@@ -1,8 +1,12 @@
 import Link from "next/link";
 import Search from "./Search.jsx";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { selectCart } from "@/redux/reducer/cartSlice.js";
 
 const Header = () => {
+  const cart = useSelector(selectCart);
+
   return (
     <header className="bg-white py-2 border-b">
       <div className="container max-w-screen-xl mx-auto px-4">
@@ -26,7 +30,7 @@ const Header = () => {
             >
               <i className="text-gray-400 w-5 fa fa-shopping-cart"></i>
               <span className="hidden lg:inline ml-1">
-                Carrito (<b>0</b>)
+                Carrito (<b>{cart.length}</b>)
               </span>
             </Link>
             <Link
@@ -59,7 +63,7 @@ const Header = () => {
               type="button"
               className="bg-white p-3 inline-flex items-center rounded-md text-black hover:bg-gray-200 hover:text-gray-800 border border-transparent"
             >
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">Abrir menu</span>
               <i className="fa fa-bars fa-lg"></i>
             </button>
           </div>

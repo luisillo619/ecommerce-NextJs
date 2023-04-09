@@ -1,15 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import StarRatings from "react-star-ratings";
 import { useRouter } from "next/router";
-import { getPriceQueryParams } from "../../../helpers/helpers";
+import { getPriceQueryParams } from "../../helpers/helpers";
 const Filters = () => {
   const router = useRouter();
   const [min, setMin] = useState();
   const [max, setMax] = useState();
-
   let queryParams;
 
-  // Por si se recarga la pagina, verifica si existen params y de ser asi selecciona el checkbox correspondiente
+  // verifica si min o max existe en query y si existe settea el estado
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      queryParams = new URLSearchParams(window.location.search);
+    }
+
+    if (typeof window !== "undefined") {
+      const minValue = queryParams.get("min");
+      const maxValue = queryParams.get("max");
+      if (minValue) setMin(minValue);
+      else setMin;
+      if (maxValue) setMax(maxValue);
+    }
+  }, []);
+
+  // Verifica si algun check existe en query y de ser asi se selecciona por defualt
   function checkHandler(checkBoxType, checkBoxValue) {
     if (typeof window !== "undefined") {
       queryParams = new URLSearchParams(window.location.search);
@@ -45,8 +59,6 @@ const Filters = () => {
       router.push(path);
     }
   }
-
-
 
   function handleButtonClick() {
     if (typeof window !== "undefined") {

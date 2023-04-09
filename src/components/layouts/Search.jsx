@@ -6,8 +6,7 @@ const Search = () => {
 
   const handlerSumbit = (e) => {
     e.preventDefault();
-    
-   
+  
     if (keyword) {
       router.push(`/?keyword=${keyword}`);
     } else router.push("/");

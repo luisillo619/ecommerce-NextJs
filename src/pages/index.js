@@ -4,11 +4,15 @@ import queryString from "query-string";
 import ListProducts from "../components/products/ListProducts";
 
 export const getServerSideProps = async (context) => {
-  const { keyword, page } = context.query;
+  const { keyword, page, category, ratings, min, max } = context.query;
 
   const urlParams = {
     keyword,
     page,
+    category,
+    "ratings[gte]": ratings,
+    "price[gte]": min,
+    "price[lte]": max,
   };
 
   const searchQuery = queryString.stringify(urlParams);

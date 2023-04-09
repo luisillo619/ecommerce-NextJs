@@ -19,6 +19,7 @@ class APIFilters {
   }
 
   filter() {
+    // precio y rating
     const queryCopy = { ...this.queryStr };
 
     const removeFields = ["keyword", "page"];
@@ -26,7 +27,8 @@ class APIFilters {
 
     let output = {};
     let prop = "";
-
+// mayor o igual gte
+// menor o igual lte
     for (let key in queryCopy) {
       if (!key.match(/\b(gt|gte|lt|lte)/)) {
         output[key] = queryCopy[key];

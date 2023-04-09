@@ -1,4 +1,4 @@
-import { isMongoId } from "../../helpers/helpers";
+import { isMongoId } from "../../src/helpers/helpers";
 import Product from "../models/product";
 import APIFilters from "../utils/APIFilters";
 

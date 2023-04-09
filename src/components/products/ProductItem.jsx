@@ -1,10 +1,38 @@
 import React from "react";
 import Link from "next/link";
+import { addItemToCart, selectCart } from "@/redux/reducer/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 import StarRatings from "react-star-ratings";
 import Image from "next/image";
-import default_product from "../../../public/images/default_product.png"
+import default_product from "../../../public/images/default_product.png";
 
 const ProductItem = ({ product }) => {
+  const dispatch = useDispatch();
+  const cart = useSelector(selectCart);
+
+  const addToCardHandler = () => {
+    const cartItem = cart.find((e) => e.product === product._id);
+    if (cartItem) {
+      const newQty = cartItem?.quantity + 1;
+
+      const item = { ...cartItem, quantity: newQty };
+
+      if (newQty > Number(cartItem.stock)) return;
+      dispatch(addItemToCart(item));
+    } else {
+      dispatch(
+        addItemToCart({
+          product: product._id,
+          name: product.name,
+          price: product.price,
+          image: product?.images[0] ? product?.images[0].url : null,
+          stock: product.stock,
+          seller: product.seller,
+        })
+      );
+    }
+  };
+
   return (
     <article className="border border-gray-200 overflow-hidden bg-white shadow-sm rounded mb-5 ">
       <div className="flex flex-col md:flex-row">
@@ -18,9 +46,7 @@ const ProductItem = ({ product }) => {
           >
             <Image
               src={
-                product?.images[0]
-                  ? product?.images[0].url
-                  : default_product
+                product?.images[0] ? product?.images[0].url : default_product
               }
               alt="product anme"
               height="240"
@@ -66,9 +92,12 @@ const ProductItem = ({ product }) => {
 
             <p className="text-green-500">Envio Gratis</p>
             <div className="my-3">
-              <a className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 cursor-pointer">
+              <button
+                className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 cursor-pointer"
+                onClick={addToCardHandler}
+              >
                 Añade al carrito
-              </a>
+              </button>
             </div>
           </div>
         </div>

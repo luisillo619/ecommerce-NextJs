@@ -1,9 +1,13 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import StarRatings from "react-star-ratings";
 import BreadCrumbs from "../layouts/BreadCrumbs";
-
+import { addItemToCart, selectCart } from "@/redux/reducer/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import Image from "next/image";
 
 const ProductDetails = ({ product }) => {
+  const dispatch = useDispatch();
+  const cart = useSelector(selectCart);
   const imgRef = useRef(null);
 
   const setImgPreview = (url) => {
@@ -11,6 +15,30 @@ const ProductDetails = ({ product }) => {
   };
 
   const inStock = product?.stock >= 1;
+  
+
+  const addToCardHandler = () => {
+    const cartItem = cart.find((e) => e.product === product._id);
+    if (cartItem) {
+      const newQty = cartItem?.quantity + 1;
+
+      const item = { ...cartItem, quantity: newQty };
+
+      if (newQty > Number(cartItem.stock)) return;
+      dispatch(addItemToCart(item));
+    } else {
+      dispatch(
+        addItemToCart({
+          product: product._id,
+          name: product.name,
+          price: product.price,
+          image: product?.images[0] ? product?.images[0].url : null,
+          stock: product.stock,
+          seller: product.seller,
+        })
+      );
+    }
+  };
 
   const breadCrumbs = [
     { name: "Home", url: "/" },
@@ -41,12 +69,13 @@ const ProductDetails = ({ product }) => {
                 />
               </div>
               <div className="space-x-2 overflow-auto text-center whitespace-nowrap">
-                {product?.images?.map((img,key) => (
+                {product?.images?.map((img, key) => (
                   <a
-                    className="inline-block border border-gray-200 p-1 rounded-md hover:border-blue-500 cursor-pointer" key={key}
+                    className="inline-block border border-gray-200 p-1 rounded-md hover:border-blue-500 cursor-pointer"
+                    key={key}
                     onClick={() => setImgPreview(img?.url)}
                   >
-                    <img
+                    <Image
                       className="w-14 h-14"
                       src={img.url}
                       alt="Product title"
@@ -90,7 +119,11 @@ const ProductDetails = ({ product }) => {
               <p className="mb-4 text-gray-500">{product?.description}</p>
 
               <div className="flex flex-wrap gap-2 mb-5">
-                <button className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700">
+                <button
+                  className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+                  onClick={addToCardHandler}
+                  disabled={inStock}
+                >
                   <i className="fa fa-shopping-cart mr-2"></i>
                   Añadir al carrito
                 </button>

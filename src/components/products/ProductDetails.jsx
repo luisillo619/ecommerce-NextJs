@@ -122,7 +122,7 @@ const ProductDetails = ({ product }) => {
                 <button
                   className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
                   onClick={addToCardHandler}
-                  disabled={inStock}
+                  disabled={!inStock}
                 >
                   <i className="fa fa-shopping-cart mr-2"></i>
                   Añadir al carrito

@@ -1,15 +1,18 @@
 import { useRouter, useSearchParams } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Pagination from "react-js-pagination";
 
 const CustomPagination = ({ resPerPage, productsCount }) => {
+  const [page, setPage] = useState();
+
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  let page = searchParams.get("page") || 1;
-  page = Number(page);
-
   let queryParams;
+
+  useEffect(() => {
+    // if (page > productsCount / Number(resPerPage)) {}
+    setPage(Number(searchParams.get("page") || 1));
+  }, []);
 
   const handlePageChange = (currentPage) => {
     if (typeof window !== "undefined") {

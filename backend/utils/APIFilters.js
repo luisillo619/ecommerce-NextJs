@@ -27,8 +27,8 @@ class APIFilters {
 
     let output = {};
     let prop = "";
-// mayor o igual gte
-// menor o igual lte
+    // mayor o igual gte
+    // menor o igual lte
     for (let key in queryCopy) {
       if (!key.match(/\b(gt|gte|lt|lte)/)) {
         output[key] = queryCopy[key];
@@ -51,6 +51,7 @@ class APIFilters {
   }
 
   pagination(resPerPage) {
+    //aqui llega page en queryStr
     const currentPage = Number(this.queryStr.page) || 1;
     const skip = resPerPage * (currentPage - 1);
 

@@ -44,7 +44,7 @@ const Header = () => {
                 <span className="hidden lg:inline ml-1">Inicia sesion</span>
               </Link>
             ) : (
-              <Link href="/me">
+              <Link href="/profile">
                 <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer">
                   <img
                     className="w-10 h-10 rounded-full"

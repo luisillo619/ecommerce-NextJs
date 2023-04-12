@@ -8,6 +8,7 @@ import { SessionProvider } from "next-auth/react";
 import App from "next/app";
 
 export default function MyApp({ Component, pageProps }) {
+  const getLayout = Component.getLayout || ((page) => page)
   return (
     <>
       <ToastContainer position="bottom-right" />
@@ -23,8 +24,3 @@ export default function MyApp({ Component, pageProps }) {
   );
 }
 
-MyApp.getInitialProps = async (appContext) => {
-  const appProps = await App.getInitialProps(appContext);
-
-  return { ...appProps };
-};

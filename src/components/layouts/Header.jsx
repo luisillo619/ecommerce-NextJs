@@ -3,9 +3,11 @@ import Search from "./Search.jsx";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { selectCart } from "@/redux/reducer/cartSlice.js";
+import { selectUser } from "@/redux/reducer/authSlice.js";
 
 const Header = () => {
   const cart = useSelector(selectCart);
+  const user = useSelector(selectUser);
 
   return (
     <header className="bg-white py-2 border-b">
@@ -33,29 +35,32 @@ const Header = () => {
                 Carrito (<b>{cart.length}</b>)
               </span>
             </Link>
-            <Link
-              href="/login"
-              className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
-            >
-              <i className="text-gray-400 w-5 fa fa-user"></i>
-              <span className="hidden lg:inline ml-1">Ingresa</span>
-            </Link>
-            <Link href="/me">
-              <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer">
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src={"/images/default.png"}
-                />
-                <div className="space-y-1 font-medium">
-                  <p>
-                    Luis
-                    <time className="block text-sm text-gray-500 dark:text-gray-400">
-                      test@gmail.com
-                    </time>
-                  </p>
+            {!user ? (
+              <Link
+                href="/login"
+                className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+              >
+                <i className="text-gray-400 w-5 fa fa-user"></i>
+                <span className="hidden lg:inline ml-1">Inicia sesion</span>
+              </Link>
+            ) : (
+              <Link href="/me">
+                <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer">
+                  <img
+                    className="w-10 h-10 rounded-full"
+                    src={user?.avatar ? user?.avatar?.url : "/images/default.png"}
+                  />
+                  <div className="space-y-1 font-medium">
+                    <p>
+                      {user.name}
+                      <time className="block text-sm text-gray-500 dark:text-gray-400">
+                        {user.email}
+                      </time>
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            )}
           </div>
 
           <div className="lg:hidden ml-2">

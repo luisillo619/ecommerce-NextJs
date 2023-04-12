@@ -122,7 +122,7 @@ const Cart = () => {
                         <div>
                           <div className="leading-5">
                             <p className="font-semibold not-italic">
-                              ${amountWithoutTax}
+                            ${cartItem.price * cartItem.quantity.toFixed(2)}
                             </p>
                             <small className="text-gray-400">
                               {" "}

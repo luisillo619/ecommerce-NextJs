@@ -34,9 +34,8 @@ export const registerUser =
         window.location.href = window.location.origin;
       }
     } catch (error) {
-      console.log(error?.response);
-
-      dispatch(setError(error?.response?.data?.message));
+      console.log(error?.response.data.error);
+      dispatch(setError(error?.response.data?.error));
     }
   };
 

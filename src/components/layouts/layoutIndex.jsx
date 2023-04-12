@@ -19,6 +19,7 @@ export default function LayoutIndex({ children }) {
     <>
       <Header />
       {children}
+     
     </>
   );
 }

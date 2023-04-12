@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+
 const Search = () => {
   const [keyword, setKeyword] = useState();
   const router = useRouter();
@@ -7,7 +8,7 @@ const Search = () => {
 
   const handlerSumbit = (e) => {
     e.preventDefault();
-
+   
     if (keyword) {
       queryParams = new URLSearchParams(window.location.search);
       if (queryParams.has("keyword")) {
@@ -15,7 +16,7 @@ const Search = () => {
       } else {
         queryParams.append("keyword", keyword);
       }
-      const path = window.location.pathname + "?" + queryParams.toString();
+      const path = window.location.origin + "?" + queryParams.toString();
       router.push(path);
     } else router.push("/");
   };
@@ -42,14 +43,14 @@ const Search = () => {
         type="text"
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
-        placeholder="Enter your keyword"
+        placeholder="Buscar productos"
         required
       />
       <button
         type="submit"
-        className="px-4 py-2 inline-block text-white border border-transparent bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        className="px-3 py-2 inline-block text-white border border-transparent bg-blue-600 text-white rounded-md hover:bg-blue-700"
       >
-        Search
+            {/* agregar lupa */}
       </button>
     </form>
   );

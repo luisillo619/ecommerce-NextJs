@@ -6,9 +6,12 @@ export const registerUser = async (req, res) => {
 
   const schema = Joi.object({
     name: Joi.string().required().max(50),
-    email: Joi.string().email().required(),
+    email: Joi.string().email().required().messages({
+      "string.email": "Por ingresa un correo valido",
+    }),
     password: Joi.string().required().min(6),
   });
+
   const { error } = schema.validate(req.body);
   if (error) {
     const message = error.details.map((el) => el.message).join(", ");

@@ -33,12 +33,26 @@ export default async function auth(req,res){
                     throw new Error("Correo o contraseña incorrectos")
                 }
 
-                return user
+                return user // this user
             }
         })
     ],
+    callbacks:{
+       jwt: async({token,user}) =>{
+          user && (token.user = user);
+          return token // this token
+       },
+       session: async ({session,token})=>{
+         session.user = token.user
+         
+         //delete password of session
+         delete session?.user?.password
+
+         return session
+       }
+    },
     pages:{
-        signIn: "/login" // si el user no ha iniciado sesion nos llevara a login
+        signIn: "/login" // si el usuario entra en profile y no a iniciado sesion, nos va a mandar a el login por el matcher
     },
     secret: process.env.NEXTAUTH_SECRET
    })

@@ -1,7 +1,9 @@
 import nc from "next-connect";
 import { getProduct } from "../../../../backend/controllers/productControllers";
 import { dbConnect } from "../../../../backend/config/dbConect";
-const handler = nc();
+import onError from "../../../../backend/middlewares/errors"
+
+const handler = nc({onError});
 dbConnect();
 
 handler.get(getProduct);

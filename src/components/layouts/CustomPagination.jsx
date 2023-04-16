@@ -3,16 +3,14 @@ import React, { useEffect, useState } from "react";
 import Pagination from "react-js-pagination";
 
 const CustomPagination = ({ resPerPage, productsCount }) => {
-  const [page, setPage] = useState();
-
   const router = useRouter();
   const searchParams = useSearchParams();
-  let queryParams;
+  const [existProduct,setExistProduct] = useState(true)
 
-  useEffect(() => {
-    // if (page > productsCount / Number(resPerPage)) {}
-    setPage(Number(searchParams.get("page") || 1));
-  }, []);
+  let page = searchParams.get("page") || 1;
+  page = Number(page);
+
+  let queryParams;
 
   const handlePageChange = (currentPage) => {
     if (typeof window !== "undefined") {
@@ -29,7 +27,31 @@ const CustomPagination = ({ resPerPage, productsCount }) => {
     }
   };
 
+  useEffect(() => {
+    if (page * resPerPage > productsCount) {
+      queryParams = new URLSearchParams(window.location.search);
+      if (queryParams.has("page")) {
+        queryParams.set("page", 1);
+      } else {
+        queryParams.append("page", 1);
+      }
+      const path = window.location.pathname + "?" + queryParams.toString();
+      router.push(path);
+    }
+    if (Number(productsCount) === 0) {
+      setExistProduct(false)
+    }
+  }, [
+    searchParams.get("page"),
+    searchParams.get("ratings"),
+    searchParams.get("category"),
+    searchParams.get("max"),
+    searchParams.get("min"),
+    searchParams.get("search"),
+  ]);
+
   return (
+    // renderizar un cartelito de que no hay productos, ver otros
     <div className="flex mt-20 justify-center">
       <Pagination
         activePage={page}
@@ -49,3 +71,4 @@ const CustomPagination = ({ resPerPage, productsCount }) => {
 };
 
 export default CustomPagination;
+// Puede comprobar si filteredProductsCount es menor que resPerPage, establezca el valor de página en 1.

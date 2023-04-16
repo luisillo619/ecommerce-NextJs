@@ -61,11 +61,3 @@ export const { setCart, addItemToCart, deleteItemFromCart } = cartSlice.actions;
 export const selectCart = (state) => state.cart.cartItems;
 export default cartSlice.reducer;
 
-// const user = useSelector(selectUser);
-// dispatch(
-//   login({
-//         this action
-//     uid: userAuth.uid,
-//     email: userAuth.email,
-//   })
-// );

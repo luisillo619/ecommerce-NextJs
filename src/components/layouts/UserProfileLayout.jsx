@@ -1,6 +1,6 @@
 // page anidada con profile
 
-import Sidebar from "./SideBar";
+import Sidebar from "./Sidebar";
 export default function UserProfileLayout({ children }) {
   return (
     <>

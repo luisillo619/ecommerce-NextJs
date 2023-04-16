@@ -31,17 +31,18 @@ const Cart = () => {
   };
 
   // cantidad sin impuesto
-  const amountWithoutTax = cart?.reduce(
-    (acc, item) => acc + item.quantity * item.price,
-    0
-  ).toFixed(2);
-  
+  const amountWithoutTax = cart
+    ?.reduce((acc, item) => acc + item.quantity * item.price, 0)
+    .toFixed(2);
+
   // impuesto
   const taxAmount = (amountWithoutTax * 0.15).toFixed(3);
-  
+
   // cantidad con impuesto
-  const totalAmount = (parseFloat(amountWithoutTax) + parseFloat(taxAmount)).toFixed(2);
-  
+  const totalAmount = (
+    parseFloat(amountWithoutTax) + parseFloat(taxAmount)
+  ).toFixed(2);
+
   return (
     <>
       <section className="py-5 sm:py-7 bg-blue-100">
@@ -122,7 +123,7 @@ const Cart = () => {
                         <div>
                           <div className="leading-5">
                             <p className="font-semibold not-italic">
-                            ${cartItem.price * cartItem.quantity.toFixed(2)}
+                              ${cartItem.price * cartItem.quantity.toFixed(2)}
                             </p>
                             <small className="text-gray-400">
                               {" "}

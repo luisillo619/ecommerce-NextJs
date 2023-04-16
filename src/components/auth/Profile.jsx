@@ -1,10 +1,9 @@
-// import UserAddresses from "../user/UserAddresses";
-
+import UserAddresses from "../user/UserAddresses";
 import Link from "next/link";
 import { selectUser } from "@/redux/reducer/authSlice";
 import { useSelector } from "react-redux";
 
-const Profile = () => {
+const Profile = ({data}) => {
   const user = useSelector(selectUser);
   
   return (
@@ -28,7 +27,7 @@ const Profile = () => {
 
       <hr className="my-4" />
 
-      {/* <UserAddresses /> */}
+      <UserAddresses addresses={data.addresses}/>
 
       <Link href="/address/new">
         <button className="px-4 py-2 inline-block text-blue-600 border border-gray-300 rounded-md hover:bg-gray-100">

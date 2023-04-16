@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { getSession } from "next-auth/react";
 
 const authSlice = createSlice({
   name: "auth",
@@ -30,14 +31,28 @@ export const registerUser =
       );
 
       if (Object.keys(data).length > 0) {
-        dispatch(setUser(data));
         window.location.href = window.location.origin;
       }
     } catch (error) {
-      console.log(error?.response.data.error);
-      dispatch(setError(error?.response.data?.error));
+      console.log(error?.response?.data?.error);
+      dispatch(setError(error?.response?.data?.error?.message));
     }
   };
+
+export const addNewAddress = (address) => async (dispatch) => {
+  try {
+    const { data } = await axios.post(
+      `${process.env.API_URL}/api/address`,
+      address
+    );
+    if (Object.keys(data).length > 0) {
+      window.location.href = window.location.origin + "/profile";
+    }
+  } catch (error) {
+    console.log(error?.response?.data?.error);
+    dispatch(setError(error?.response?.data?.error?.message));
+  }
+};
 
 export const { setUser, clearError, setError } = authSlice.actions;
 export const selectUser = (state) => state.auth.user;

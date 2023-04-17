@@ -1,119 +1,53 @@
-// import NextAuth from "next-auth/next";
-// import Credentials from "next-auth/providers/credentials";
-
-// import User from "../../../../backend/models/user";
-// import bcrypt from "bcryptjs";
-// import { dbConnect } from "../../../../backend/config/dbConect";
-
-// export const auth = {
-//     session:{
-//         strategy: "jwt"
-//     },
-//     providers:[
-//         Credentials({
-//             // credentials vienen del frontend
-//             async authorize(credentials){
-//                 dbConnect()
-
-//                 const {email, password} = credentials
-
-//                 const user = await User.findOne({email}).select("+password")
-                
-//                 if(!user){
-//                     throw new Error("Correo o contraseña incorrectos")
-//                 }
-
-//                 const isPasswordMatch = await bcrypt.compare(
-//                     password,
-//                     user.password
-//                 )
-
-//                 if(!isPasswordMatch){
-//                     throw new Error("Correo o contraseña incorrectos")
-//                 }
-
-//                 return user // this user
-//             }
-//         })
-//     ],
-//     callbacks:{
-//        jwt: async({token,user}) =>{
-//           user && (token.user = user);
-//           return token // this token
-//        },
-//        session: async ({session,token})=>{
-//          session.user = token.user
-         
-//          //delete password of session
-//          delete session?.user?.password
-
-//          return session
-//        }
-//     },
-//     pages:{
-//         signIn: "/login" // si el usuario entra en profile y no a iniciado sesion, nos va a mandar a el login por el matcher
-//     },
-//     secret: process.env.NEXTAUTH_SECRET
-//   }
-
-//   export default NextAuth(auth)
-
-  import NextAuth from "next-auth/next";
-import Credentials from "next-auth/providers/credentials";
-
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 import User from "../../../../backend/models/user";
 import bcrypt from "bcryptjs";
 import { dbConnect } from "../../../../backend/config/dbConect";
 
-export default async function auth(req,res){
-   return await NextAuth(req,res,{
-    session:{
-        strategy: "jwt"
+const authOptions = {
+  providers: [
+    CredentialsProvider({
+      async authorize(credentials, req) {
+        dbConnect();
+
+        const { email, password } = credentials;
+
+        const user = await User.findOne({ email }).select("+password");
+
+        if (!user) {
+          throw new Error("Invalid Email or Password");
+        }
+
+        const isPasswordMatched = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordMatched) {
+          throw new Error("Invalid Email or Password");
+        }
+
+        return user;
+      },
+    }),
+  ],
+  callbacks: {
+    jwt: async ({ token, user }) => {
+      // el user se le agrega en la segunda vuelta(cuando se recarga la pagina despues de que ya se esta logeado)
+      user && (token.user = user);
+
+      return token;
     },
-    providers:[
-        Credentials({
-            // credentials vienen del frontend
-            async authorize(credentials){
-                dbConnect()
+    session: async ({ session, token }) => {
+      session.user = token.user;
 
-                const {email, password} = credentials
+      // delete password from session
+      delete session?.user?.password;
 
-                const user = await User.findOne({email}).select("+password")
-                
-                if(!user){
-                    throw new Error("Correo o contraseña incorrectos")
-                }
-
-                const isPasswordMatch = await bcrypt.compare(
-                    password,
-                    user.password
-                )
-
-                if(!isPasswordMatch){
-                    throw new Error("Correo o contraseña incorrectos")
-                }
-
-                return user // this user
-            }
-        })
-    ],
-    callbacks:{
-       jwt: async({token,user}) =>{
-
-          return token // this token
-       },
-       session: async ({session,token})=>{
-         session.user = token.user
-         
-         //delete password of session
-         delete session?.user?.password
-
-         return session
-       }
+      return session;
     },
-    pages:{
-        signIn: "/login" // si el usuario entra en profile y no a iniciado sesion, nos va a mandar a el login por el matcher
-    },
-    secret: process.env.NEXTAUTH_SECRET
-   })
-}
+  },
+  pages: {
+    signIn: "/login",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+};
+
+export default NextAuth(authOptions);

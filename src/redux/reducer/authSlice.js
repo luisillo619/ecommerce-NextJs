@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { getSession } from "next-auth/react";
+
 
 const authSlice = createSlice({
   name: "auth",

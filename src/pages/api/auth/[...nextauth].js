@@ -45,7 +45,7 @@ const authOptions = {
     },
   },
   pages: {
-    signIn: "/login",
+    signIn: "/login", // Por si el match del middleware concide y no existe la sesion del usuario va a redirigir a /login
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

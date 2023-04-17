@@ -1,6 +1,6 @@
 import User from "../models/user";
 
-
+// validaciones desde la coleccion
 export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 

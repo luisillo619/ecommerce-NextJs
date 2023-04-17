@@ -9,8 +9,7 @@ export default function LayoutIndex({ children }) {
   // añadir estado inicial del carrito y de la sesion del usuario a redux
   const dispatch = useDispatch();
   const { data } = useSession(); // obtener la sesion del ususario si existe
-  // const { accessToken } = data
-  // console.log(data);
+  
   useEffect(() => {
     dispatch(setCart());
     dispatch(setUser(data?.user));

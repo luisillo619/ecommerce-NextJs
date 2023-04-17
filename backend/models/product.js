@@ -3,15 +3,15 @@ import mongoose from "mongoose";
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Porfavor ingresa el nombre del producto"],
+    required: [true, "Por favor, ingresa el nombre del producto"],
   },
   description: {
     type: String,
-    required: [true, "Porfavor ingresa la descripcion del producto"],
+    required: [true, "Por favor, ingresa la descripcion del producto"],
   },
   price: {
     type: Number,
-    required: [true, "Porfavor ingresa el precio del producto"],
+    required: [true, "Por favor, ingresa el precio del producto"],
   },
   images: [
     {
@@ -24,7 +24,7 @@ const productSchema = new mongoose.Schema({
 
   category: {
     type: String,
-    required: [true, "Porfavor ingresa la categoria del producto"],
+    required: [true, "Por favor, ingresa la categoria del producto"],
     enum: {
       values: [
         "Electronicos",
@@ -34,16 +34,16 @@ const productSchema = new mongoose.Schema({
         "Belleza",
         "Deportivos",
       ],
-      message: "Porfavor seleccione una categoria valida",
+      message: "Por favor, selecciona una categoria valida",
     },
   },
   seller: {
     type: String,
-    required: [true, "Porfavor ingresa al vendedor del producto"],
+    required: [true, "Por favor, ingresa al vendedor del producto"],
   },
   stock: {
     type: Number,
-    required: [true, "Porfavor ingresa el stock del producto"],
+    required: [true, "Por favor ingresa el stock del producto"],
   },
 
   ratings: {

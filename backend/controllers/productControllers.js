@@ -2,6 +2,7 @@ import { isMongoId } from "../../src/helpers/helpers";
 import Product from "../models/product";
 import APIFilters from "../utils/APIFilters";
 
+// validacion desde la coleccion
 export const newProduct = async (req, res, next) => {
   const product = await Product.create(req.body);
   res.status(201).json({

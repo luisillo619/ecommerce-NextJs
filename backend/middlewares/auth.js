@@ -2,6 +2,7 @@ import { getSession } from "next-auth/react";
 import ErrorHandler from "../utils/errorHandler";
 
 const isAuthenticatedUser = async (req, res, next) => {
+
   const sessionCookie = req.headers.cookie
     ?.split(";")
     .find((c) => c.trim().startsWith("next-auth.session-token="));

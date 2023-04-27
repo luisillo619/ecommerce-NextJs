@@ -32,7 +32,7 @@ export const registerUser =
   ({ name, email, password }) =>
   async (dispatch) => {
     try {
-      console.log("hollalala");
+    
       const { data } = await axios.post(
         `${process.env.API_URL}/api/auth/register`,
         { name, email, password }
@@ -75,7 +75,6 @@ const loadUser = async (router, dispatch) => {
 export const updateProfile = (formData, router) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
-    console.log(process.env.API_URL);
     const { data } = await axios.put(
       `${process.env.API_URL}/api/auth/profile/update`,
       formData,

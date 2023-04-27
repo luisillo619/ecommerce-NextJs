@@ -60,7 +60,7 @@ const Cart = () => {
               <main className="md:w-3/4">
                 <article className="border border-gray-200 bg-white shadow-sm rounded mb-5 p-3 lg:p-5">
                   {cart?.map((cartItem) => (
-                    <div>
+                    <div key={cartItem.product}>
                       <div className="flex flex-wrap lg:flex-row gap-5  mb-4">
                         <div className="w-full lg:w-2/5 xl:w-2/4">
                           <figure className="flex leading-5">
@@ -154,11 +154,11 @@ const Cart = () => {
                 <article className="border border-gray-200 bg-white shadow-sm rounded mb-5 p-3 lg:p-5">
                   <ul className="mb-5">
                     <li className="flex justify-between text-gray-600  mb-1">
-                      <span>Cantidad sin impuesto:</span>
+                      <span>Precio sin impuesto:</span>
                       <span>${amountWithoutTax}</span>
                     </li>
                     <li className="flex justify-between text-gray-600  mb-1">
-                      <span>Total de productos::</span>
+                      <span>Total de productos:</span>
                       <span className="text-green-500">
                         {cart?.reduce((acc, item) => acc + item.quantity, 0)}{" "}
                         (unidades)
@@ -174,9 +174,11 @@ const Cart = () => {
                     </li>
                   </ul>
 
-                  <a className="px-4 py-3 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 cursor-pointer">
+                  <Link 
+                  href="/shipping"
+                  className="px-4 py-3 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 cursor-pointer">
                     Continuar
-                  </a>
+                  </Link>
 
                   <Link
                     href="/"

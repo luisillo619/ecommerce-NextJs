@@ -33,6 +33,7 @@ export const getAddress = async (req, res) => {
 };
 
 export const getAddresses = async (req, res) => {
+  
   const addresses = await Address.find({ user: req.user._id });
   res.status(200).json({
     addresses,
@@ -41,7 +42,7 @@ export const getAddresses = async (req, res) => {
 
 // validacion desde la coleccion
 export const newAddress = async (req, res) => {
-  req.body.user = req.user._id;
+  req.body.user = req.user._id; // se agrega la referencia
   const address = await Address.create(req.body);
   res.status(201).json({ address });
 };

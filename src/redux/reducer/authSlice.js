@@ -101,6 +101,29 @@ export const updateProfile = (formData, router) => async (dispatch) => {
   }
 };
 
+export const updatePassword =
+  ({ currentPassword, newPassword }, router) =>
+  async (dispatch) => {
+    try {
+      const { data } = await axios.put(
+        `${process.env.API_URL}/api/auth/profile/update_password`,
+        { currentPassword, newPassword }
+      );
+
+      if (Object.keys(data).length > 0) {
+        router.replace("/profile");
+      }
+    } catch (error) {
+      const errorMessages = error?.response?.data?.message;
+      if (errorMessages) {
+        const messagesArray = errorMessages.split(",");
+        dispatch(
+          setError(messagesArray[0] || error?.response?.data?.error?.message)
+        );
+      }
+    }
+  };
+
 export const addNewAddress = (address, router) => async (dispatch) => {
   try {
     const { data } = await axios.post(
@@ -162,4 +185,4 @@ export const selectUpdated = (state) => state.auth.updated;
 export const selectLoading = (state) => state.auth.loading;
 export const selectAuthError = (state) => state.auth.error;
 
-export default authSlice.reducer;
+export default authSlice.reducer; 

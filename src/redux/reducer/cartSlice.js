@@ -23,7 +23,7 @@ const cartSlice = createSlice({
         seller,
         quantity = 1, // cantidad de un solo producto
       } = action.payload;
-  
+
       const isItemExist = state.cartItems?.find((i) => i.product === product);
       let newCartItems;
 
@@ -39,7 +39,7 @@ const cartSlice = createSlice({
           { product, name, price, image, stock, seller, quantity },
         ];
       }
-     
+
       // newCartItems = [{},{}]
       localStorage.setItem("cart", JSON.stringify(newCartItems));
       state.cartItems = newCartItems;
@@ -60,4 +60,3 @@ const cartSlice = createSlice({
 export const { setCart, addItemToCart, deleteItemFromCart } = cartSlice.actions;
 export const selectCart = (state) => state.cart.cartItems;
 export default cartSlice.reducer;
-

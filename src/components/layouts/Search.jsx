@@ -41,7 +41,7 @@ const Search = () => {
       <input
         className="flex-grow appearance-none border border-gray-200 bg-gray-100 rounded-md mr-2 py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400"
         type="text"
-        placeholder="Enter your keyword"
+        placeholder="Que estas"
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
         required
@@ -51,7 +51,7 @@ const Search = () => {
         className="px-4 py-2 inline-block text-white border border-transparent bg-blue-600 text-white rounded-md hover:bg-blue-700"
         onClick={handlerSumbit}
       >
-        Search
+        Buscar
       </button>
     </form>
   );

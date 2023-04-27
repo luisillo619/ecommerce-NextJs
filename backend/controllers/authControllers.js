@@ -3,6 +3,7 @@ import { uploads } from "../utils/cloudinary";
 import fs from "fs";
 import Joi from "joi";
 import ErrorHandler from "../utils/errorHandler";
+import bcrypt from "bcryptjs";
 
 const userSchema = Joi.object({
   name: Joi.string().required().messages({
@@ -27,7 +28,7 @@ export const registerUser = async (req, res) => {
   res.status(201).json(user);
 };
 
-export const updateProfile = async (req, res) => {
+export const updateProfile = async (req, res, next) => {
   // req.files viene del middleware multer
   // multer carga la imagen en la carpeta uploads y valida la imagen y se gurada en req.files y en la pc localmente
 
@@ -35,7 +36,9 @@ export const updateProfile = async (req, res) => {
   // fs elimina la imagen de la carpeta uploads
 
   const existEmail = await User.findOne({ email: req.body.email });
-  if (existEmail) throw new ErrorHandler("El correo ya está en uso", 400);
+  if (existEmail && existEmail.email !== req.user.email) {
+    next(new ErrorHandler("El correo ya está en uso", 400));
+  }
 
   const { error } = userSchema.validate({
     email: req.body.email,
@@ -60,6 +63,7 @@ export const updateProfile = async (req, res) => {
     const { path } = file;
     // path === 'public\uploads\promociones-empresas-espai-dental-1024x626.jpg'
     const avatarResponse = await uploader(path);
+    // Elimina el archivo temporal del servidor
     fs.unlinkSync(path);
     newUserData.avatar = avatarResponse;
   }
@@ -67,4 +71,23 @@ export const updateProfile = async (req, res) => {
   const user = await User.findByIdAndUpdate(req.user._id, newUserData);
 
   res.status(201).json(user);
+};
+
+export const updatePassword = async (req, res, next) => {
+  const user = await User.findById(req.user._id).select("+password");
+
+  const isPasswordMatched = await bcrypt.compare(
+    req.body.currentPassword,
+    user.password
+  );
+
+  if (!isPasswordMatched) {
+    return next(new ErrorHandler("Tu contraseña actual es incorrecta", 400));
+  }
+
+  user.password = req.body.newPassword;
+  await user.save();
+  res.status(201).json({
+    success: true,
+  });
 };

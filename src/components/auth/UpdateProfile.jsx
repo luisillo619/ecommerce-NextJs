@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 
 const UpdateProfile = () => {
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router = useRouter();
   const error = useSelector(selectAuthError);
   const user = useSelector(selectUser);
   const loading = useSelector(selectLoading);
@@ -41,7 +41,7 @@ const UpdateProfile = () => {
     formData.set("name", name);
     formData.set("email", email);
     formData.set("image", avatar);
-    dispatch(updateProfile(formData,router));
+    dispatch(updateProfile(formData, router));
   };
 
   const onChange = (e) => {
@@ -64,10 +64,10 @@ const UpdateProfile = () => {
         className="mt-1 mb-20 p-4 md:p-7 mx-auto rounded bg-white"
       >
         <form onSubmit={submitHandler}>
-          <h2 className="mb-5 text-2xl font-semibold">Update Profile</h2>
+          <h2 className="mb-5 text-2xl font-semibold">Actualizar Perfil</h2>
 
           <div className="mb-4">
-            <label className="block mb-1"> Full Name </label>
+            <label className="block mb-1"> Nombre Completo </label>
             <input
               className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
               type="text"
@@ -79,7 +79,7 @@ const UpdateProfile = () => {
           </div>
 
           <div className="mb-4">
-            <label className="block mb-1"> Email </label>
+            <label className="block mb-1"> Correo </label>
             <input
               className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
               type="text"
@@ -112,7 +112,7 @@ const UpdateProfile = () => {
             className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
             disabled={loading ? true : false}
           >
-            {loading ? "Updating..." : "Update"}
+            {loading ? "Actualizando..." : "Actualizar"}
           </button>
         </form>
       </div>

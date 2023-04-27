@@ -1,25 +1,16 @@
 import mongoose from "mongoose";
 
 const cartSchema = new mongoose.Schema({
-  cartItems: [
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    require: true,
+    ref: "User",
+  },
+  // En el front necesito un array de productos y posible mente en el front lo tenga que modificar para que sea asi {[{products},{products}],{user}}
+  products: [
     {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: [true, "Por favor, ingresa el usuario"],
-      },
-      product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
-        required: [true, "Por favor, ingresa el producto"],
-      },
-      quantity: {
-        type: Number,
-        required: [
-          true,
-          "Por favor, ingresa la cantidad de unidades del producto",
-        ],
-      },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
     },
   ],
 });

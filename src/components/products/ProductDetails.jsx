@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import StarRatings from "react-star-ratings";
+import Rating from "@mui/material/Rating";
 import BreadCrumbs from "../layouts/BreadCrumbs";
 import { addItemToCart, selectCart } from "@/redux/reducer/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +15,6 @@ const ProductDetails = ({ product }) => {
   };
 
   const inStock = product?.stock >= 1;
-  
 
   const addToCardHandler = () => {
     const cartItem = cart.find((e) => e.product === product._id);
@@ -91,13 +90,11 @@ const ProductDetails = ({ product }) => {
 
               <div className="flex flex-wrap items-center space-x-2 mb-2">
                 <div className="ratings">
-                  <StarRatings
-                    rating={product?.ratings}
-                    starRatedColor="#ffb829"
-                    numberOfStars={5}
-                    starDimension="20px"
-                    starSpacing="2px"
-                    name="rating"
+                  <Rating
+                    value={product?.ratings}
+                    precision={0.5}
+                    readOnly
+                    size="small"
                   />
                 </div>
                 <span className="text-yellow-500">{product?.ratings}</span>

@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { addItemToCart, selectCart } from "@/redux/reducer/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
-import StarRatings from "react-star-ratings";
+import Rating from "@mui/material/Rating";
 import Image from "next/image";
 import default_product from "../../../public/images/default_product.png";
 
@@ -66,13 +66,11 @@ const ProductItem = ({ product }) => {
             <div className="flex flex-wrap items-center space-x-2 mb-2">
               <div className="ratings">
                 <div className="my-1">
-                  <StarRatings
-                    rating={product?.ratings}
-                    starRatedColor="#ffb829"
-                    numberOfStars={5}
-                    starDimension="18px"
-                    starSpacing="1px"
-                    name="rating"
+                  <Rating
+                    value={product?.ratings}
+                    precision={0.5}
+                    readOnly
+                    size="small"
                   />
                 </div>
               </div>

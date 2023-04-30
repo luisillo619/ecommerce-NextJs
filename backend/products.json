@@ -93,7 +93,7 @@
     "name": "Beats Solo3 Wireless On-Ear Headphones",
     "price": 199.95,
     "description": "The Beats Solo3 Wireless On-Ear Headphones are a premium set of headphones that feature Bluetooth connectivity, up to 40 hours of battery life, and on-ear controls for adjusting volume and switching tracks. They have a sleek, stylish design and come in a variety of colors. They also have a built-in microphone for taking calls and use the Apple W1 chip for easy and stable connectivity with Apple devices.",
-    "category": "Headphones",
+    "category": "Electronicos",
     "seller": "Beats by Dr. Dre",
     "stock": 500,
     "images": [
@@ -108,5 +108,23 @@
     ],
     "reviews": [],
     "ratings": 2
+  },
+  {
+    "name": "Nintendo Switch",
+    "price": 299,
+    "description": "La Nintendo Switch es una consola de videojuegos portátil y de sobremesa que permite a los usuarios jugar en cualquier lugar. Viene con dos controladores Joy-Con que se pueden conectar o desconectar de la consola según sea necesario. También cuenta con una pantalla táctil de 6,2 pulgadas y una batería de larga duración.",
+    "category": "Juguetes",
+    "seller": "Nintendo",
+    "stock": 500,
+    "images": [
+      {
+        "public_id": "buyitnow/products/R-removebg-preview_t1gcbg.png",
+        "url": "https://res.cloudinary.com/drkzjxpza/image/upload/v1682831514/buyitnow/products/R-removebg-preview_t1gcbg.png"
+      }
+     
+    ],
+    "reviews": [],
+    "ratings": 4.5
   }
 ]
+

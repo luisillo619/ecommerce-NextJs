@@ -10,7 +10,7 @@ import {
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
-const NewAddress = () => {
+const NewAddress = ({session}) => {
   const router = useRouter()
   const dispatch = useDispatch();
   const error = useSelector(selectAuthError);
@@ -35,7 +35,7 @@ const NewAddress = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(addNewAddress(address,router));
+    dispatch(addNewAddress(address,router,session));
   };
 
   const handleChange = (e) => {

@@ -20,7 +20,7 @@ const Profile = ({data}) => {
           <h5 className="font-semibold text-lg">{user?.name}</h5>
           <p>
             <b>Correo:</b> {user?.email} | <b>Te uniste el:</b>
-            {user?.createdAt.substring(0,10)}
+            {user?.createdAt?.substring(0,10)}
           </p>
         </figcaption>
       </figure>

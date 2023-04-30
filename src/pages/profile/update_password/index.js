@@ -1,10 +1,22 @@
 import UpdatePassword from "@/components/auth/UpdatePassword";
 import UserProfileLayout from "@/components/layouts/UserProfileLayout";
+import { getSession } from "next-auth/react";
 
-export default function UpdatePasswordPage() {
+export const getServerSideProps = async ({ req }) => {
+  const session = await getSession({ req });
+  if (session) {
+    return {
+      props: {
+        session,
+      },
+    };
+  }
+};
+
+export default function UpdatePasswordPage({ session }) {
   return (
     <UserProfileLayout>
-      <UpdatePassword />
+      <UpdatePassword session={session} />
     </UserProfileLayout>
   );
 }

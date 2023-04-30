@@ -1,22 +1,32 @@
 import UpdateAddress from "@/components/user/UpdateAddress";
 import axios from "axios";
+import { getSession } from "next-auth/react";
 
 export const getServerSideProps = async (context) => {
   const { id } = context.params;
+  const req = context.req;
 
-  const { data } = await axios.get(`${process.env.API_URL}/api/address/${id}`, {
-    headers: {
-      Cookie: `next-auth.session-token=${context.req?.cookies["next-auth.session-token"]}`,
-    },
-  });
+  const session = await getSession({ req });
 
-  return {
-    props: {
-      addressData: data?.address || null,
-    },
-  };
+  if (session) {
+    const { data } = await axios.get(
+      `${process.env.API_URL}/api/address/${id}`,
+      {
+        headers: {
+          "x-user-session": JSON.stringify(session),
+        },
+      }
+    );
+
+    return {
+      props: {
+        addressData: data?.address || null,
+        session,
+      },
+    };
+  }
 };
 
-export default function UpdateAddressPage({ addressData }) {
-  return <UpdateAddress addressData={addressData} />;
+export default function UpdateAddressPage({ addressData, session }) {
+  return <UpdateAddress addressData={addressData} session={session} />;
 }

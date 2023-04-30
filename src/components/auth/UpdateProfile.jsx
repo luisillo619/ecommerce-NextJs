@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { updateProfile } from "@/redux/reducer/authSlice";
 import { useRouter } from "next/router";
 
-const UpdateProfile = () => {
+const UpdateProfile = ({session}) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const error = useSelector(selectAuthError);
@@ -41,7 +41,7 @@ const UpdateProfile = () => {
     formData.set("name", name);
     formData.set("email", email);
     formData.set("image", avatar);
-    dispatch(updateProfile(formData, router));
+    dispatch(updateProfile(formData, router,session));
   };
 
   const onChange = (e) => {

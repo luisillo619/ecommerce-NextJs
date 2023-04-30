@@ -8,7 +8,7 @@ import defaultProduct from "../../../public/images/default_product.png";
 import Image from "next/image";
 import axios from "axios";
 
-const Shipping = ({ addresses }) => {
+const Shipping = ({ addresses, session }) => {
   const cart = useSelector(selectCart);
 
   const [shippingInfo, setShippinInfo] = useState("");
@@ -27,6 +27,11 @@ const Shipping = ({ addresses }) => {
         {
           items: cart,
           shippingInfo,
+        },
+        {
+          headers: {
+            "x-user-session": JSON.stringify(session),
+          },
         }
       );
       window.location.href = data.url; // se abre la ventana de stripe

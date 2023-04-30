@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-const UpdatePassword = () => {
+const UpdatePassword = ({session}) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const error = useSelector(selectAuthError);
@@ -26,7 +26,7 @@ const UpdatePassword = () => {
       updatePassword({
         currentPassword,
         newPassword,
-      },router)
+      },router,session)
     );
   };
 

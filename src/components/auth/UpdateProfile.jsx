@@ -41,7 +41,7 @@ const UpdateProfile = ({session}) => {
     formData.set("name", name);
     formData.set("email", email);
     formData.set("image", avatar);
-    dispatch(updateProfile(formData, router,session));
+    dispatch(updateProfile(formData, router, session));
   };
 
   const onChange = (e) => {

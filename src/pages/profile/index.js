@@ -20,9 +20,8 @@ export const getServerSideProps = async (context) => {
 
 export default function ProfilePage({ data }) {
   return (
-    // <UserProfileLayout>
-    //   <Profile data={data} />
-    // </UserProfileLayout>
-    <h1>Hola</h1>
+    <UserProfileLayout>
+      <Profile data={data} />
+    </UserProfileLayout>
   );
 }

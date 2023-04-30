@@ -41,10 +41,9 @@ export default async function auth(req, res) {
         user && (token.user = user);
 
         // Para que los cambios se vean automaticamente despues de que el usuario actualiza su perfil
+
         if (req.url === "/api/auth/session?update") {
-          console.log("dentro de token");
           const updateUser = await User.findById(token.user._id);
-          console.log(updateUser, "update user");
           token.user = updateUser;
         }
 
@@ -52,10 +51,11 @@ export default async function auth(req, res) {
       },
       session: async ({ session, token }) => {
         session.user = token.user;
-
+        session.token = token; // Agregar esta línea
+    
         // delete password from session
         delete session?.user?.password;
-
+    
         return session;
       },
     },

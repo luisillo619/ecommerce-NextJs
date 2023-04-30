@@ -29,10 +29,9 @@ const Shipping = ({ addresses }) => {
           shippingInfo,
         }
       );
-      window.location.href = data.url;
+      window.location.href = data.url; // se abre la ventana de stripe
     } catch (error) {
-      console.log(error.response);
-
+      console.log(error);
     }
   };
 

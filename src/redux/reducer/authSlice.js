@@ -56,7 +56,7 @@ export const registerUser =
 const loadUser = async (router, dispatch) => {
   try {
     const { data } = await axios.get("/api/auth/session?update");
-
+    console.log("data",data);
     if (Object.keys(data).length > 0) {
       dispatch(setUser(data.user));
       router.replace("/profile");

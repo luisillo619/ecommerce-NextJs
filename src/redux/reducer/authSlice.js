@@ -32,12 +32,12 @@ export const registerUser =
   ({ name, email, password }) =>
   async (dispatch) => {
     try {
-    
-      const { data } = await axios.post(
-        `${process.env.API_URL}/api/auth/register`,
-        { name, email, password }
-      );
-      
+      const { data } = await axios.post(`/api/auth/register`, {
+        name,
+        email,
+        password,
+      });
+
       if (Object.keys(data).length > 0) {
         window.location.href = window.location.origin;
       }
@@ -75,15 +75,12 @@ const loadUser = async (router, dispatch) => {
 export const updateProfile = (formData, router) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
-    const { data } = await axios.put(
-      `${process.env.API_URL}/api/auth/profile/update`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+
+    const { data } = await axios.put(`/api/auth/profile/update`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     if (Object.keys(data).length > 0) {
       await loadUser(router, dispatch);
@@ -105,10 +102,10 @@ export const updatePassword =
   ({ currentPassword, newPassword }, router) =>
   async (dispatch) => {
     try {
-      const { data } = await axios.put(
-        `${process.env.API_URL}/api/auth/profile/update_password`,
-        { currentPassword, newPassword }
-      );
+      const { data } = await axios.put(`/api/auth/profile/update_password`, {
+        currentPassword,
+        newPassword,
+      });
 
       if (Object.keys(data).length > 0) {
         router.replace("/profile");
@@ -126,10 +123,7 @@ export const updatePassword =
 
 export const addNewAddress = (address, router) => async (dispatch) => {
   try {
-    const { data } = await axios.post(
-      `${process.env.API_URL}/api/address`,
-      address
-    );
+    const { data } = await axios.post(`/api/address`, address);
     if (Object.keys(data).length > 0) {
       router.push("/profile");
     }
@@ -146,10 +140,7 @@ export const addNewAddress = (address, router) => async (dispatch) => {
 
 export const updateAddress = (address, id, router) => async (dispatch) => {
   try {
-    const { data } = await axios.put(
-      `${process.env.API_URL}/api/address/${id}`,
-      address
-    );
+    const { data } = await axios.put(`/api/address/${id}`, address);
 
     if (Object.keys(data).length > 0) {
       dispatch(setUpdated(true));
@@ -162,11 +153,9 @@ export const updateAddress = (address, id, router) => async (dispatch) => {
 
 export const deleteAddress = (id, router) => async (dispatch) => {
   try {
-    const { data } = await axios.delete(
-      `${process.env.API_URL}/api/address/${id}`
-    );
+    const { data } = await axios.delete(`/api/address/${id}`);
     if (data?.success) {
-      router.push(`/profile`);
+      router.replace(`/profile`);
     }
   } catch (error) {
     dispatch(
@@ -185,4 +174,4 @@ export const selectUpdated = (state) => state.auth.updated;
 export const selectLoading = (state) => state.auth.loading;
 export const selectAuthError = (state) => state.auth.error;
 
-export default authSlice.reducer; 
+export default authSlice.reducer;

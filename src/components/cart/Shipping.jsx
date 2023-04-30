@@ -23,7 +23,7 @@ const Shipping = ({ addresses }) => {
     }
     try {
       const { data } = await axios.post(
-        `${process.env.API_URL}/api/orders/checkout_session`,
+        `/api/orders/checkout_session`,
         {
           items: cart,
           shippingInfo,

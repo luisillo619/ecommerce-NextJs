@@ -33,8 +33,8 @@ export const getAddress = async (req, res) => {
 };
 
 export const getAddresses = async (req, res) => {
-  
-  const addresses = await Address.find({ user: req.user._id });
+  const userId = req.headers['x-user-id'];
+  const addresses = await Address.find({ user: userId });
   res.status(200).json({
     addresses,
   });

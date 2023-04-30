@@ -5,6 +5,7 @@ const isAuthenticatedUser = async (req, res, next) => {
   const sessionCookie = req.headers.cookie
     ?.split(";")
     .find((c) => c.trim().startsWith("next-auth.session-token="));
+    console.log( req.headers);
   if (!sessionCookie) {
     return next(
       new ErrorHandler("Inicia sesion para tener acceso a esta ruta", 401)

@@ -37,25 +37,25 @@ export default async function auth(req, res) {
     ],
     callbacks: {
       jwt: async ({ token, user }) => {
-        // el user se le agrega en la segunda vuelta(cuando se recarga la pagina despues de que ya se logeó)
+        // El user se le agrega en la segunda vuelta (cuando se recarga la página después de que ya se logeó)
         user && (token.user = user);
 
-        // Para que los cambios se vean automaticamente despues de que el usuario actualiza su perfil
+        // Para que los cambios se vean automáticamente después de que el usuario actualiza su perfil
+        const update = req.query?.update;
 
-        if (req.url === "/api/auth/session?update") {
-          const updateUser = await User.findById(token.user._id);
-          token.user = updateUser;
+        if (update === "true") {
+          const updatedUser = await User.findById(token.user._id);
+          token.user = updatedUser;
         }
 
         return token;
       },
       session: async ({ session, token }) => {
         session.user = token.user;
-        session.token = token; // Agregar esta línea
-    
+
         // delete password from session
         delete session?.user?.password;
-    
+
         return session;
       },
     },

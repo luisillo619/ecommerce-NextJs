@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import Pagination from "@mui/material/Pagination";
+import ReactPaginate from "react-paginate";
 
 const CustomPagination = ({ resPerPage, productsCount }) => {
   const router = useRouter();
@@ -8,7 +8,8 @@ const CustomPagination = ({ resPerPage, productsCount }) => {
 
   const page = Number(pageParam) || 1;
 
-  const handlePageChange = (event, currentPage) => {
+  const handlePageChange = (selectedItem) => {
+    const currentPage = selectedItem.selected + 1;
     const newSearchParams = new URLSearchParams(restSearchParams);
     newSearchParams.set("page", currentPage);
     router.push({
@@ -21,7 +22,7 @@ const CustomPagination = ({ resPerPage, productsCount }) => {
     const totalPages = Math.ceil(productsCount / resPerPage);
 
     if (productsCount > 0 && (page > totalPages || page < 1)) {
-      handlePageChange(null, page > totalPages ? totalPages : 1);
+      handlePageChange({ selected: page > totalPages ? totalPages - 1 : 0 });
     }
   }, [
     router.query.ratings,
@@ -36,14 +37,24 @@ const CustomPagination = ({ resPerPage, productsCount }) => {
   }
 
   return (
-    <div className="flex mt-20 justify-center">
-      <Pagination
-        count={Math.ceil(productsCount / resPerPage)}
-        page={page}
-        onChange={handlePageChange}
-        siblingCount={1}
-        boundaryCount={1}
-        color="primary"
+    <div className="flex mt-10 justify-center">
+      <ReactPaginate
+        pageCount={Math.ceil(productsCount / resPerPage)}
+        pageRangeDisplayed={2}
+        marginPagesDisplayed={1}
+        onPageChange={handlePageChange}
+        forcePage={page - 1}
+        previousLabel={"Anterior"}
+        nextLabel={"Siguiente"}
+        breakLabel={"..."}
+        containerClassName={"flex items-center"}
+        pageClassName={"px-4 py-2 mx-1 border rounded"}
+        activeClassName={"bg-blue-600 border text-white"}
+        breakClassName={"px-4 py-2 mx-1"}
+        previousClassName={"px-4 py-2 mx-1 border rounded"}
+        nextClassName={"px-4 py-2 mx-1 border rounded"}
+        disabledClassName={"opacity-50 cursor-not-allowed"}
+      
       />
     </div>
   );

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Rating } from "@mui/material";
-import { StarBorder } from "@mui/icons-material";
-import { useRouter } from "next/router";
+import { StarIcon } from "@heroicons/react/24/solid";
+import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
+import ReactRating from "react-rating";
+
 import { getPriceQueryParams } from "../../helpers/helpers";
+import { useRouter } from "next/router";
 const Filters = () => {
   const router = useRouter();
   const [min, setMin] = useState();
@@ -202,11 +204,15 @@ const Filters = () => {
                   onClick={(e) => handlerClick(e.target)}
                 />
                 <span className="ml-2 text-gray-500">
-                  <Rating
-                    value={rating}
-                    readOnly
-                    precision={1}
-                    icon={<StarBorder fontSize="inherit" />}
+                  <ReactRating
+                    initialRating={rating}
+                    readonly
+                    emptySymbol={
+                      <StarIconOutline className="w-4 h-4 text-[#FAAF00]" />
+                    }
+                    fullSymbol={
+                      <StarIcon className="w-4 h-4 text-[#FAAF00]" />
+                    }
                   />
                 </span>
               </label>

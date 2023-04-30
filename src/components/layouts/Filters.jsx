@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import StarRatings from "react-star-ratings";
+import { Rating } from "@mui/material";
+import { StarBorder } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { getPriceQueryParams } from "../../helpers/helpers";
 const Filters = () => {
@@ -201,13 +202,11 @@ const Filters = () => {
                   onClick={(e) => handlerClick(e.target)}
                 />
                 <span className="ml-2 text-gray-500">
-                  <StarRatings
-                    rating={rating}
-                    starRatedColor="#ffb829"
-                    numberOfStars={5}
-                    starDimension="20px"
-                    starSpacing="2px"
-                    name="rating"
+                  <Rating
+                    value={rating}
+                    readOnly
+                    precision={1}
+                    icon={<StarBorder fontSize="inherit" />}
                   />
                 </span>
               </label>

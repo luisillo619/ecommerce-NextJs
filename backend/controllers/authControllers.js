@@ -30,7 +30,7 @@ export const registerUser = async (req, res) => {
 
 export const updateProfile = async (req, res, next) => {
   // req.files viene del middleware multer
-  // multer carga la imagen en la carpeta uploads y valida la imagen y se gurada en req.files y en la pc localmente
+  // multer carga la imagen en la carpeta uploads y valida la imagen y se gurada  en req.files y en la pc localmente
 
   // si req.files entonces se guarda en cloudinary en buyitnow/avatars
   // fs elimina la imagen de la carpeta uploads
@@ -56,15 +56,27 @@ export const updateProfile = async (req, res, next) => {
     name: req.body.name,
     email: req.body.email,
   };
+  // LOCAL:
+  // if (req.files.length > 0) {
+  //   const uploader = async (path) => await uploads(path, "buyitnow/avatars");
+  //   const file = req.files[0];
+  //   const { path } = file;
+  //   // path === 'public\uploads\promociones-empresas-espai-dental-1024x626.jpg'
+  //   const avatarResponse = await uploader(path);
+  //   // Elimina el archivo temporal de la pc
+  //   fs.unlinkSync(path);
+  //   newUserData.avatar = avatarResponse;
+  // }
 
+  // DEPLOYADO:
   if (req.files.length > 0) {
-    const uploader = async (path) => await uploads(path, "buyitnow/avatars");
+    const uploader = async (buffer) =>
+      await uploads(buffer, "buyitnow/avatars");
     const file = req.files[0];
-    const { path } = file;
-    // path === 'public\uploads\promociones-empresas-espai-dental-1024x626.jpg'
-    const avatarResponse = await uploader(path);
-    // Elimina el archivo temporal del servidor
-    fs.unlinkSync(path);
+    const buffer = file.buffer;
+    const avatarResponse = await uploader(buffer);
+
+    // No es necesario eliminar el archivo del servidor, ya que se almacenó en memoria
     newUserData.avatar = avatarResponse;
   }
 

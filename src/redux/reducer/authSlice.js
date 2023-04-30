@@ -72,13 +72,14 @@ const loadUser = async (router, dispatch) => {
   }
 };
 
-export const updateProfile = (formData, router) => async (dispatch) => {
+export const updateProfile = (formData, router,session) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
 
     const { data } = await axios.put(`/api/auth/profile/update`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
+        'x-user-session': JSON.stringify(session),
       },
     });
 
@@ -99,12 +100,16 @@ export const updateProfile = (formData, router) => async (dispatch) => {
 };
 
 export const updatePassword =
-  ({ currentPassword, newPassword }, router) =>
+  ({ currentPassword, newPassword }, router, session) =>
   async (dispatch) => {
     try {
       const { data } = await axios.put(`/api/auth/profile/update_password`, {
         currentPassword,
         newPassword,
+      },{
+        headers: {
+          'x-user-session': JSON.stringify(session),
+        },
       });
 
       if (Object.keys(data).length > 0) {
@@ -121,9 +126,13 @@ export const updatePassword =
     }
   };
 
-export const addNewAddress = (address, router) => async (dispatch) => {
+export const addNewAddress = (address, router,session) => async (dispatch) => {
   try {
-    const { data } = await axios.post(`/api/address`, address);
+    const { data } = await axios.post(`/api/address`, address,{
+      headers: {
+        'x-user-session': JSON.stringify(session),
+      },
+    });
     if (Object.keys(data).length > 0) {
       router.push("/profile");
     }
@@ -138,22 +147,29 @@ export const addNewAddress = (address, router) => async (dispatch) => {
   }
 };
 
-export const updateAddress = (address, id, router) => async (dispatch) => {
-  try {
-    const { data } = await axios.put(`/api/address/${id}`, address);
+export const updateAddress =
+  (address, id, router, session) => async (dispatch) => {
+    try {
+      const { data } = await axios.put(`/api/address/${id}`, address, {
+        headers: {
+          "x-user-session": JSON.stringify(session),
+        },
+      });
 
-    if (Object.keys(data).length > 0) {
-      dispatch(setUpdated(true));
-      router.replace(`/address/${id}`);
+      if (Object.keys(data).length > 0) {
+        dispatch(setUpdated(true));
+        router.replace(`/address/${id}`);
+      }
+    } catch (error) {
+      dispatch(setError(error?.response?.data?.error?.message));
     }
-  } catch (error) {
-    dispatch(setError(error?.response?.data?.error?.message));
-  }
-};
+  };
 
-export const deleteAddress = (id, router) => async (dispatch) => {
+export const deleteAddress = (id, router, session) => async (dispatch) => {
   try {
-    const { data } = await axios.delete(`/api/address/${id}`);
+    const { data } = await axios.delete(`/api/address/${id}`, {
+      headers: { "x-user-session": JSON.stringify(session) },
+    });
     if (data?.success) {
       router.replace(`/profile`);
     }

@@ -24,7 +24,9 @@ const addressSchema = Joi.object({
 });
 
 export const getAddress = async (req, res) => {
+
   const address = await Address.findById(req.query.id);
+ 
   if (!address) return new ErrorHandler("Direccion no encontrada", 404);
 
   res.status(200).json({
@@ -33,8 +35,7 @@ export const getAddress = async (req, res) => {
 };
 
 export const getAddresses = async (req, res) => {
-  const userId = req.headers['x-user-id'];
-  const addresses = await Address.find({ user: userId });
+  const addresses = await Address.find({ user: req.user._id });
   res.status(200).json({
     addresses,
   });

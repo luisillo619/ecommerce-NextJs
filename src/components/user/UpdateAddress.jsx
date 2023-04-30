@@ -13,7 +13,7 @@ import {
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
-const UpdateAddress = ({ addressData }) => {
+const UpdateAddress = ({ addressData, session }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const error = useSelector(selectAuthError);
@@ -52,11 +52,11 @@ const UpdateAddress = ({ addressData }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     
-    dispatch(updateAddress(address, addressData._id, router));
+    dispatch(updateAddress(address, addressData._id, router, session));
   };
 
   const deleteHandler = () => {
-    dispatch(deleteAddress(addressData._id, router));
+    dispatch(deleteAddress(addressData._id, router, session));
   };
 
   return (

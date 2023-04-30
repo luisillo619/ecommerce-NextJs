@@ -19,7 +19,7 @@ export default async function auth(req, res) {
           const user = await User.findOne({ email }).select("+password");
 
           if (!user) {
-            throw new Error("Invalid Email or Password");
+            throw new Error("Correo o contraseña invalido");
           }
 
           const isPasswordMatched = await bcrypt.compare(
@@ -28,7 +28,7 @@ export default async function auth(req, res) {
           );
 
           if (!isPasswordMatched) {
-            throw new Error("Invalid Email or Password");
+            throw new Error("Correo o contraseña invalido");
           }
 
           return user;
@@ -57,6 +57,7 @@ export default async function auth(req, res) {
         return session;
       },
     },
+
     pages: {
       signIn: "/login", // Por si el match del middleware concide y no existe la sesion del usuario va a redirigir a /login
     },

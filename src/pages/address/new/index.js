@@ -1,8 +1,20 @@
 import NewAddress from "@/components/user/NewAddress";
+import { getSession } from "next-auth/react";
 
-const NewAddressPage = () => {
-  return <NewAddress />;
+export const getServerSideProps = async ({ req }) => {
+  const session = await getSession({ req });
+
+  if (session) {
+    return {
+      props: {
+        session,
+      },
+    };
+  }
+};
+
+const NewAddressPage = ({ session }) => {
+  return <NewAddress session={session} />;
 };
 
 export default NewAddressPage;
-

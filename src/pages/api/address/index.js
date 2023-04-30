@@ -10,7 +10,7 @@ import { isAuthenticatedUser } from "../../../../backend/middlewares/auth";
 const handler = nc({ onError });
 dbConnect();
 
-handler.get(getAddresses); // Se autentica la session en getServerSideProps
+handler.use(isAuthenticatedUser).get(getAddresses);
 handler.use(isAuthenticatedUser).post(newAddress);
 
 

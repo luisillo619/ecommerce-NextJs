@@ -1,5 +1,8 @@
 import { useRef } from "react";
-import Rating from "@mui/material/Rating";
+import { StarIcon } from "@heroicons/react/24/solid";
+import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
+import ReactRating from "react-rating";
+
 import BreadCrumbs from "../layouts/BreadCrumbs";
 import { addItemToCart, selectCart } from "@/redux/reducer/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -90,11 +93,11 @@ const ProductDetails = ({ product }) => {
 
               <div className="flex flex-wrap items-center space-x-2 mb-2">
                 <div className="ratings">
-                  <Rating
-                    value={product?.ratings}
-                    precision={0.5}
-                    readOnly
-                    size="small"
+                  <ReactRating
+                    initialRating={product?.ratings}
+                    readonly
+                    emptySymbol={<StarIconOutline className="w-4 h-4 text-[#FAAF00]" />}
+                    fullSymbol={<StarIcon className="w-4 h-4 text-[#FAAF00]" />}
                   />
                 </div>
                 <span className="text-yellow-500">{product?.ratings}</span>

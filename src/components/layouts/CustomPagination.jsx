@@ -21,13 +21,6 @@ const useHandlePageChange = (page, productsCount, resPerPage, setLoading) => {
     if (productsCount === 0) return;
 
     const totalPages = Math.ceil(productsCount / resPerPage);
-    let queryParams = new URLSearchParams(window.location.search);
-
-    if (queryParams.has("page") && router.query.page === "1") {
-      queryParams.delete("page");
-      const path = window.location.pathname + "?" + queryParams.toString();
-      router.push(path);
-    }
 
     if (page > totalPages || page < 1) {
       setLoading(true);

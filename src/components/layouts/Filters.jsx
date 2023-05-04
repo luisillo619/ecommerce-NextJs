@@ -12,6 +12,17 @@ const Filters = () => {
 
   // verifica si min o max existe en query y si existe settea el estado
   useEffect(() => {
+    if (Object.keys(router.query).length === 0) {
+      const minInput = document.querySelector('input[name="min"]');
+      const maxInput = document.querySelector('input[name="max"]');
+      if (minInput) minInput.value = "";
+      if (maxInput) maxInput.value = "";
+      setMin("");
+      setMax("");
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach((checkbox) => (checkbox.checked = false));
+    }
+
     if (typeof window !== "undefined") {
       queryParams = new URLSearchParams(window.location.search);
     }
@@ -23,7 +34,7 @@ const Filters = () => {
       else setMin;
       if (maxValue) setMax(maxValue);
     }
-  }, []);
+  }, [router]);
 
   // Verifica si algun check existe en query y de ser asi se selecciona por defualt
   const checkHandler = useCallback((checkBoxType, checkBoxValue) => {

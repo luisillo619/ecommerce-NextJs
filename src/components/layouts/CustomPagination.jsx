@@ -4,7 +4,7 @@ import ReactPaginate from "react-paginate";
 
 const useHandlePageChange = (page, productsCount, resPerPage, setLoading) => {
   const router = useRouter();
-  const { page: pageParam, ...restSearchParams } = router.query;
+  const { ...restSearchParams } = router.query;
 
   const handlePageChange = (selectedItem) => {
     const currentPage = selectedItem.selected + 1;
@@ -18,7 +18,16 @@ const useHandlePageChange = (page, productsCount, resPerPage, setLoading) => {
   };
 
   useEffect(() => {
+    if (productsCount === 0) return;
+
     const totalPages = Math.ceil(productsCount / resPerPage);
+    let queryParams = new URLSearchParams(window.location.search);
+
+    if (queryParams.has("page") && router.query.page === "1") {
+      queryParams.delete("page");
+      const path = window.location.pathname + "?" + queryParams.toString();
+      router.push(path);
+    }
 
     if (page > totalPages || page < 1) {
       setLoading(true);
@@ -34,8 +43,7 @@ const useHandlePageChange = (page, productsCount, resPerPage, setLoading) => {
 const CustomPagination = ({ resPerPage, productsCount }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { page: pageParam } = router.query;
-  const page = Number(pageParam) || 1;
+  const page = Number(router.query.page) || 1;
 
   const handlePageChange = useHandlePageChange(
     page,

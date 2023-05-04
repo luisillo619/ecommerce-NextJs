@@ -5,6 +5,7 @@ const DB_URI = process.env.DB_URI;
 const conn = {
   isConnected: false,
 };
+
 mongoose.set("strictQuery", false);
 export const dbConnect = async () => {
   try {

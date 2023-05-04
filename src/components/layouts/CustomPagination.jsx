@@ -1,17 +1,16 @@
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ReactPaginate from "react-paginate";
 
-const CustomPagination = ({ resPerPage, productsCount }) => {
+const useHandlePageChange = (page, productsCount, resPerPage, setLoading) => {
   const router = useRouter();
   const { page: pageParam, ...restSearchParams } = router.query;
-
-  const page = Number(pageParam) || 1;
 
   const handlePageChange = (selectedItem) => {
     const currentPage = selectedItem.selected + 1;
     const newSearchParams = new URLSearchParams(restSearchParams);
     newSearchParams.set("page", currentPage);
+
     router.push({
       pathname: router.pathname,
       search: newSearchParams.toString(),
@@ -21,16 +20,34 @@ const CustomPagination = ({ resPerPage, productsCount }) => {
   useEffect(() => {
     const totalPages = Math.ceil(productsCount / resPerPage);
 
-    if (productsCount > 0 && (page > totalPages || page < 1)) {
+    if (page > totalPages || page < 1) {
+      setLoading(true);
       handlePageChange({ selected: page > totalPages ? totalPages - 1 : 0 });
+    } else {
+      setLoading(false);
     }
-  }, [
-    router.query.ratings,
-    router.query.category,
-    router.query.max,
-    router.query.min,
-    router.query.search,
-  ]);
+  }, [router.query]);
+
+  return handlePageChange;
+};
+
+const CustomPagination = ({ resPerPage, productsCount }) => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { page: pageParam } = router.query;
+  const page = Number(pageParam) || 1;
+
+  const handlePageChange = useHandlePageChange(
+    page,
+    productsCount,
+    resPerPage,
+    setLoading
+  );
+
+  const totalPages = useMemo(
+    () => Math.ceil(productsCount / resPerPage),
+    [productsCount, resPerPage]
+  );
 
   if (productsCount === 0) {
     return <div>No hay productos disponibles.</div>;
@@ -38,24 +55,27 @@ const CustomPagination = ({ resPerPage, productsCount }) => {
 
   return (
     <div className="flex mt-10 justify-center">
-      <ReactPaginate
-        pageCount={Math.ceil(productsCount / resPerPage)}
-        pageRangeDisplayed={2}
-        marginPagesDisplayed={1}
-        onPageChange={handlePageChange}
-        forcePage={page - 1}
-        previousLabel={"Anterior"}
-        nextLabel={"Siguiente"}
-        breakLabel={"..."}
-        containerClassName={"flex items-center"}
-        pageClassName={"px-4 py-2 mx-1 border rounded"}
-        activeClassName={"bg-blue-600 border text-white"}
-        breakClassName={"px-4 py-2 mx-1"}
-        previousClassName={"px-4 py-2 mx-1 border rounded"}
-        nextClassName={"px-4 py-2 mx-1 border rounded"}
-        disabledClassName={"opacity-50 cursor-not-allowed"}
-      
-      />
+      {!loading && (
+        <ReactPaginate
+          pageCount={totalPages}
+          onPageChange={handlePageChange}
+          forcePage={page - 1}
+          previousLabel="Anterior"
+          nextLabel="Siguiente"
+          breakLabel="..."
+          containerClassName="flex items-center"
+          pageClassName="border rounded mx-1"
+          pageLinkClassName="px-4 py-2 w-full h-full flex items-center justify-center"
+          activeClassName="bg-blue-600 border text-white"
+          breakClassName="px-4 py-2 mx-1 border border-red-500"
+          previousClassName="border rounded mx-1"
+          nextClassName="border rounded mx-1"
+          previousLinkClassName="px-4 py-2 w-full h-full flex items-center justify-center"
+          nextLinkClassName="px-4 py-2 w-full h-full flex items-center justify-center"
+          disabledClassName="opacity-50 cursor-not-allowed"
+          disabledLinkClassName="opacity-50 cursor-not-allowed"
+        />
+      )}
     </div>
   );
 };

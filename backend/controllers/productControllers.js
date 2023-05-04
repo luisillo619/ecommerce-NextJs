@@ -10,29 +10,28 @@ export const newProduct = async (req, res, next) => {
   });
 };
 
+// Función para obtener productos con filtros y paginación.
 export const getProducts = async (req, res, next) => {
-  const resPerPage = 3;
-  const productsCount = await Product.countDocuments();
+  const resPerPage = 4; // Número de resultados por página
+  const productsCount = await Product.countDocuments(); // Contar todos los productos sin filtros
 
-  // APLICANDO FILTROS
+  // Crear una instancia de APIFilters y aplicar filtros de búsqueda y filtrado
   const apiFilters = new APIFilters(Product.find(), req.query)
     .search()
     .filter();
 
-  let products = await apiFilters.query; // productos con filtros
-  const filteredProductsCount = products.length;
+  // Clonar la consulta y contar los productos después de aplicar los filtros (sin paginación)
+  const countQuery = apiFilters.query.clone();
+  const filteredProductsCount = await countQuery.countDocuments();
 
-  // APLICANDO FILTRO DE PAGINACION
-  apiFilters.pagination(resPerPage);
-
-  products = await apiFilters.query.clone(); // productos con filtros + filtro de paginacion
+  // Aplicar paginación y ejecutar la consulta final para obtener productos
+  const products = await apiFilters.pagination(resPerPage).query.exec();
 
   res.status(200).json({
-    productsCount, // cantidad de productos sin filtro
-    resPerPage, // cantidad de productos que se va a mostrar en cada pagina
-    filteredProductsCount, // cantidad de productos con los filtros, sin los filtros de paginacion
-
-    products, // productos con filtros + filtro de paginacion (solo son 3)
+    productsCount, // Cantidad total de productos sin filtros
+    resPerPage, // Número de resultados por página
+    filteredProductsCount, // Cantidad de productos después de aplicar filtros (sin paginación)
+    products, // Productos filtrados y paginados
   });
 };
 

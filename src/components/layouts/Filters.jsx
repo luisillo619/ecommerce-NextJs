@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, memo } from "react";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
-import ReactRating from "react-rating";
-
 import { getPriceQueryParams } from "../../helpers/helpers";
 import { useRouter } from "next/router";
+
 const Filters = () => {
   const router = useRouter();
   const [min, setMin] = useState();
@@ -27,7 +26,7 @@ const Filters = () => {
   }, []);
 
   // Verifica si algun check existe en query y de ser asi se selecciona por defualt
-  function checkHandler(checkBoxType, checkBoxValue) {
+  const checkHandler = useCallback((checkBoxType, checkBoxValue) => {
     if (typeof window !== "undefined") {
       queryParams = new URLSearchParams(window.location.search);
     }
@@ -37,9 +36,9 @@ const Filters = () => {
       if (checkBoxValue === value) return true;
       return false;
     }
-  }
+  }, []);
 
-  function handlerClick(checkbox) {
+  const handlerClick = useCallback((checkbox) => {
     if (typeof window !== "undefined") {
       queryParams = new URLSearchParams(window.location.search);
 
@@ -61,9 +60,9 @@ const Filters = () => {
       const path = window.location.pathname + "?" + queryParams.toString();
       router.push(path);
     }
-  }
+  }, []);
 
-  function handleButtonClick() {
+  const handleButtonClick = useCallback(() => {
     if (typeof window !== "undefined") {
       queryParams = new URLSearchParams(window.location.search);
       queryParams = getPriceQueryParams(queryParams, "min", min);
@@ -71,44 +70,56 @@ const Filters = () => {
       const path = window.location.pathname + "?" + queryParams.toString();
       router.push(path);
     }
-  }
+  }, [min, max]);
+
+  const CustomRating = ({ rating }) => {
+    return (
+      <div className="flex">
+        {[1, 2, 3, 4, 5].map((star) => {
+          return star <= rating ? (
+            <StarIcon key={star} className="w-4 h-4 text-[#FAAF00]" />
+          ) : (
+            <StarIconOutline key={star} className="w-4 h-4 text-[#FAAF00]" />
+          );
+        })}
+      </div>
+    );
+  };
 
   return (
     <aside className="md:w-1/3 lg:w-1/4 px-4">
       <a
-        className="md:hidden mb-5 w-full text-center px-4 py-2 inline-block text-lg text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-blue-600"
+        className="block md:hidden mb-5 w-full text-center px-4 py-2 text-lg text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-blue-600"
         href="#"
       >
         Filtrar por:
       </a>
       <div className="hidden md:block px-6 py-4 border border-gray-200 bg-white rounded shadow-sm">
-        <h3 className="font-semibold mb-2">Precio ($)</h3>
+        <h3 className="font-semibold mb-2">Precio:</h3>
         <div className="grid md:grid-cols-3 gap-x-2">
           <div className="mb-4">
             <input
               name="min"
-              className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+              className="border border-gray-200 bg-gray-100 rounded-md py-2 px-3 w-full hover:border-gray-400 focus:outline-none focus:border-gray-400"
               type="number"
               placeholder="Min"
               value={min}
               onChange={(e) => setMin(e.target.value)}
             />
           </div>
-
           <div className="mb-4">
             <input
               name="max"
-              className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+              className="border border-gray-200 bg-gray-100 rounded-md py-2 px-3 w-full hover:border-gray-400 focus:outline-none focus:border-gray-400"
               type="number"
               placeholder="Max"
               value={max}
               onChange={(e) => setMax(e.target.value)}
             />
           </div>
-
           <div className="mb-4">
             <button
-              className="px-1 py-2 text-center w-full inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+              className="px-1 py-2 text-center w-full text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
               onClick={handleButtonClick}
             >
               Ir
@@ -117,84 +128,35 @@ const Filters = () => {
         </div>
       </div>
 
-      <div className="hidden md:block px-6 py-4 border border-gray-200 bg-white rounded shadow-sm ">
+      <div className="hidden md:block px-6 py-4 border border-gray-200 bg-white rounded shadow-sm">
         <h3 className="font-semibold mb-2">Categoria</h3>
-
         <ul className="space-y-1">
-          <li>
-            <label className="flex items-center">
-              <input
-                name="category"
-                type="checkbox"
-                value="Electronicos"
-                className="h-4 w-4"
-                defaultChecked={checkHandler("category", "Electronicos")}
-                onClick={(e) => handlerClick(e.target)}
-              />
-              <span className="ml-2 text-gray-500"> Electronicos </span>
-            </label>
-          </li>
-          <li>
-            <label className="flex items-center">
-              <input
-                name="category"
-                type="checkbox"
-                value="Laptops"
-                className="h-4 w-4"
-                defaultChecked={checkHandler("category", "Laptops")}
-                onClick={(e) => handlerClick(e.target)}
-              />
-              <span className="ml-2 text-gray-500"> Laptops </span>
-            </label>
-          </li>
-          <li>
-            <label className="flex items-center">
-              <input
-                name="category"
-                type="checkbox"
-                value="Juguetes"
-                className="h-4 w-4"
-                defaultChecked={checkHandler("category", "Juguetes")}
-                onClick={(e) => handlerClick(e.target)}
-              />
-              <span className="ml-2 text-gray-500"> Juguetes </span>
-            </label>
-          </li>
-          <li>
-            <label className="flex items-center">
-              <input
-                name="category"
-                type="checkbox"
-                value="Oficina"
-                className="h-4 w-4"
-                defaultChecked={checkHandler("category", "Oficina")}
-                onClick={(e) => handlerClick(e.target)}
-              />
-              <span className="ml-2 text-gray-500"> Oficina </span>
-            </label>
-          </li>
-          <li>
-            <label className="flex items-center">
-              <input
-                name="category"
-                type="checkbox"
-                value="Belleza"
-                className="h-4 w-4"
-                defaultChecked={checkHandler("category", "Belleza")}
-                onClick={(e) => handlerClick(e.target)}
-              />
-              <span className="ml-2 text-gray-500"> Belleza </span>
-            </label>
-          </li>
+          {["Electrónicos", "Laptops", "Juguetes", "Oficina", "Belleza"].map(
+            (category) => (
+              <li key={category}>
+                <label className="flex items-center">
+                  <input
+                    name="category"
+                    type="checkbox"
+                    value={category}
+                    className="h-4 w-4"
+                    defaultChecked={checkHandler("category", category)}
+                    onClick={(e) => handlerClick(e.target)}
+                  />
+                  <span className="ml-2 text-gray-500">{category}</span>
+                </label>
+              </li>
+            )
+          )}
         </ul>
 
         <hr className="my-4" />
 
         <h3 className="font-semibold mb-2">Calificaciones</h3>
         <ul className="space-y-1">
-          <li>
-            {[5, 4, 3, 2, 1].map((rating) => (
-              <label key={rating} className="flex items-center">
+          {[5, 4, 3, 2, 1].map((rating) => (
+            <li key={rating}>
+              <label className="flex items-center">
                 <input
                   name="ratings"
                   type="checkbox"
@@ -204,24 +166,15 @@ const Filters = () => {
                   onClick={(e) => handlerClick(e.target)}
                 />
                 <span className="ml-2 text-gray-500">
-                  <ReactRating
-                    initialRating={rating}
-                    readonly
-                    emptySymbol={
-                      <StarIconOutline className="w-4 h-4 text-[#FAAF00]" />
-                    }
-                    fullSymbol={
-                      <StarIcon className="w-4 h-4 text-[#FAAF00]" />
-                    }
-                  />
+                  <CustomRating rating={rating} />
                 </span>
               </label>
-            ))}
-          </li>
+            </li>
+          ))}
         </ul>
       </div>
     </aside>
   );
 };
 
-export default Filters;
+export default memo(Filters);

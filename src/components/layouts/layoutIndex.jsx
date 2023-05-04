@@ -10,8 +10,10 @@ import { useSession } from "next-auth/react";
 export default function LayoutIndex({ children }) {
   const dispatch = useDispatch();
   const { data, status } = useSession();
-  const cart = useSelector(selectCart);
-  const user = useSelector(selectUser);
+  let cart = useSelector(selectCart);
+  let user = useSelector(selectUser);
+  user = user || {};
+
   const isLoaded = status === "authenticated" || status === "unauthenticated";
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function LayoutIndex({ children }) {
         dispatch(setUser(data.user));
       }
     }
-  }, [data, dispatch, isLoaded]);
+  }, [data, dispatch]);
 
   if (!user) {
     return null;
@@ -29,7 +31,7 @@ export default function LayoutIndex({ children }) {
 
   return (
     <>
-      <Header user={user} cart={cart}/>
+      <Header user={user} cart={cart} />
       {children}
     </>
   );

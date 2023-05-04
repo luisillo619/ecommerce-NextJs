@@ -1,15 +1,9 @@
 import Link from "next/link";
 import Search from "./Search.jsx";
 import Image from "next/image";
-import { useSelector } from "react-redux";
-import { selectCart } from "@/redux/reducer/cartSlice.js";
-import { selectUser } from "@/redux/reducer/authSlice.js";
 import buyItNowLogo from "../../../public/images/logo.png";
 
-const Header = () => {
-  const cart = useSelector(selectCart);
-  const user = useSelector(selectUser);
-
+const Header = ({ user, cart }) => {
   return (
     <header className="bg-white py-2 border-b">
       <div className="container max-w-screen-xl mx-auto px-4">

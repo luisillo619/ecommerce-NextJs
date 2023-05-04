@@ -52,17 +52,15 @@ const ProductItem = ({ product }) => {
   return (
     <article className="grid grid-cols-1 md:grid-cols-12 gap-4 border border-gray-200 overflow-hidden bg-white shadow-sm rounded mb-5">
       <div className="col-span-12 md:col-span-3 p-3 flex items-center justify-center">
-      <div className="w-48 h-48 md:w-60 md:h-52 relative">
-        <Image
-          src={
-            product?.images[0] ? product?.images[0].url : default_product
-          }
-          alt="product name"
-          layout="fill"
-          objectFit="contain"
-          priority="true"
-        />
-      </div>
+        <div className="w-48 h-48 md:w-60 md:h-52 relative">
+          <Image
+            src={product?.images[0] ? product?.images[0].url : default_product}
+            alt="product name"
+            layout="fill"
+            objectFit="contain"
+            priority="true"
+          />
+        </div>
       </div>
       <div className="col-span-12 md:col-span-6 p-4">
         <Link href={`/product/${product._id}`}>

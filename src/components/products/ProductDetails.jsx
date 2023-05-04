@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
-import ReactRating from "react-rating";
 
 import BreadCrumbs from "../layouts/BreadCrumbs";
 import { addItemToCart, selectCart } from "@/redux/reducer/cartSlice";
@@ -46,9 +45,24 @@ const ProductDetails = ({ product }) => {
     { name: "Home", url: "/" },
     {
       name: `${product?.name?.substring(0, 100)} ...`,
-      url: `/products/${product?._id}`,
+      url: `/product/${product?._id}`,
     },
   ];
+
+  const CustomRating = ({ rating }) => {
+    return (
+      <div className="flex">
+        {[1, 2, 3, 4, 5].map((star) => {
+          return star <= rating ? (
+            <StarIcon key={star} className="w-4 h-4 text-[#FAAF00]" />
+          ) : (
+            <StarIconOutline key={star} className="w-4 h-4 text-[#FAAF00]" />
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <>
       <BreadCrumbs breadCrumbs={breadCrumbs} />
@@ -56,18 +70,16 @@ const ProductDetails = ({ product }) => {
         <div className="container max-w-screen-xl mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-5">
             <aside>
-              <div className="border border-gray-200 shadow-sm p-3 text-center rounded mb-5">
+              <div className="border border-gray-200 shadow-sm p-3 text-center rounded mb-5 h-96 flex items-center justify-center">
                 <img
                   ref={imgRef}
-                  className="object-cover inline-block"
+                  className="object-contain inline-block max-h-96"
                   src={
                     product?.images[0]
                       ? product?.images[0].url
                       : "/images/default_product.png"
                   }
                   alt="Product title"
-                  width="340"
-                  height="340"
                 />
               </div>
               <div className="space-x-2 overflow-auto text-center whitespace-nowrap">
@@ -93,12 +105,7 @@ const ProductDetails = ({ product }) => {
 
               <div className="flex flex-wrap items-center space-x-2 mb-2">
                 <div className="ratings">
-                  <ReactRating
-                    initialRating={product?.ratings}
-                    readonly
-                    emptySymbol={<StarIconOutline className="w-4 h-4 text-[#FAAF00]" />}
-                    fullSymbol={<StarIcon className="w-4 h-4 text-[#FAAF00]" />}
-                  />
+                  <CustomRating rating={product?.ratings} />
                 </div>
                 <span className="text-yellow-500">{product?.ratings}</span>
 

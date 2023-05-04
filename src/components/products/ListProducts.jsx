@@ -2,9 +2,7 @@ import ProductItem from "./ProductItem";
 import Filters from "../layouts/Filters";
 import CustomPagination from "../layouts/CustomPagination";
 
-// los dos start rings son los que me dan error
 const ListProducts = ({ data }) => {
-  
   return (
     <section className="py-12">
       <div className="container max-w-screen-xl mx-auto px-4 ">

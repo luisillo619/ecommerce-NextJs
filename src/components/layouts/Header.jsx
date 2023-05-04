@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { selectCart } from "@/redux/reducer/cartSlice.js";
 import { selectUser } from "@/redux/reducer/authSlice.js";
+import buyItNowLogo from "../../../public/images/logo.png";
 
 const Header = () => {
   const cart = useSelector(selectCart);
@@ -16,10 +17,13 @@ const Header = () => {
           <div className="flex-shrink-0 mr-5">
             <Link href="/">
               <Image
-                src="/images/logo.png"
+                src={buyItNowLogo}
                 height="40"
                 width="120"
                 alt="BuyItNow"
+                className="cursor-pointer"
+                style={{ objectFit: "contain", width: "auto", height: "auto" }}
+                priority
               />
             </Link>
           </div>

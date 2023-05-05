@@ -31,7 +31,6 @@ const UpdatePassword = ({ session }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-
     dispatch(
       updatePassword(
         {

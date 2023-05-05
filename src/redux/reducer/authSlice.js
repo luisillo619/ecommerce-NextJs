@@ -99,7 +99,7 @@ export const updateProfile =
           setError(messagesArray[0] || error?.response?.data?.error?.message)
         );
       }
-      dispatch(selectLoading(false));
+      dispatch(setLoading(false));
     }
   };
 
@@ -136,8 +136,8 @@ export const updatePassword =
         dispatch(
           setError(messagesArray[0] || error?.response?.data?.error?.message)
         );
-        dispatch(selectLoading(false));
       }
+      dispatch(setLoading(false));
     }
   };
 
@@ -158,6 +158,7 @@ export const addNewAddress = (address, router, session) => async (dispatch) => {
       router.push("/profile");
     }
   } catch (error) {
+    dispatch(setLoading(false));
     const errorMessages = error?.response?.data?.message;
     if (errorMessages) {
       const messagesArray = errorMessages.split(",");
@@ -165,7 +166,6 @@ export const addNewAddress = (address, router, session) => async (dispatch) => {
         setError(messagesArray[0] || error?.response?.data?.error?.message)
       );
     }
-    dispatch(selectLoading(false));
   }
 };
 
@@ -223,7 +223,7 @@ export const deleteAddress =
 export const { setUser, clearError, setError, setLoading } = authSlice.actions;
 
 export const selectUser = (state) => state.auth.user;
-export const selectLoading = (state) => state.auth.loading;
+export const selectLoading = (state) => state?.auth?.loading;
 export const selectAuthError = (state) => state.auth.error;
 
 export default authSlice.reducer;

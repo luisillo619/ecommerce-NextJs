@@ -2,7 +2,7 @@ import { selectAuthError, selectLoading } from "@/redux/reducer/authSlice";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { registerUser } from "@/redux/reducer/authSlice";
-import { toast } from "react-toastify";
+import { toast, Zoom } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { clearError } from "@/redux/reducer/authSlice";
 import { useRouter } from "next/router";
@@ -19,7 +19,11 @@ const Register = () => {
 
   useEffect(() => {
     if (error) {
-      toast.error(error);
+      toast.error(error,{
+        position: "bottom-right",
+        autoClose: 1200,
+        transition: Zoom,
+      });
       dispatch(clearError());
     }
   }, [error]);

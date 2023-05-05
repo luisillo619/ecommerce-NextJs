@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React, { useState } from "react";
-import { toast } from "react-toastify";
+import { toast, Slide } from "react-toastify";
 import BreadCrumbs from "../layouts/BreadCrumbs";
 import { useSelector } from "react-redux";
 import { selectCart } from "@/redux/reducer/cartSlice";
@@ -19,7 +19,11 @@ const Shipping = ({ addresses, session }) => {
 
   const checkoutHandler = async () => {
     if (!shippingInfo) {
-      return toast.error("Por favor, selecciona una direccion de envio");
+      return toast.error("Por favor, selecciona una direccion de envio",{
+        position: "bottom-right",
+        autoClose: 1200,
+        transition: Slide,
+      });
     }
     try {
       const { data } = await axios.post(

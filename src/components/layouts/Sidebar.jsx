@@ -1,9 +1,17 @@
 import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
 
 const Sidebar = () => {
-  const logoutHandler = () => {
-    signOut();
+  const [loading, setLoading] = useState(false);
+
+  const logoutHandler = async () => {
+    setLoading(true);
+    const data = await signOut();
+    if (data) {
+      toast.success("Session cerrada exitosamente");
+      router.replace("/");
+    }
   };
 
   return (
@@ -83,16 +91,17 @@ const Sidebar = () => {
         </li>
 
         <li>
-          <a
+          <button
             className="block px-4 py-2 text-red-800 bg-white hover:bg-red-100  rounded-md cursor-pointer"
+            disabled={loading ? true : false}
             onClick={logoutHandler}
           >
             Salir
-          </a>
+          </button>
         </li>
       </ul>
     </aside>
   );
 };
 
-export default Sidebar
+export default Sidebar;

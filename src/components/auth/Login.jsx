@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
-import { toast } from "react-toastify";
+import { toast, Zoom } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
 import { parseCallbackUrl } from "@/helpers/helpers";
 
@@ -23,9 +23,18 @@ const Login = () => {
     });
 
     if (data?.error) {
-      toast.error(data?.error);
+      toast.error(data?.error, {
+        position: "bottom-right",
+        autoClose: 1200,
+        transition: Zoom,
+      });
+      setLoading(false);
     } else if (data?.ok) {
-      toast.success("Bienvenido de vuelta");
+      toast.success("Bienvenido de vuelta", {
+        position: "bottom-right",
+        autoClose: 1200,
+        transition: Zoom,
+      });
       const targetUrl = callBackUrl ? parseCallbackUrl(callBackUrl) : "/";
       router.replace(targetUrl);
     }

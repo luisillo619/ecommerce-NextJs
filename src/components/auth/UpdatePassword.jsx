@@ -8,7 +8,7 @@ import { updatePassword } from "@/redux/reducer/authSlice";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { toast, Slide } from "react-toastify";
 
 const UpdatePassword = ({ session }) => {
   const dispatch = useDispatch();
@@ -20,7 +20,11 @@ const UpdatePassword = ({ session }) => {
 
   useEffect(() => {
     if (error) {
-      toast.error(error);
+      toast.error(error, {
+        position: "bottom-right",
+        autoClose: 1200,
+        transition: Slide,
+      });
       dispatch(clearError());
     }
   }, [error]);

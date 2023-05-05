@@ -5,7 +5,7 @@ import store from "@/redux/store/store";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SessionProvider } from "next-auth/react";
-import App from "next/app";
+
 
 export default function MyApp({ Component, pageProps }) {
   const getLayout = Component.getLayout || ((page) => page)

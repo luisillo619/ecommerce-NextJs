@@ -7,7 +7,7 @@ import {
 } from "@/redux/reducer/authSlice";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { toast, Slide } from "react-toastify";
 import { updateProfile } from "@/redux/reducer/authSlice";
 import { useRouter } from "next/router";
 
@@ -24,16 +24,17 @@ const UpdateProfile = ({ session }) => {
   const [avatarPreview, setAvatarPreview] = useState("/images/default.png");
 
   useEffect(() => {
-    if (user) {
-      setName(user.name);
-      setEmail(user.email);
-    }
-
+    setName(user.name);
+    setEmail(user.email);
     if (error) {
-      toast.error(error);
+      toast.error(error, {
+        position: "bottom-right",
+        autoClose: 1200,
+        transition: Slide,
+      });
       dispatch(clearError());
     }
-  }, [error, user]);
+  }, [error]);
 
   const submitHandler = (e) => {
     e.preventDefault();

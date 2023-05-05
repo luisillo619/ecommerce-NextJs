@@ -20,5 +20,6 @@ export const getServerSideProps = async ({req}) => {
 };
 
 export default function ShippingPage({ addresses,session }) {
+  
   return <Shipping addresses={addresses} session={session}/>;
 }

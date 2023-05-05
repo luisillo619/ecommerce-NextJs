@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "./Header";
 import { setCart } from "@/redux/reducer/cartSlice";
@@ -9,30 +9,30 @@ import { useSession } from "next-auth/react";
 
 export default function LayoutIndex({ children }) {
   const dispatch = useDispatch();
-  const { data, status } = useSession();
-  let cart = useSelector(selectCart);
-  let user = useSelector(selectUser);
-  user = user || {};
-
-  const isLoaded = status === "authenticated" || status === "unauthenticated";
+  const { status, data } = useSession();
+  const cart = useSelector(selectCart);
+  const user = useSelector(selectUser);
 
   useEffect(() => {
-    if (isLoaded) {
-      dispatch(setCart());
-      if (data) {
-        dispatch(setUser(data.user));
-      }
-    }
-  }, [data, dispatch]);
+    dispatch(setCart());
+  }, []);
 
-  if (!user) {
-    return null;
-  }
+  useEffect(() => {
+    if (status === "authenticated") {
+      dispatch(setUser(data.user));
+    } else if (status === "unauthenticated") {
+      dispatch(setUser({}));
+    }
+  }, [status]);
 
   return (
     <>
-      <Header user={user} cart={cart} />
-      {children}
+      {user !== null && (
+        <>
+          <Header user={user} cart={cart} />
+          {children}
+        </>
+      )}
     </>
   );
 }

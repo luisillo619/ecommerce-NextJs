@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Link from "next/link";
 import { addItemToCart, selectCart } from "@/redux/reducer/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +15,7 @@ const ProductItem = ({ product }) => {
   const addToCardHandler = () => {
     const cartItem = cart.find((e) => e.product === product._id);
     if (cartItem) {
-      const newQty = cartItem?.quantity + 1;
+      const newQty = cartItem.quantity + 1;
 
       const item = { ...cartItem, quantity: newQty };
 
@@ -27,7 +27,7 @@ const ProductItem = ({ product }) => {
           product: product._id,
           name: product.name,
           price: product.price,
-          image: product?.images[0] ? product?.images[0].url : null,
+          image: product.images[0] ? product.images[0].url : null,
           stock: product.stock,
           seller: product.seller,
         })
@@ -35,26 +35,24 @@ const ProductItem = ({ product }) => {
     }
   };
 
-  const CustomRating = ({ rating }) => {
-    return (
-      <div className="flex">
-        {[1, 2, 3, 4, 5].map((star) => {
-          return star <= rating ? (
-            <StarIcon key={star} className="w-4 h-4 text-[#FAAF00]" />
-          ) : (
-            <StarIconOutline key={star} className="w-4 h-4 text-[#FAAF00]" />
-          );
-        })}
-      </div>
-    );
-  };
+  const CustomRating = ({ rating }) => (
+    <div className="flex">
+      {[1, 2, 3, 4, 5].map((star) =>
+        star <= rating ? (
+          <StarIcon key={star} className="w-4 h-4 text-[#FAAF00]" />
+        ) : (
+          <StarIconOutline key={star} className="w-4 h-4 text-[#FAAF00]" />
+        )
+      )}
+    </div>
+  );
 
   return (
     <article className="grid grid-cols-1 md:grid-cols-12 gap-4 border border-gray-200 overflow-hidden bg-white shadow-sm rounded mb-5">
       <div className="col-span-12 md:col-span-3 p-3 flex items-center justify-center">
         <div className="w-48 h-48 md:w-60 md:h-52 relative">
           <Image
-            src={product?.images[0] ? product?.images[0].url : default_product}
+            src={product.images[0] ? product.images[0].url : default_product}
             alt="product name"
             layout="fill"
             objectFit="contain"
@@ -69,11 +67,11 @@ const ProductItem = ({ product }) => {
           </span>
         </Link>
         <div className="flex items-center space-x-2 my-2">
-          <CustomRating rating={product?.ratings} />
-          <span className="text-yellow-500">{product?.ratings}</span>
+          <CustomRating rating={product.ratings} />
+          <span className="text-yellow-500">{product.ratings}</span>
         </div>
         <p className="text-gray-500 mb-2">
-          {product?.description.substring(0, 150)}...
+          {product.description.substring(0, 150)}...
         </p>
       </div>
       <div className="col-span-12 md:col-span-3 lg:col-span-3 border-t md:border-t-0 md:border-l border-gray-200 p-5">

@@ -6,8 +6,8 @@ import { useRouter } from "next/router";
 
 const Filters = () => {
   const router = useRouter();
-  const [min, setMin] = useState();
-  const [max, setMax] = useState();
+  const [min, setMin] = useState("");
+  const [max, setMax] = useState("");
   let queryParams;
 
   // verifica si min o max existe en query y si existe settea el estado
@@ -31,7 +31,7 @@ const Filters = () => {
       const minValue = queryParams.get("min");
       const maxValue = queryParams.get("max");
       if (minValue) setMin(minValue);
-      else setMin;
+      else setMin("");
       if (maxValue) setMax(maxValue);
     }
   }, [router]);

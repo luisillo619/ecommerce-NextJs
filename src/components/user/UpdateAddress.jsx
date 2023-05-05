@@ -6,7 +6,8 @@ import {
   clearError,
   deleteAddress,
   selectAuthError,
-  selectUpdated,
+  selectLoading,
+  setLoading,
   setUpdated,
   updateAddress,
 } from "@/redux/reducer/authSlice";
@@ -17,19 +18,15 @@ const UpdateAddress = ({ addressData, session }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const error = useSelector(selectAuthError);
-  const updated = useSelector(selectUpdated);
+  const updateLoading = useSelector(selectLoading);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
-    if (updated) {
-      toast.success("Direccion actualizada");
-      dispatch(setUpdated(false));
-    }
-
     if (error) {
       toast.error(error);
       dispatch(clearError());
     }
-  }, [error, updated]);
+  }, [error]);
 
   const countriesList = Object.values(countries);
 
@@ -51,13 +48,18 @@ const UpdateAddress = ({ addressData, session }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    
+
     dispatch(updateAddress(address, addressData._id, router, session));
   };
 
   const deleteHandler = () => {
+    setDeleteLoading(true);
     dispatch(deleteAddress(addressData._id, router, session));
   };
+
+  useEffect(() => {
+    return () => setDeleteLoading(false);
+  }, []);
 
   return (
     <>
@@ -159,15 +161,17 @@ const UpdateAddress = ({ addressData, session }) => {
                     <button
                       type="submit"
                       className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+                      disabled={updateLoading || deleteLoading ? true : false}
                     >
-                      Actualizar
+                      {updateLoading ? "Actualizando..." : "Actualizar"}
                     </button>
                     <button
                       type="button"
                       className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700"
                       onClick={deleteHandler}
+                      disabled={deleteLoading || updateLoading ? true : false}
                     >
-                      Eliminar
+                      {deleteLoading ? "Eliminando..." : "Eliminar"}
                     </button>
                   </div>
                 </form>

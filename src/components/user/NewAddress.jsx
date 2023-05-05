@@ -9,7 +9,7 @@ import {
   selectLoading,
   setLoading,
 } from "@/redux/reducer/authSlice";
-import { toast } from "react-toastify";
+import { toast, Slide } from "react-toastify";
 import { useRouter } from "next/router";
 
 const NewAddress = ({ session }) => {
@@ -20,7 +20,9 @@ const NewAddress = ({ session }) => {
 
   useEffect(() => {
     if (error) {
-      toast.error(error);
+      toast.error(error,{    position: "bottom-right",
+      autoClose: 1200,
+      transition: Slide,});
       dispatch(clearError());
     }
   }, [error]);

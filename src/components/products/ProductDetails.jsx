@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
-
+import { toast, Zoom } from "react-toastify";
 import BreadCrumbs from "../layouts/BreadCrumbs";
 import { addItemToCart, selectCart } from "@/redux/reducer/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,13 +20,25 @@ const ProductDetails = ({ product }) => {
 
   const addToCardHandler = () => {
     const cartItem = cart.find((e) => e.product === product._id);
+
     if (cartItem) {
       const newQty = cartItem?.quantity + 1;
 
       const item = { ...cartItem, quantity: newQty };
 
-      if (newQty > Number(cartItem.stock)) return;
+      if (newQty > Number(cartItem.stock)) {
+        return toast.error("Producto fuera de stock", {
+          position: "bottom-right",
+          autoClose: 500,
+          transition: Zoom,
+        });
+      }
       dispatch(addItemToCart(item));
+      return toast.success("Producto agregado al carrito", {
+        position: "bottom-right",
+        autoClose: 500,
+        transition: Zoom,
+      });
     } else {
       dispatch(
         addItemToCart({

@@ -19,7 +19,7 @@ export default async function auth(req, res) {
           const user = await User.findOne({ email }).select("+password");
 
           if (!user) {
-            throw new Error("Correo o contraseña invalido");
+            throw new Error("Correo o contraseña incorrecta");
           }
 
           const isPasswordMatched = await bcrypt.compare(
@@ -28,7 +28,7 @@ export default async function auth(req, res) {
           );
 
           if (!isPasswordMatched) {
-            throw new Error("Correo o contraseña invalido");
+            throw new Error("Correo o contraseña incorrecta");
           }
 
           return user;

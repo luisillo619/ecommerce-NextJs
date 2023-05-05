@@ -11,7 +11,7 @@ import {
   setUpdated,
   updateAddress,
 } from "@/redux/reducer/authSlice";
-import { toast } from "react-toastify";
+import { toast, Slide } from "react-toastify";
 import { useRouter } from "next/router";
 
 const UpdateAddress = ({ addressData, session }) => {
@@ -23,7 +23,11 @@ const UpdateAddress = ({ addressData, session }) => {
 
   useEffect(() => {
     if (error) {
-      toast.error(error);
+      toast.error(error, {
+        position: "bottom-right",
+        autoClose: 1200,
+        transition: Slide,
+      });
       dispatch(clearError());
     }
   }, [error]);
@@ -54,7 +58,7 @@ const UpdateAddress = ({ addressData, session }) => {
 
   const deleteHandler = () => {
     setDeleteLoading(true);
-    dispatch(deleteAddress(addressData._id, router, session));
+    dispatch(deleteAddress(addressData._id, router, session, setDeleteLoading));
   };
 
   useEffect(() => {

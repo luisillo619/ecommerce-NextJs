@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
-// import { parseCallbackUrl } from "@/helpers/helpers";
+import { parseCallbackUrl } from "@/helpers/helpers";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,25 +11,22 @@ const Login = () => {
 
   const router = useRouter();
   const params = useSearchParams();
-  // const callBackUrl = params.get("callbackUrl")
+  const callBackUrl = params.get("callbackUrl");
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
     const data = await signIn("credentials", {
       email,
       password,
-      // callbackUrl: callBackUrl ? parseCallbackUrl(callBackUrl) : "/"
       redirect: false,
     });
 
     if (data?.error) {
       toast.error(data?.error);
-    }
-
-    if (data?.ok) {
+    } else if (data?.ok) {
       toast.success("Bienvenido de vuelta");
-      router.replace("/");
+      const targetUrl = callBackUrl ? parseCallbackUrl(callBackUrl) : "/";
+      router.replace(targetUrl);
     }
   };
 

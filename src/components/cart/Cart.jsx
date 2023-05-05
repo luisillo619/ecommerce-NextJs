@@ -47,9 +47,9 @@ const Cart = () => {
     <>
       <section className="py-5 sm:py-7 bg-blue-100">
         <div className="container max-w-screen-xl mx-auto px-4">
-          <h2 className="text-3xl font-semibold mb-2">
+          <h1 className="font-bold text-2xl">
             {cart?.length || 0} Elemento(s) en el Carrito
-          </h2>
+          </h1>
         </div>
       </section>
 
@@ -174,9 +174,10 @@ const Cart = () => {
                     </li>
                   </ul>
 
-                  <Link 
-                  href="/shipping"
-                  className="px-4 py-3 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 cursor-pointer">
+                  <Link
+                    href="/shipping"
+                    className="px-4 py-3 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 cursor-pointer"
+                  >
                     Continuar
                   </Link>
 

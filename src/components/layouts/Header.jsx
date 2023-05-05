@@ -2,6 +2,7 @@ import Link from "next/link";
 import Search from "./Search.jsx";
 import Image from "next/image";
 import buyItNowLogo from "../../../public/images/logo.png";
+import imagenProductDefault from "../../../public/images/default.png";
 
 const Header = ({ user, cart }) => {
   return (
@@ -12,12 +13,10 @@ const Header = ({ user, cart }) => {
             <Link href="/">
               <Image
                 src={buyItNowLogo}
-                height="40"
-                width="120"
                 alt="BuyItNow"
-                className="cursor-pointer"
-                style={{ objectFit: "contain", width: "auto", height: "auto" }}
-                priority
+                className="cursor-pointer object-contain w-24 h-12"
+                width={120}
+                height={40}
               />
             </Link>
           </div>
@@ -44,17 +43,20 @@ const Header = ({ user, cart }) => {
             ) : (
               <Link href="/profile">
                 <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer">
-                  <img
-                    className="w-10 h-10 rounded-full"
+                  <Image
+                    alt="BuyItNow"
+                    className="cursor-pointer object-cover rounded-full w-10 h-10"
+                    width={40}
+                    height={40}
                     src={
-                      user?.avatar ? user?.avatar?.url : "/images/default.png"
+                      user?.avatar ? user?.avatar?.url : imagenProductDefault
                     }
                   />
                   <div className="space-y-1 font-medium">
                     <p>
                       {user?.name}
-                      <time className="block text-sm text-gray-500 dark:text-gray-400">
-                        {/* {user?.email.substring(0,25)}...@ */}
+                      <time className="block text-xs text-gray-500 dark:text-gray-400">
+                        {user?.email?.substring(0, 35)}
                       </time>
                     </p>
                   </div>

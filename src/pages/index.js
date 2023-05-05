@@ -6,19 +6,10 @@ import ListProducts from "../components/products/ListProducts";
 export const getServerSideProps = async ({ query }) => {
   const { keyword, page, category, ratings, min, max } = query;
 
-  const cleanUrlParams = (params) => {
-    const cleanedParams = {};
-    for (const key in params) {
-      if (
-        params[key] !== undefined &&
-        params[key] !== null &&
-        params[key] !== ""
-      ) {
-        cleanedParams[key] = params[key];
-      }
-    }
-    return cleanedParams;
-  };
+  const cleanUrlParams = (params) =>
+    Object.fromEntries(
+      Object.entries(params).filter(([_, value]) => value !== undefined && value !== null && value !== "")
+    );
 
   const urlParams = cleanUrlParams({
     keyword,

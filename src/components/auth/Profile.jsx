@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 const Profile = ({ data }) => {
   const user = useSelector(selectUser);
-
+  
   return (
     <>
       <figure className="flex flex-col items-start sm:items-center sm:flex-row ">

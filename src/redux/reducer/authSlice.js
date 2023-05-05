@@ -1,21 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
     error: null,
-    updated: null,
+
     loading: null,
   },
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
     },
-    setUpdated: (state, action) => {
-      state.updated = action.payload;
-    },
+
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
@@ -29,9 +28,10 @@ const authSlice = createSlice({
 });
 
 export const registerUser =
-  ({ name, email, password }) =>
+  ({ name, email, password }, router) =>
   async (dispatch) => {
     try {
+      dispatch(setLoading(true));
       const { data } = await axios.post(`/api/auth/register`, {
         name,
         email,
@@ -39,7 +39,7 @@ export const registerUser =
       });
 
       if (Object.keys(data).length > 0) {
-        window.location.href = window.location.origin;
+        router.replace("/");
       }
     } catch (error) {
       const errorMessages = error?.response?.data?.message;
@@ -94,8 +94,6 @@ export const updateProfile =
           setError(messagesArray[0] || error?.response?.data?.error?.message)
         );
       }
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 
@@ -103,6 +101,7 @@ export const updatePassword =
   ({ currentPassword, newPassword }, router, session) =>
   async (dispatch) => {
     try {
+      dispatch(setLoading(true));
       const { data } = await axios.put(
         `/api/auth/profile/update_password`,
         {
@@ -132,6 +131,7 @@ export const updatePassword =
 
 export const addNewAddress = (address, router, session) => async (dispatch) => {
   try {
+    dispatch(setLoading(true));
     const { data } = await axios.post(`/api/address`, address, {
       headers: {
         "x-user-session": JSON.stringify(session),
@@ -154,6 +154,8 @@ export const addNewAddress = (address, router, session) => async (dispatch) => {
 export const updateAddress =
   (address, id, router, session) => async (dispatch) => {
     try {
+      dispatch(setLoading(true));
+
       const { data } = await axios.put(`/api/address/${id}`, address, {
         headers: {
           "x-user-session": JSON.stringify(session),
@@ -161,11 +163,13 @@ export const updateAddress =
       });
 
       if (Object.keys(data).length > 0) {
-        dispatch(setUpdated(true));
+        toast.success("Direccion actualizada");
         router.replace(`/address/${id}`);
       }
     } catch (error) {
       dispatch(setError(error?.response?.data?.error?.message));
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
@@ -175,6 +179,7 @@ export const deleteAddress = (id, router, session) => async (dispatch) => {
       headers: { "x-user-session": JSON.stringify(session) },
     });
     if (data?.success) {
+      toast.success("Direccion eliminada");
       router.replace(`/profile`);
     }
   } catch (error) {
@@ -186,11 +191,10 @@ export const deleteAddress = (id, router, session) => async (dispatch) => {
   }
 };
 
-export const { setUser, setUpdated, clearError, setError, setLoading } =
-  authSlice.actions;
+export const { setUser, clearError, setError, setLoading } = authSlice.actions;
 
 export const selectUser = (state) => state.auth.user;
-export const selectUpdated = (state) => state.auth.updated;
+
 export const selectLoading = (state) => state.auth.loading;
 export const selectAuthError = (state) => state.auth.error;
 

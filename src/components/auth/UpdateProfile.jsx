@@ -3,6 +3,7 @@ import {
   selectLoading,
   selectUser,
   clearError,
+  setLoading,
 } from "@/redux/reducer/authSlice";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +11,7 @@ import { toast } from "react-toastify";
 import { updateProfile } from "@/redux/reducer/authSlice";
 import { useRouter } from "next/router";
 
-const UpdateProfile = ({session}) => {
+const UpdateProfile = ({ session }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const error = useSelector(selectAuthError);
@@ -56,6 +57,10 @@ const UpdateProfile = ({session}) => {
     setAvatar(e.target.files[0]);
     reader.readAsDataURL(e.target.files[0]);
   };
+
+  useEffect(() => {
+    return () => dispatch(setLoading(false));
+  }, []);
 
   return (
     <>

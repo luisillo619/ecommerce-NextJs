@@ -6,14 +6,17 @@ import {
   addNewAddress,
   clearError,
   selectAuthError,
+  selectLoading,
+  setLoading,
 } from "@/redux/reducer/authSlice";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
-const NewAddress = ({session}) => {
-  const router = useRouter()
+const NewAddress = ({ session }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const error = useSelector(selectAuthError);
+  const loading = useSelector(selectLoading);
 
   useEffect(() => {
     if (error) {
@@ -23,7 +26,7 @@ const NewAddress = ({session}) => {
   }, [error]);
 
   const countriesList = Object.values(countries);
-  
+
   const [address, setAddress] = useState({
     street: "",
     city: "",
@@ -35,7 +38,7 @@ const NewAddress = ({session}) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(addNewAddress(address,router,session));
+    dispatch(addNewAddress(address, router, session));
   };
 
   const handleChange = (e) => {
@@ -44,6 +47,10 @@ const NewAddress = ({session}) => {
       [e.target.name]: e.target.value,
     });
   };
+
+  useEffect(() => {
+    return () => dispatch(setLoading(false));
+  }, []);
 
   return (
     <>
@@ -144,8 +151,9 @@ const NewAddress = ({session}) => {
                   <button
                     type="submit"
                     className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+                    disabled={loading ? true : false}
                   >
-                    Añadir
+                    {loading ? "Añadiendo..." : "Añadir"}
                   </button>
                 </form>
               </div>

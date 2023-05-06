@@ -2,7 +2,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { parseCallbackUrl } from "@/helpers/helpers";
 
 const Login = () => {
@@ -10,8 +10,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const router = useRouter();
-  const params = useSearchParams();
-  const callBackUrl = params.get("callbackUrl");
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -19,23 +17,15 @@ const Login = () => {
     const data = await signIn("credentials", {
       email,
       password,
-      // callbackUrl: callBackUrl ? parseCallbackUrl(callBackUrl) : "/",
-      redirect: false
+      redirect: false,
     });
-
+    const fullPath = router.asPath;
+   
     if (data?.error) {
       toast.error(data?.error);
     }
-
-    if (data?.ok) {
-      router.push("https://ecommerce-next-js-delta.vercel.app/profile")
-      // router.beforePopState(({ url, as, options }) => {
-      //   if (url !== "/profile") {
-      //     return true; // Permite la navegación si la URL de destino no es "/profile"
-      //   }
-      //   return false; // Cancela la navegación si la URL de destino es "/profile"
-      // });
-      router.push("/");
+    else if (data?.ok) {
+      router.replace(fullPath);
     }
   };
 

@@ -19,18 +19,16 @@ const Login = () => {
     const data = await signIn("credentials", {
       email,
       password,
-      callbackUrl: callBackUrl ? parseCallbackUrl(callBackUrl) : "/",
+      redirect: false,
     });
 
     if (data?.error) {
       toast.error(data?.error);
-    }
-
-    if (data?.ok) {
-      router.push("/");
+    } else if (data?.ok) {
+      router.replace(callBackUrl ? parseCallbackUrl(callBackUrl) : "/");
     }
   };
-  
+
   return (
     <div
       style={{ maxWidth: "480px" }}

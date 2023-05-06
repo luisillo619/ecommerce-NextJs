@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { parse } from "url";
 
 export function isMongoId(id, res) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -24,6 +23,13 @@ export function getPriceQueryParams(queryParams, key, value) {
 }
 
 export const parseCallbackUrl = (url) => {
-  const res = url.replace(/%3A/g, ":").replace(/%2F/g, "/");
-  return res;
+  const decodedUrl = decodeURIComponent(url);
+  const urlParams = new URLSearchParams(decodedUrl.split("?")[1]);
+
+  if (urlParams.has("callbackUrl")) {
+    const callbackUrl = urlParams.get("callbackUrl");
+    return callbackUrl;
+  } else {
+    return "/";
+  }
 };

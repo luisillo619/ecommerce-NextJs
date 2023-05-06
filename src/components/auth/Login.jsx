@@ -11,7 +11,6 @@ const Login = () => {
 
   const router = useRouter();
   const params = useSearchParams();
-  const callBackUrl = params.get("callbackUrl");
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -19,15 +18,16 @@ const Login = () => {
     const data = await signIn("credentials", {
       email,
       password,
-      callbackUrl: callBackUrl ? parseCallbackUrl(callBackUrl) : "/",
+      redirect: false,
     });
 
     if (data?.error) {
-      toast.error(data?.error);
+      // toast.error(data?.error);
     }
 
     if (data?.ok) {
-      router.push("/");
+      console.log("holalalala", data.url, parseCallbackUrl(data.url));
+      router.push(parseCallbackUrl(data.url) || "/");
     }
   };
   return (

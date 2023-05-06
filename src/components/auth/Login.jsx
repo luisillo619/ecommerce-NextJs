@@ -37,12 +37,9 @@ const Login = () => {
       });
       const targetUrl = callBackUrl ? parseCallbackUrl(callBackUrl) : "/";
       router.replace(targetUrl);
+      return setLoading(false);
     }
   };
-
-  useEffect(() => {
-    return () => setLoading(false);
-  }, []);
 
   return (
     <div

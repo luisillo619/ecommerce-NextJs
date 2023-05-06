@@ -23,13 +23,6 @@ export function getPriceQueryParams(queryParams, key, value) {
 }
 
 export const parseCallbackUrl = (url) => {
-  const decodedUrl = decodeURIComponent(url);
-  const urlParams = new URLSearchParams(decodedUrl.split("?")[1]);
-
-  if (urlParams.has("callbackUrl") || urlParams.has("callbackurl")) {
-    const callbackUrl = urlParams.get("callbackUrl") || urlParams.get("callbackurl");
-    return callbackUrl;
-  } else {
-    return "/";
-  }
+  const res = url.replace(/%3A/g, ":").replace(/%2F/g, "/");
+  return res;
 };

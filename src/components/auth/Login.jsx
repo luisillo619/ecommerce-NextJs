@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React, { useState } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
 import { parseCallbackUrl } from "@/helpers/helpers";
@@ -8,31 +8,29 @@ import { parseCallbackUrl } from "@/helpers/helpers";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { status } = useSession();
 
   const router = useRouter();
   const params = useSearchParams();
+  const callBackUrl = params.get("callbackUrl");
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    signIn("credentials", {
+    const data = await signIn("credentials", {
       email,
       password,
-      redirect: false,
-    }).then((data) => {
-      if (data?.error) {
-        // toast.error(data?.error);
-      }
-      if (
-        data?.ok &&
-        (status === "authenticated" || status === "unauthenticated")
-      ) {
-        console.log("holalalala", data.url, parseCallbackUrl(data.url));
-        router.push(parseCallbackUrl(data.url) || "/");
-      }
+      callbackUrl: callBackUrl ? parseCallbackUrl(callBackUrl) : "/",
     });
+
+    if (data?.error) {
+      toast.error(data?.error);
+    }
+
+    if (data?.ok) {
+      router.push("/");
+    }
   };
+  
   return (
     <div
       style={{ maxWidth: "480px" }}

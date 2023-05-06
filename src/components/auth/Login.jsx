@@ -1,15 +1,17 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { signIn, useSession } from "next-auth/react";
+import React, { useState } from "react";
+import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
+import { parseCallbackUrl } from "@/helpers/helpers";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [data, setData] = useState("");
-  const { status } = useSession();
+
   const router = useRouter();
+  const params = useSearchParams();
+  const callBackUrl = params.get("callbackUrl");
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -17,21 +19,17 @@ const Login = () => {
     const data = await signIn("credentials", {
       email,
       password,
-      redirect: false,
+      redirect: false
     });
 
-    if (data.error) {
+    if (data?.error) {
       toast.error(data?.error);
-    } else {
-      setData(data);
     }
-  };
 
-  useEffect(() => {
-    if (data.ok && data.status === 200 && status === "authenticated") {
+    if (data?.ok) {
       router.push("/profile");
     }
-  }, [status, data]);
+  };
 
   return (
     <div

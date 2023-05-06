@@ -27,12 +27,12 @@ export default function LayoutIndex({ children }) {
 
   return (
     <>
-      {/* {user !== null && ( */}
+      {user !== null && (
         <>
           <Header user={user} cart={cart} />
           {children}
         </>
-      {/* )} */}
+      )}
     </>
   );
 }

@@ -155,7 +155,7 @@ export const addNewAddress = (address, router, session) => async (dispatch) => {
         autoClose: 1200,
         transition: Zoom,
       });
-      router.push("/profile");
+      router.back();
     }
   } catch (error) {
     dispatch(setLoading(false));

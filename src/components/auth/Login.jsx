@@ -1,14 +1,14 @@
 import Link from "next/link";
-import React, { useState } from "react";
-import { signIn } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { parseCallbackUrl } from "@/helpers/helpers";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [data, setData] = useState("");
+  const { status } = useSession();
   const router = useRouter();
 
   const submitHandler = async (e) => {
@@ -19,15 +19,19 @@ const Login = () => {
       password,
       redirect: false,
     });
-    const fullPath = router.asPath;
-   
-    if (data?.error) {
+
+    if (data.error) {
       toast.error(data?.error);
-    }
-    else if (data?.ok) {
-      router.replace(fullPath);
+    } else {
+      setData(data);
     }
   };
+
+  useEffect(() => {
+    if (data.ok && data.status === 200 && status === "authenticated") {
+      router.push("/profile");
+    }
+  }, [status, data]);
 
   return (
     <div

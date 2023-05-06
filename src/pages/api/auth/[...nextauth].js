@@ -16,7 +16,9 @@ export default async function auth(req, res) {
 
           const { email, password } = credentials;
 
-          const user = await User.findOne({ email }).select("+password");
+          const user = await User.findOne({
+            email: email.toLowerCase(),
+          }).select("+password");
 
           if (!user) {
             throw new Error("Correo o contraseña incorrecta");

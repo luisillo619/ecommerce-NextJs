@@ -1,51 +1,37 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { signIn } from "next-auth/react";
-import { toast, Zoom } from "react-toastify";
-import { useRouter } from "next/router";
-import { parseCallbackUrl } from "@/helpers/helpers";
+import { toast } from "react-toastify";
+import { useRouter, useSearchParams } from "next/navigation";
+// import { parseCallbackUrl } from "@/helpers/helpers";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [redirectTo, setRedirectTo] = useState(null);
+
   const router = useRouter();
-  const callBackUrl = router.query.callbackUrl;
+  const params = useSearchParams();
+  // const callBackUrl = params.get("callbackUrl")
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
     const data = await signIn("credentials", {
       email,
       password,
+      // callbackUrl: callBackUrl ? parseCallbackUrl(callBackUrl) : "/"
       redirect: false,
     });
 
     if (data?.error) {
-      toast.error(data?.error, {
-        position: "bottom-right",
-        autoClose: 1200,
-        transition: Zoom,
-      });
-      setLoading(false);
-    } else if (data?.ok) {
-      toast.success("Bienvenido de vuelta", {
-        position: "bottom-right",
-        autoClose: 1200,
-        transition: Zoom,
-      });
-      const targetUrl = callBackUrl ? parseCallbackUrl(callBackUrl) : "/";
-      setRedirectTo(targetUrl);
-      setLoading(false);
+      toast.error(data?.error);
+    }
+
+    if (data?.ok) {
+      toast.success("Bienvenido de vuelta");
+      router.replace("/");
     }
   };
-
-  useEffect(() => {
-    if (redirectTo) {
-      router.replace(redirectTo);
-    }
-  }, [redirectTo, router]);
 
   return (
     <div
@@ -83,9 +69,8 @@ const Login = () => {
         <button
           type="submit"
           className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
-          disabled={loading ? true : false}
         >
-          {loading ? "Ingresando..." : "Ingresar"}
+          Ingresar
         </button>
 
         <hr className="mt-4" />

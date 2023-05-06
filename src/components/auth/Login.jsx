@@ -35,7 +35,6 @@ const Login = () => {
         autoClose: 1200,
         transition: Zoom,
       });
-      toast.success("Bienvenido de vuelta");
       router.replace("/");
     }
   };

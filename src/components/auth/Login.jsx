@@ -8,7 +8,6 @@ import { parseCallbackUrl } from "@/helpers/helpers";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
- 
 
   const router = useRouter();
   const params = useSearchParams();
@@ -19,17 +18,16 @@ const Login = () => {
     const data = await signIn("credentials", {
       email,
       password,
-      redirect: false
+      callbackUrl: callBackUrl ? parseCallbackUrl(callBackUrl) : "/",
+      redirect: false,
     });
 
     if (data?.error) {
       toast.error(data?.error);
-     
     }
 
     if (data?.ok) {
-      router.push(callBackUrl ? parseCallbackUrl(callBackUrl) : "/" );
-     
+      router.push(callBackUrl ? parseCallbackUrl(callBackUrl) : "/");
     }
   };
 

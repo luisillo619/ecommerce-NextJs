@@ -35,7 +35,7 @@ const Login = () => {
         autoClose: 1200,
         transition: Zoom,
       });
-      const targetUrl = callBackUrl ? parseCallbackUrl(callBackUrl) : "/";
+      const targetUrl = "/";
       router.replace(targetUrl);
       setLoading(false);
     }

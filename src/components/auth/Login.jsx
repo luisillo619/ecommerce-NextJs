@@ -2,7 +2,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { toast, Zoom } from "react-toastify";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { parseCallbackUrl } from "@/helpers/helpers";
 
 const Login = () => {
@@ -10,8 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const params = useSearchParams();
-  const callBackUrl = params.get("callbackUrl");
+  const callBackUrl = router.query.callbackUrl;
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -81,6 +80,7 @@ const Login = () => {
         >
           {loading ? "Ingresando..." : "Ingresar"}
         </button>
+
 
         <hr className="mt-4" />
 

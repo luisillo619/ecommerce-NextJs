@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React, { useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
 import { parseCallbackUrl } from "@/helpers/helpers";
@@ -8,6 +8,7 @@ import { parseCallbackUrl } from "@/helpers/helpers";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { status } = useSession();
 
   const router = useRouter();
   const params = useSearchParams();
@@ -15,20 +16,22 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    const data = await signIn("credentials", {
+    signIn("credentials", {
       email,
       password,
       redirect: false,
+    }).then((data) => {
+      if (data?.error) {
+        // toast.error(data?.error);
+      }
+      if (
+        data?.ok &&
+        (status === "authenticated" || status === "unauthenticated")
+      ) {
+        console.log("holalalala", data.url, parseCallbackUrl(data.url));
+        router.push(parseCallbackUrl(data.url) || "/");
+      }
     });
-
-    if (data?.error) {
-      // toast.error(data?.error);
-    }
-
-    if (data?.ok) {
-      console.log("holalalala", data.url, parseCallbackUrl(data.url));
-      router.push(parseCallbackUrl(data.url) || "/");
-    }
   };
   return (
     <div

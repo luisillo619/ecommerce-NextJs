@@ -26,8 +26,8 @@ export const parseCallbackUrl = (url) => {
   const decodedUrl = decodeURIComponent(url);
   const urlParams = new URLSearchParams(decodedUrl.split("?")[1]);
 
-  if (urlParams.has("callbackUrl")) {
-    const callbackUrl = urlParams.get("callbackUrl");
+  if (urlParams.has("callbackUrl") || urlParams.has("callbackurl")) {
+    const callbackUrl = urlParams.get("callbackUrl") || urlParams.get("callbackurl");
     return callbackUrl;
   } else {
     return "/";

@@ -1,46 +1,35 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { signIn } from "next-auth/react";
-import { toast, Zoom } from "react-toastify";
+import { toast } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
 import { parseCallbackUrl } from "@/helpers/helpers";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   const params = useSearchParams();
   const callBackUrl = params.get("callbackUrl");
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
     const data = await signIn("credentials", {
       email,
       password,
-      redirect: false,
+      callbackUrl: callBackUrl ? parseCallbackUrl(callBackUrl) : "/",
     });
 
     if (data?.error) {
-      toast.error(data?.error, {
-        position: "bottom-right",
-        autoClose: 1200,
-        transition: Zoom,
-      });
-      setLoading(false);
-    } else if (data?.ok) {
-      toast.success("Bienvenido de vuelta", {
-        position: "bottom-right",
-        autoClose: 1200,
-        transition: Zoom,
-      });
-      const targetUrl = "/";
-      router.replace(targetUrl);
-      setLoading(false);
+      toast.error(data?.error);
+    }
+
+    if (data?.ok) {
+      router.push("/");
     }
   };
-
   return (
     <div
       style={{ maxWidth: "480px" }}

@@ -26,8 +26,7 @@ const Login = () => {
       toast.error(data?.error);
     } else if (data?.ok) {
       toast.success("Bienvenido de vuelta");
-      const targetUrl = callBackUrl ? parseCallbackUrl(callBackUrl) : "/";
-      router.replace(targetUrl);
+      router.replace(callBackUrl);
     }
   };
 

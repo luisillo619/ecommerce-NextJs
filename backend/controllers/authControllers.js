@@ -21,7 +21,7 @@ export const registerUser = async (req, res) => {
 
   const user = await User.create({
     name,
-    email: email.toUpperCase(),
+    email: email.toLowerCase(),
     password,
   });
 
@@ -36,7 +36,7 @@ export const updateProfile = async (req, res, next) => {
   // fs elimina la imagen de la carpeta uploads
 
   const existEmail = await User.findOne({ email: req.body.email });
-  if (existEmail && existEmail.email !== req.user.email) {
+  if (existEmail && existEmail.email !== req.user.email.toLowerCase()) {
     next(new ErrorHandler("El correo ya está en uso", 400));
   }
 

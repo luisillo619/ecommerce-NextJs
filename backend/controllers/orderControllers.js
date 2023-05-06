@@ -1,7 +1,27 @@
 import getRawBody from "raw-body";
 import Stripe from "stripe";
 import Order from "../models/order";
+import APIFilters from "../utils/APIFilters";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+export const myOrders = async (req, res) => {
+  const resPerPage = 2;
+  const ordersCount = await Order.find({ user: req.user._id }).countDocuments();
+
+  const apiFilters = new APIFilters(Order.find(), req.query).pagination(
+    resPerPage
+  );
+
+  const orders = await apiFilters.query
+    .find({ user: req.user._id })
+    .populate("shippingInfo user");
+
+  res.status(200).json({
+    ordersCount,
+    resPerPage,
+    orders,
+  });
+};
 
 export const checkoutSession = async (req, res) => {
   const body = req.body;
@@ -48,7 +68,6 @@ export const checkoutSession = async (req, res) => {
     url: session.url, // url de pago. Una vez completado el pago va a redirigir a suscess_url o a cancel_url
   });
 };
-
 
 async function getCartItem(item) {
   const product = await stripe.products.retrieve(item.price.product);

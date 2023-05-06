@@ -19,7 +19,8 @@ const Login = () => {
     const data = await signIn("credentials", {
       email,
       password,
-      callbackUrl: callBackUrl ? parseCallbackUrl(callBackUrl) : "/",
+      // callbackUrl: callBackUrl ? parseCallbackUrl(callBackUrl) : "/",
+      redirect: false
     });
 
     if (data?.error) {
@@ -27,6 +28,13 @@ const Login = () => {
     }
 
     if (data?.ok) {
+      router.push("https://ecommerce-next-js-delta.vercel.app/profile")
+      // router.beforePopState(({ url, as, options }) => {
+      //   if (url !== "/profile") {
+      //     return true; // Permite la navegación si la URL de destino no es "/profile"
+      //   }
+      //   return false; // Cancela la navegación si la URL de destino es "/profile"
+      // });
       router.push("/");
     }
   };

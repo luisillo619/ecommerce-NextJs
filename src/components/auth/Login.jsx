@@ -10,7 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const params = useSearchParams();
+ 
 
   const submitHandler = async (e) => {
     e.preventDefault();

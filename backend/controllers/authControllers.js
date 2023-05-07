@@ -4,7 +4,7 @@ import fs from "fs";
 import Joi from "joi";
 import ErrorHandler from "../utils/errorHandler";
 import bcrypt from "bcryptjs";
-import { sendWelcomeEmail } from "../utils/nodemailer";
+import { sendWelcomeMail } from "../utils/nodemailer";
 
 const userSchema = Joi.object({
   name: Joi.string().required().messages({
@@ -27,7 +27,7 @@ export const registerUser = async (req, res, next) => {
   });
 
   if (user) {
-    await sendWelcomeEmail(req, res, next);
+    await sendWelcomeMail(req, res, next);
     res.status(201).json(user);
   }
 };

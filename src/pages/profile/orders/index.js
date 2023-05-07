@@ -1,4 +1,3 @@
-import Profile from "@/components/auth/Profile";
 import UserProfileLayout from "@/components/layouts/UserProfileLayout";
 import ListOrders from "@/components/orders/ListOrders";
 import axios from "axios";

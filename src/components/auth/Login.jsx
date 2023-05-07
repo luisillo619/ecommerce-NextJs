@@ -34,7 +34,7 @@ const Login = () => {
         autoClose: 1200,
         transition: Zoom,
       });
-      router.replace("/");
+      router.refresh();
     }
   };
 

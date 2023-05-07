@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const welcomeEmail = (email, name) => {
+const welcomeMail = (email, name) => {
   return {
     from: process.env.MY_EMAIL,
     to: email,
@@ -72,12 +72,23 @@ const welcomeEmail = (email, name) => {
   };
 };
 
-export async function sendWelcomeEmail(req, res, next) {
+export async function sendWelcomeMail(req, res, next) {
   const { email, name } = req.body;
-  const mailOptions = welcomeEmail(email, name);
+  const mailOptions = welcomeMail(email, name);
   try {
-    return await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
+    return true;
   } catch (error) {
-    return next(new ErrorHandler("Correo no enviado", 400));
+    return false;
   }
 }
+
+// export async function sendAccountDeletionMail(req, res, next) {
+//   const { email, name } = req.body;
+//   const mailOptions = accountDeletionMail(email, name);
+//   try {
+//     return await transporter.sendMail(mailOptions);
+//   } catch (error) {
+//     return next(new ErrorHandler("Correo no enviado", 400));
+//   }
+// }

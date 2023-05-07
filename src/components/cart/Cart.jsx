@@ -185,7 +185,7 @@ const Cart = () => {
                     href="/"
                     className="px-4 py-3 inline-block text-lg w-full text-center font-medium text-green-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100"
                   >
-                    Volver a comprar
+                    Volver a los productos
                   </Link>
                 </article>
               </aside>

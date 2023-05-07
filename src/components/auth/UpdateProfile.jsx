@@ -21,7 +21,9 @@ const UpdateProfile = ({ session }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState("");
-  const [avatarPreview, setAvatarPreview] = useState("/images/default.png");
+  const [avatarPreview, setAvatarPreview] = useState(
+    session.user.avatar.url || "/images/default.png"
+  );
 
   useEffect(() => {
     setName(user.name);

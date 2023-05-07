@@ -87,7 +87,6 @@ export const updateProfile =
           "x-user-session": JSON.stringify(session),
         },
       });
-
       if (Object.keys(data).length > 0) {
         await loadUser(router, dispatch);
       }

@@ -23,11 +23,10 @@ const addressSchema = Joi.object({
   }),
 });
 
-export const getAddress = async (req, res) => {
-
+export const getAddress = async (req, res, next) => {
   const address = await Address.findById(req.query.id);
- 
-  if (!address) return new ErrorHandler("Direccion no encontrada", 404);
+
+  if (!address) return next(new ErrorHandler("Direccion no encontrada", 404));
 
   res.status(200).json({
     address,
@@ -48,21 +47,24 @@ export const newAddress = async (req, res) => {
   res.status(201).json({ address });
 };
 
-export const updateAddress = async (req, res) => {
+export const updateAddress = async (req, res, next) => {
   let address = await Address.findById(req.query.id);
-  if (!address) return new ErrorHandler("Direccion no encontrada", 404);
+
+  if (!address) return next(new ErrorHandler("Direccion no encontrada", 404));
+
   if (address.user.toString() !== req.user._id) {
-    return new ErrorHandler(
-      "No tienes permiso para modificar esta direccion",
-      401
+    return next(
+      new ErrorHandler("No tienes permiso para modificar esta direccion", 401)
     );
   }
 
   const { error } = addressSchema.validate(req.body);
   if (error) {
-    throw new ErrorHandler(
-      error.details.map((detail) => detail.message).join(", "),
-      400
+    return next(
+      new ErrorHandler(
+        error.details.map((detail) => detail.message).join(", "),
+        400
+      )
     );
   }
 
@@ -71,15 +73,13 @@ export const updateAddress = async (req, res) => {
   res.status(201).json({ address });
 };
 
-
-export const deleteAddress = async (req, res) => {
+export const deleteAddress = async (req, res, next) => {
   let address = await Address.findById(req.query.id);
   if (!address) return next(new ErrorHandler("Address not found", 404));
 
   if (address.user.toString() !== req.user._id)
-    return new ErrorHandler(
-      "No tienes permiso para eliminar esta direccion",
-      401
+    return next(
+      new ErrorHandler("No tienes permiso para eliminar esta direccion", 401)
     );
 
   await Address.findByIdAndRemove(req.query.id);

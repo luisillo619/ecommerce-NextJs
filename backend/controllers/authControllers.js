@@ -4,6 +4,7 @@ import fs from "fs";
 import Joi from "joi";
 import ErrorHandler from "../utils/errorHandler";
 import bcrypt from "bcryptjs";
+import { sendWelcomeEmail } from "../utils/nodemailer";
 
 const userSchema = Joi.object({
   name: Joi.string().required().messages({
@@ -16,7 +17,7 @@ const userSchema = Joi.object({
 });
 
 // validaciones desde la coleccion
-export const registerUser = async (req, res) => {
+export const registerUser = async (req, res, next) => {
   const { name, email, password } = req.body;
 
   const user = await User.create({
@@ -25,7 +26,10 @@ export const registerUser = async (req, res) => {
     password,
   });
 
-  res.status(201).json(user);
+  if (user) {
+    await sendWelcomeEmail(req, res, next);
+    res.status(201).json(user);
+  }
 };
 
 export const updateProfile = async (req, res, next) => {
@@ -37,7 +41,7 @@ export const updateProfile = async (req, res, next) => {
 
   const existEmail = await User.findOne({ email: req.body.email });
   if (existEmail && existEmail.email !== req.user.email.toLowerCase()) {
-    next(new ErrorHandler("El correo ya está en uso", 400));
+    return next(new ErrorHandler("El correo ya está en uso", 400));
   }
 
   const { error } = userSchema.validate({
@@ -46,9 +50,11 @@ export const updateProfile = async (req, res, next) => {
   });
 
   if (error) {
-    throw new ErrorHandler(
-      error.details.map((detail) => detail.message).join(", "),
-      400
+    return next(
+      new ErrorHandler(
+        error.details.map((detail) => detail.message).join(", "),
+        400
+      )
     );
   }
 

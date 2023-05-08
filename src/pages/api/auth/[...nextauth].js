@@ -86,11 +86,17 @@ export default async function auth(req, res) {
             });
 
             if (!existingUser) {
+              const avatar = {
+                url: profile.picture,
+                public_id: profile.sub,
+              };
+
               existingUser = await User.create({
                 name: profile.name,
                 email: profile.email.toLowerCase(),
                 googleId: user.id,
                 isOAuthUser: true,
+                avatar,
               });
 
               await sendWelcomeMail({

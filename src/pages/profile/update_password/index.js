@@ -4,13 +4,12 @@ import { getSession } from "next-auth/react";
 
 export const getServerSideProps = async ({ req }) => {
   const session = await getSession({ req });
-  if (session) {
-    return {
-      props: {
-        session,
-      },
-    };
-  }
+
+  return {
+    props: {
+      session,
+    },
+  };
 };
 
 export default function UpdatePasswordPage({ session }) {

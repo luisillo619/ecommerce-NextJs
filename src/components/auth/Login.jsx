@@ -92,7 +92,7 @@ const Login = () => {
               Registrate
             </Link>
           </p>
-          <p className="font-medium">o</p>
+          <p>o</p>
           <p className="mb-2">Ingresa con Google</p>
           <button
             className="inline-flex items-center justify-center p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700"

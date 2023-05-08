@@ -5,7 +5,6 @@ import { getSession } from "next-auth/react";
 export const getServerSideProps = async (context) => {
   const session = await getSession({ req: context.req });
   if (session) {
-  
     return {
       redirect: {
         destination: context.query.callbackUrl

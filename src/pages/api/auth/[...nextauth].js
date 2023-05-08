@@ -92,6 +92,7 @@ export default async function auth(req, res) {
                 googleId: user.id,
                 isOAuthUser: true,
               });
+
               await sendWelcomeMail({
                 email: profile.email,
                 name: profile.name,
@@ -103,8 +104,7 @@ export default async function auth(req, res) {
             }
             return true;
           } catch (error) {
-            console.error("Error en el inicio de sesión de Google:", error);
-            return false;
+            throw new Error("Error en el inicio de sesión de Google");
           }
         } else if (account.provider === "credentials") {
           return true;

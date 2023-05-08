@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer";
-import ErrorHandler from "./errorHandler";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -72,10 +71,12 @@ const welcomeMail = (email, name) => {
   };
 };
 
-export async function sendWelcomeMail(req) {
-  const { email, name } = req.body;
+export async function sendWelcomeMail(data) {
+  const { email, name } = data;
+  console.log(email, name);
   const mailOptions = welcomeMail(email, name);
   try {
+  
     await transporter.sendMail(mailOptions);
     return true;
   } catch (error) {

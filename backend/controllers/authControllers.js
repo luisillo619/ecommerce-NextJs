@@ -36,7 +36,7 @@ export const registerUser = async (req, res, next) => {
     password,
   });
 
-  await sendWelcomeMail(req);
+  await sendWelcomeMail(req.body);
   res.status(201).json(newUser);
 };
 

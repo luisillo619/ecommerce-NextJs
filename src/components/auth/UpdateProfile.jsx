@@ -22,7 +22,7 @@ const UpdateProfile = ({ session }) => {
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState("");
   const [avatarPreview, setAvatarPreview] = useState(
-    session.user.avatar.url || "/images/default.png"
+    session?.user?.avatar?.url || "/images/default.png"
   );
 
   useEffect(() => {

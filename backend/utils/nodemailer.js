@@ -72,7 +72,7 @@ const welcomeMail = (email, name) => {
   };
 };
 
-export async function sendWelcomeMail(req, res, next) {
+export async function sendWelcomeMail(req) {
   const { email, name } = req.body;
   const mailOptions = welcomeMail(email, name);
   try {

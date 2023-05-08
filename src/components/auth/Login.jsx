@@ -4,13 +4,11 @@ import { signIn } from "next-auth/react";
 import { toast, Zoom } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
 
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
- 
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -55,7 +53,7 @@ const Login = () => {
           <input
             className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
             type="text"
-            placeholder="Type your email"
+            placeholder="Ingresa tu correo"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -67,7 +65,7 @@ const Login = () => {
           <input
             className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
             type="password"
-            placeholder="Type your password"
+            placeholder="Ingresa tu contraseña"
             minLength={6}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -85,16 +83,25 @@ const Login = () => {
 
         <hr className="mt-4" />
 
-        <p className="text-center mt-5">
-          No tienes cuenta?{" "}
-          <Link href="/register" className="text-blue-500">
-            Registrate
-          </Link>
-        </p>
+        <div className="text-center mt-5">
+          <p>
+            No tienes cuenta?{" "}
+            <Link href="/register" className="text-blue-500">
+              Registrate
+            </Link>
+          </p>
+          <p>o Ingresa con</p>
+          <button
+            className="btn -link-floating-mx-1"
+            type="button"
+            onClick={() => signIn("google")}
+          >
+            <i className="fab fa-google"></i>
+          </button>
+        </div>
       </form>
     </div>
   );
 };
 
 export default Login;
-

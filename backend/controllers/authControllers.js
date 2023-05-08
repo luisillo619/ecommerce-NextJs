@@ -19,17 +19,25 @@ const userSchema = Joi.object({
 // validaciones desde la coleccion
 export const registerUser = async (req, res, next) => {
   const { name, email, password } = req.body;
+  const user = await User.findOne({ email: email.toLowerCase() }).select(
+    "+password"
+  );
 
-  const user = await User.create({
+  if (user && user.isOAuthUser && !user.password) {
+    user.password = password;
+    await user.save();
+    user.password = undefined;
+    return res.status(200).json(user);
+  }
+
+  const newUser = await User.create({
     name,
     email: email.toLowerCase(),
     password,
   });
 
-  if (user) {
-    await sendWelcomeMail(req, res, next);
-    res.status(201).json(user);
-  }
+  await sendWelcomeMail(req);
+  res.status(201).json(newUser);
 };
 
 export const updateProfile = async (req, res, next) => {

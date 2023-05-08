@@ -92,7 +92,10 @@ export default async function auth(req, res) {
                 googleId: user.id,
                 isOAuthUser: true,
               });
-              await sendWelcomeMail(req);
+              await sendWelcomeMail({
+                email: profile.email,
+                name: profile.name,
+              });
             } else if (!existingUser.googleId) {
               existingUser.googleId = user.id;
               existingUser.isOAuthUser = true;

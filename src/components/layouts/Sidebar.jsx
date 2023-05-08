@@ -1,9 +1,12 @@
+import { selectUser } from "@/redux/reducer/authSlice";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const Sidebar = () => {
   const [loading, setLoading] = useState(false);
+  const user = useSelector(selectUser);
 
   const logoutHandler = async () => {
     setLoading(true);
@@ -17,45 +20,48 @@ const Sidebar = () => {
   return (
     <aside className="md:w-2/2 px-4 ">
       <ul className="space-y-2  ">
-        <>
-          <li>
-            <Link
-              href="/admin/products/new"
-              className="block px-4 py-2 text-gray-800 bg-white hover:bg-blue-100 hover:text-blue-500 rounded-md"
-            >
-              Nuevo Producto <span className="text-red-500">(Admin)</span>
-            </Link>
-          </li>
+        {user?.role === "admin" && (
+          <>
+            <li>
+              <Link
+                href="/admin/products/new"
+                className="block px-4 py-2 text-gray-800 bg-white hover:bg-blue-100 hover:text-blue-500 rounded-md"
+              >
+                Nuevo Producto <span className="text-red-500">(Admin)</span>
+              </Link>
+            </li>
 
-          <li>
-            <Link
-              href="/admin/products"
-              className="block px-4 py-2 text-gray-800 bg-white hover:bg-blue-100 hover:text-blue-500 rounded-md"
-            >
-              Todos los Productos <span className="text-red-500">(Admin)</span>
-            </Link>
-          </li>
+            <li>
+              <Link
+                href="/admin/products"
+                className="block px-4 py-2 text-gray-800 bg-white hover:bg-blue-100 hover:text-blue-500 rounded-md"
+              >
+                Todos los Productos{" "}
+                <span className="text-red-500">(Admin)</span>
+              </Link>
+            </li>
 
-          <li>
-            <Link
-              href="/admin/orders"
-              className="block px-4 py-2 text-gray-800 bg-white hover:bg-blue-100 hover:text-blue-500 rounded-md"
-            >
-              Todas las Ordenes <span className="text-red-500">(Admin)</span>
-            </Link>
-          </li>
+            <li>
+              <Link
+                href="/admin/orders"
+                className="block px-4 py-2 text-gray-800 bg-white hover:bg-blue-100 hover:text-blue-500 rounded-md"
+              >
+                Todas las Ordenes <span className="text-red-500">(Admin)</span>
+              </Link>
+            </li>
 
-          <li>
-            <Link
-              href="/admin/users"
-              className="block px-4 py-2 text-gray-800 bg-white hover:bg-blue-100 hover:text-blue-500 rounded-md"
-            >
-              Todos los Usuarios <span className="text-red-500">(Admin)</span>
-            </Link>
-          </li>
+            <li>
+              <Link
+                href="/admin/users"
+                className="block px-4 py-2 text-gray-800 bg-white hover:bg-blue-100 hover:text-blue-500 rounded-md"
+              >
+                Todos los Usuarios <span className="text-red-500">(Admin)</span>
+              </Link>
+            </li>
 
-          <li className="border-t border-gray-300 my-2"></li>
-        </>
+            <li className="border-t border-gray-300 my-2"></li>
+          </>
+        )}
 
         <li>
           <Link

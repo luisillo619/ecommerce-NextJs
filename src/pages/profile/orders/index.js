@@ -7,25 +7,23 @@ import queryString from "query-string";
 export const getServerSideProps = async (context) => {
   const session = await getSession({ req: context.req });
 
-  if (session) {
-    const urlParams = {
-      page: context.query.page || 1,
-    };
-    const searchQuery = queryString.stringify(urlParams);
+  const urlParams = {
+    page: context.query.page || 1,
+  };
+  const searchQuery = queryString.stringify(urlParams);
 
-    const { data } = await axios.get(
-      `${process.env.API_URL}/api/orders/me?${searchQuery}`,
-      {
-        headers: {
-          "x-user-session": JSON.stringify(session),
-        },
-      }
-    );
+  const { data } = await axios.get(
+    `${process.env.API_URL}/api/orders/me?${searchQuery}`,
+    {
+      headers: {
+        "x-user-session": JSON.stringify(session),
+      },
+    }
+  );
 
-    return {
-      props: { data },
-    };
-  }
+  return {
+    props: { data },
+  };
 };
 
 export default function MyOrdersPage({ data }) {

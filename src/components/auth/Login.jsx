@@ -45,11 +45,13 @@ const Login = () => {
       style={{ maxWidth: "480px" }}
       className="mt-10 mb-20 p-4 md:p-7 mx-auto rounded bg-white shadow-lg"
     >
-      <form onSubmit={submitHandler}>
-        <h2 className="mb-5 text-2xl font-semibold">Ingresa</h2>
+      <form onSubmit={submitHandler} className="space-y-4">
+        <h2 className="text-2xl font-semibold text-center text-blue-600">
+          Ingresa
+        </h2>
 
-        <div className="mb-4">
-          <label className="block mb-1"> Correo </label>
+        <div>
+          <label className="block mb-1 font-medium">Correo</label>
           <input
             className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
             type="text"
@@ -60,8 +62,8 @@ const Login = () => {
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block mb-1"> Contraseña </label>
+        <div>
+          <label className="block mb-1 font-medium">Contraseña</label>
           <input
             className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
             type="password"
@@ -83,16 +85,17 @@ const Login = () => {
 
         <hr className="mt-4" />
 
-        <div className="text-center mt-5">
+        <div className="text-center">
           <p>
             No tienes cuenta?{" "}
             <Link href="/register" className="text-blue-500">
               Registrate
             </Link>
           </p>
-          <p>o Ingresa con</p>
+          <p className="font-medium">o</p>
+          <p className="mb-2">Ingresa con Google</p>
           <button
-            className="btn -link-floating-mx-1"
+            className="inline-flex items-center justify-center p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700"
             type="button"
             onClick={() => signIn("google")}
           >

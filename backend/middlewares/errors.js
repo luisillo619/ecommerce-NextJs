@@ -12,7 +12,7 @@ export default (err, req, res, next) => {
   }
 
   if (err.code == 11000) {
-    const message = `${Object.keys(err.keyValue)} ya está ocupado`;
+    const message = `${Object.keys(err.keyValue)} en uso`;
     error = new ErrorHandler(message, 400);
   }
 

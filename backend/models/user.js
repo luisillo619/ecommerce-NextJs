@@ -13,9 +13,18 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "La contraseña es requerida"],
-    minLength: [6, "La contraseña debe tener mas de 6 caracteres"],
-    select: false, //  no se devolvera en la respuesta de la consulta
+    required: function () {
+      return this.isNew && !this.isOAuthUser;
+    },
+    minLength: [6, "La contraseña debe tener más de 6 caracteres"],
+    select: false, // no se devolverá en la respuesta de la consulta
+  },
+  isOAuthUser: {
+    type: Boolean,
+    default: false,
+  },
+  googleId: {
+    type: String,
   },
   avatar: {
     public_id: String,

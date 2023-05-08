@@ -6,6 +6,7 @@ import queryString from "query-string";
 
 export const getServerSideProps = async (context) => {
   const session = await getSession({ req: context.req });
+
   if (session) {
     const urlParams = {
       page: context.query.page || 1,

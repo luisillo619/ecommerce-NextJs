@@ -5,16 +5,15 @@ import { getSession } from "next-auth/react";
 export const getServerSideProps = async (context) => {
   const session = await getSession({ req: context.req });
 
- 
   return {
     props: { session },
   };
 };
 
-export default function NewProductPage({session}) {
+export default function NewProductPage({ session }) {
   return (
     <AdminProfileLayout>
-      <NewProduct session={session}/>
+      <NewProduct session={session} />
     </AdminProfileLayout>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import OrderItem from "./OrderItem";
 import CustomPagination from "../layouts/CustomPagination";
 import { clearCart } from "@/redux/reducer/cartSlice";
@@ -9,7 +9,7 @@ const ListOrders = ({ orders }) => {
   const dispatch = useDispatch();
   const params = useSearchParams();
   const router = useRouter();
-
+  const [loading, setLoading] = useState();
   const orderSuccess = params.get("order_success");
 
   useEffect(() => {
@@ -29,6 +29,8 @@ const ListOrders = ({ orders }) => {
         <CustomPagination
           resPerPage={orders?.resPerPage}
           productsCount={orders?.ordersCount}
+          loading={loading}
+          setLoading={setLoading}
         />
       </div>
     </>

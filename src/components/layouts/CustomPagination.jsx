@@ -1,19 +1,20 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 import ReactPaginate from "react-paginate";
 
-const useHandlePageChange = (page, productsCount, resPerPage, setLoading) => {
-  const router = useRouter();
-  const { ...restSearchParams } = router.query;
-
+const useHandlePageChange = (
+  page,
+  productsCount,
+  resPerPage,
+  setLoading,
+  router
+) => {
   const handlePageChange = (selectedItem) => {
     const currentPage = selectedItem.selected + 1;
-    const newSearchParams = new URLSearchParams(restSearchParams);
-    newSearchParams.set("page", currentPage);
 
-    router.push({
+    router.replace({
       pathname: router.pathname,
-      search: newSearchParams.toString(),
+      query: { ...router.query, page: currentPage },
     });
   };
 
@@ -33,8 +34,12 @@ const useHandlePageChange = (page, productsCount, resPerPage, setLoading) => {
   return handlePageChange;
 };
 
-const CustomPagination = ({ resPerPage, productsCount }) => {
-  const [loading, setLoading] = useState(false);
+const CustomPagination = ({
+  resPerPage,
+  productsCount,
+  loading,
+  setLoading,
+}) => {
   const router = useRouter();
   const page = Number(router.query.page) || 1;
 
@@ -42,13 +47,11 @@ const CustomPagination = ({ resPerPage, productsCount }) => {
     page,
     productsCount,
     resPerPage,
-    setLoading
+    setLoading,
+    router
   );
 
-  const totalPages = useMemo(
-    () => Math.ceil(productsCount / resPerPage),
-    [productsCount, resPerPage]
-  );
+  const totalPages = Math.ceil(productsCount / resPerPage);
 
   if (productsCount === 0) {
     return <div>No hay productos disponibles.</div>;

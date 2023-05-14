@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import axios from "axios";
 import queryString from "query-string";
 import ListProducts from "../components/products/ListProducts";
@@ -33,9 +32,7 @@ export const getServerSideProps = async ({ query }) => {
 };
 
 const HomePage = ({ products }) => {
-  const memoizedProducts = useMemo(() => products, [products]);
-
-  return <ListProducts data={memoizedProducts} />;
+  return <ListProducts data={products} />;
 };
 
 export default HomePage;

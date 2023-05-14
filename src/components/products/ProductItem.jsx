@@ -11,6 +11,7 @@ import default_product from "../../../public/images/default_product.png";
 const ProductItem = ({ product }) => {
   const dispatch = useDispatch();
   const cart = useSelector(selectCart);
+  const inStock = product?.stock >= 1;
 
   const addToCardHandler = () => {
     const cartItem = cart.find((e) => e.product === product._id);
@@ -33,16 +34,23 @@ const ProductItem = ({ product }) => {
         transition: Zoom,
       });
     } else {
-      dispatch(
-        addItemToCart({
-          product: product._id,
-          name: product.name,
-          price: product.price,
-          image: product.images[0] ? product.images[0].url : null,
-          stock: product.stock,
-          seller: product.seller,
-        })
-      );
+      if (inStock) {
+        dispatch(
+          addItemToCart({
+            product: product._id,
+            name: product.name,
+            price: product.price,
+            image: product?.images[0] ? product?.images[0].url : null,
+            stock: product.stock,
+            seller: product.seller,
+          })
+        );
+        return toast.success("Producto agregado al carrito", {
+          position: "bottom-right",
+          autoClose: 500,
+          transition: Zoom,
+        });
+      }
     }
   };
 

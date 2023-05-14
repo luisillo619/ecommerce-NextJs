@@ -45,9 +45,9 @@ const Shipping = ({ addresses, session }) => {
   };
 
   const breadCrumbs = [
-    { name: "Home", url: "/" },
-    { name: "Cart", url: "/cart" },
-    { name: "Order", url: "" },
+    { name: "Inicio", url: "/" },
+    { name: "Carrito", url: "/cart" },
+    { name: "Orden", url: "" },
   ];
 
   // cantidad sin impuesto

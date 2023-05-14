@@ -112,20 +112,26 @@ const Filters = () => {
             <input
               name="min"
               className="border border-gray-200 bg-gray-100 rounded-md py-2 px-3 w-full hover:border-gray-400 focus:outline-none focus:border-gray-400"
-              type="number"
+              type="text"
+              min="0"
               placeholder="Min"
               value={min}
-              onChange={(e) => setMin(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value >= 0) setMin(e.target.value);
+              }}
             />
           </div>
           <div className="mb-4">
             <input
               name="max"
               className="border border-gray-200 bg-gray-100 rounded-md py-2 px-3 w-full hover:border-gray-400 focus:outline-none focus:border-gray-400"
-              type="number"
+              type="text"
+              min="0"
               placeholder="Max"
               value={max}
-              onChange={(e) => setMax(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value >= 0) setMax(e.target.value);
+              }}
             />
           </div>
           <div className="mb-4">
@@ -142,23 +148,28 @@ const Filters = () => {
       <div className="hidden md:block px-6 py-4 border border-gray-200 bg-white rounded shadow-sm">
         <h3 className="font-semibold mb-2">Categoria</h3>
         <ul className="space-y-1">
-          {["Electrónicos", "Laptops", "Juguetes", "Oficina", "Belleza"].map(
-            (category) => (
-              <li key={category}>
-                <label className="flex items-center">
-                  <input
-                    name="category"
-                    type="checkbox"
-                    value={category}
-                    className="h-4 w-4"
-                    defaultChecked={checkHandler("category", category)}
-                    onClick={(e) => handlerClick(e.target)}
-                  />
-                  <span className="ml-2 text-gray-500">{category}</span>
-                </label>
-              </li>
-            )
-          )}
+          {[
+            "Electrónicos",
+            "Laptops",
+            "Juguetes",
+            "Oficina",
+            "Belleza",
+            "Deportivos",
+          ].map((category) => (
+            <li key={category}>
+              <label className="flex items-center">
+                <input
+                  name="category"
+                  type="checkbox"
+                  value={category}
+                  className="h-4 w-4"
+                  defaultChecked={checkHandler("category", category)}
+                  onClick={(e) => handlerClick(e.target)}
+                />
+                <span className="ml-2 text-gray-500">{category}</span>
+              </label>
+            </li>
+          ))}
         </ul>
 
         <hr className="my-4" />

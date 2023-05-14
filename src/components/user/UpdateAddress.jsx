@@ -12,7 +12,7 @@ import {
   updateAddress,
 } from "@/redux/reducer/authSlice";
 import { toast, Slide } from "react-toastify";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const UpdateAddress = ({ addressData, session }) => {
   const router = useRouter();

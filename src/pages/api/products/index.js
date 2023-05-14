@@ -1,5 +1,5 @@
 import nc from "next-connect";
-import { getProducts, newProduct } from "../../../../backend/controllers/productControllers";
+import { getProducts } from "../../../../backend/controllers/productControllers";
 import { dbConnect } from "../../../../backend/config/dbConect";
 import onError from "../../../../backend/middlewares/errors"
 
@@ -11,7 +11,6 @@ const handler = nc({onError});
 dbConnect();
 
 handler.get(getProducts)
-handler.post(newProduct);
 
 
 export default handler

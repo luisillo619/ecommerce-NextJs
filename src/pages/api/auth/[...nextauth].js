@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { dbConnect } from "../../../../backend/config/dbConect";
 import { sendWelcomeMail } from "../../../../backend/utils/nodemailer";
 
+// manejar errores de login
 export default async function auth(req, res) {
   return await NextAuth(req, res, {
     session: {

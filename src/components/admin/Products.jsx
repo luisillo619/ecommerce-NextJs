@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import CustomPagination from "../layouts/CustomPagination";
 
 const Products = ({ data }) => {
+  const [loading, setLoading] = useState()
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <h1 className="text-3xl my-5 ml-6 font-bold">
@@ -59,6 +60,8 @@ const Products = ({ data }) => {
         <CustomPagination
           resPerPage={data?.resPerPage}
           productsCount={data?.filteredProductsCount}
+          loading={loading}
+          setLoading={setLoading}
         />
       </div>
     </div>

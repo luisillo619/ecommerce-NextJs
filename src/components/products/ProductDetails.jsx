@@ -40,21 +40,28 @@ const ProductDetails = ({ product }) => {
         transition: Zoom,
       });
     } else {
-      dispatch(
-        addItemToCart({
-          product: product._id,
-          name: product.name,
-          price: product.price,
-          image: product?.images[0] ? product?.images[0].url : null,
-          stock: product.stock,
-          seller: product.seller,
-        })
-      );
+      if (inStock) {
+        dispatch(
+          addItemToCart({
+            product: product._id,
+            name: product.name,
+            price: product.price,
+            image: product?.images[0] ? product?.images[0].url : null,
+            stock: product.stock,
+            seller: product.seller,
+          })
+        );
+        return toast.success("Producto agregado al carrito", {
+          position: "bottom-right",
+          autoClose: 500,
+          transition: Zoom,
+        });
+      }
     }
   };
 
   const breadCrumbs = [
-    { name: "Home", url: "/" },
+    { name: "Inicio", url: "/" },
     {
       name: `${product?.name?.substring(0, 100)} ...`,
       url: `/product/${product?._id}`,

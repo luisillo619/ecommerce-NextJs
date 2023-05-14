@@ -6,15 +6,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SessionProvider } from "next-auth/react";
 
-
 export default function MyApp({ Component, pageProps }) {
-  const getLayout = Component.getLayout || ((page) => page)
   return (
     <>
       <ToastContainer position="bottom-right" />
       <Provider store={store}>
         <SessionProvider>
-          {/*acceso a la sesion del usuario*/}
           <LayoutIndex>
             <Component {...pageProps} />
           </LayoutIndex>
@@ -23,4 +20,3 @@ export default function MyApp({ Component, pageProps }) {
     </>
   );
 }
-

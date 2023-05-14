@@ -7,8 +7,6 @@ import {
   deleteAddress,
   selectAuthError,
   selectLoading,
-  setLoading,
-  setUpdated,
   updateAddress,
 } from "@/redux/reducer/authSlice";
 import { toast, Slide } from "react-toastify";

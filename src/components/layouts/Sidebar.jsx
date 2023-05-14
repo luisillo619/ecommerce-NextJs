@@ -3,6 +3,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const Sidebar = () => {
   const [loading, setLoading] = useState(false);

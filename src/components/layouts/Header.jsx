@@ -5,6 +5,7 @@ import buyItNowLogo from "../../../public/images/logo.png";
 import imagenProductDefault from "../../../public/images/default.png";
 
 const Header = ({ user, cart }) => {
+  const quantity = cart?.reduce((total, item) => total + item.quantity, 0) || 0;
   return (
     <header className="bg-white py-2 border-b">
       <div className="container max-w-screen-xl mx-auto px-4">

@@ -3,28 +3,31 @@ import mongoose from "mongoose";
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Por favor, ingresa el nombre del producto"],
+    unique: true,
+    required: [true, "El nombre del producto es requerido"],
   },
   description: {
     type: String,
-    required: [true, "Por favor, ingresa la descripcion del producto"],
+    required: [true, "La descripcion del es requerida"],
   },
   price: {
     type: Number,
-    required: [true, "Por favor, ingresa el precio del producto"],
+    required: [true, "El precio es requerido"],
   },
   images: [
     {
       public_id: {
         type: String,
       },
-      url: {},
+      url: {
+        type: String,
+      },
     },
   ],
 
   category: {
     type: String,
-    required: [true, "Por favor, ingresa la categoria del producto"],
+    required: [true, "La categoria es requerida"],
     enum: {
       values: [
         "Electronicos",
@@ -34,16 +37,16 @@ const productSchema = new mongoose.Schema({
         "Belleza",
         "Deportivos",
       ],
-      message: "Por favor, selecciona una categoria valida",
+      message: "Selecciona una categoria valida",
     },
   },
   seller: {
     type: String,
-    required: [true, "Por favor, ingresa al vendedor del producto"],
+    required: [true, "El vendedor es requerido"],
   },
   stock: {
     type: Number,
-    required: [true, "Por favor ingresa el stock del producto"],
+    required: [true, "El stock es requerido"],
   },
 
   ratings: {
@@ -66,6 +69,11 @@ const productSchema = new mongoose.Schema({
       },
     },
   ],
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    require: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

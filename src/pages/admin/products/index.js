@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import queryString from "query-string";
 import Products from "@/components/admin/Products";
-import UserProfileLayout from "@/components/layouts/UserProfileLayout";
+import AdminProfileLayout from "@/components/layouts/AdminProfileLayout";
 
 export const getServerSideProps = async ({ query }) => {
   const urlParams = {
@@ -22,12 +22,12 @@ export const getServerSideProps = async ({ query }) => {
   };
 };
 
-const HomePagee = ({ data }) => {
+const AdminProductsPage = ({ data }) => {
   return (
-    <UserProfileLayout>
+    <AdminProfileLayout>
       <Products data={data} />;
-    </UserProfileLayout>
+    </AdminProfileLayout>
   );
 };
 
-export default HomePagee;
+export default AdminProductsPage;

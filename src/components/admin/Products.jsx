@@ -5,8 +5,8 @@ import CustomPagination from "../layouts/CustomPagination";
 const Products = ({ data }) => {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <h1 className="text-3xl my-5 ml-4 font-bold">
-        {data?.productsCount} Products
+      <h1 className="text-3xl my-5 ml-6 font-bold">
+        {data?.productsCount} Productos
       </h1>
       <table className="w-full text-sm text-left">
         <thead className="text-l text-gray-700 uppercase">
@@ -55,7 +55,7 @@ const Products = ({ data }) => {
           ))}
         </tbody>
       </table>
-      <div className="mb-6">
+      <div className="my-5 flex justify-center">
         <CustomPagination
           resPerPage={data?.resPerPage}
           productsCount={data?.filteredProductsCount}

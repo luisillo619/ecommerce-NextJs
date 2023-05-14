@@ -8,7 +8,7 @@ const Search = () => {
 
   const handlerSumbit = (e) => {
     e.preventDefault();
-   
+
     if (keyword) {
       queryParams = new URLSearchParams(window.location.search);
       if (queryParams.has("keyword")) {
@@ -25,13 +25,11 @@ const Search = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       queryParams = new URLSearchParams(window.location.search);
-    }
-
-    if (typeof window !== "undefined") {
       const value = queryParams.get("keyword");
       if (value) setKeyword(value);
+      else setKeyword("");
     }
-  }, []);
+  }, [router]);
 
   return (
     <form
@@ -41,7 +39,7 @@ const Search = () => {
       <input
         className="flex-grow appearance-none border border-gray-200 bg-gray-100 rounded-md mr-2 py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400"
         type="text"
-        placeholder="Que estas"
+        placeholder="Encuentra lo que buscas"
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
         required

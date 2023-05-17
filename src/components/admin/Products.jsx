@@ -28,7 +28,7 @@ const Products = ({ data }) => {
         </thead>
         <tbody>
           {data?.products?.map((product) => (
-            <tr className="bg-white">
+            <tr className="bg-white" key={product?.name}>
               <td className="px-6 py-2">{product?.name}</td>
               <td className="px-6 py-2">{product?.stock}</td>
               <td className="px-6 py-2">${product?.price}</td>

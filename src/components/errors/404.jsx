@@ -16,10 +16,10 @@ const Error404 = () => {
 
   if (path === null) return null;
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white text-blue-800 p-4">
+    <div className="h-full flex flex-col items-center bg-white text-blue-800 p-4 space-y-16">
       <div 
         data-aos="fade-up"
-        className="text-center mb-5"
+        className="text-center"
       >
         <h1 className="text-5xl sm:text-8xl font-extrabold tracking-tighter mb-4">404</h1>
         <h2 className="text-xl sm:text-3xl">
@@ -28,13 +28,15 @@ const Error404 = () => {
           no existe.
         </h2>
       </div>
-      <div className="mb-5">
+      <div>
         <Image
           src="https://res.cloudinary.com/drkzjxpza/image/upload/v1684049700/buyitnow/errors/Error404_xncugl.png"
-          objectFit="contain"
+         
+          style={{objectFit:"contain"}}
           alt="404"
           width="200"
           height="200"
+         
         />
       </div>
       <button

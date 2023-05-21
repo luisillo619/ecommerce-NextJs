@@ -52,6 +52,43 @@ export const newProduct = (product, router, session) => async (dispatch) => {
   }
 };
 
+export const uploadProductImages =
+  (formdata, id, session, router) => async (dispatch) => {
+    try {
+      dispatch(setLoading(true));
+      const { data } = await axios.post(
+        `/api/admin/products/upload_images/${id}`,
+        formdata,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "x-user-session": JSON.stringify(session),
+          },
+        }
+      );
+
+      if (data?.success) {
+        toast.success("Imagenes Cargadas", {
+          position: "bottom-right",
+          autoClose: 1500,
+          transition: Zoom,
+        });
+        router.replace("/admin/products");
+      }
+    } catch (error) {
+      const errorMessages = error?.response?.data?.message;
+
+      if (errorMessages) {
+        const messagesArray = errorMessages.split(",");
+
+        dispatch(
+          setError(messagesArray[0] || error?.response?.data?.error?.message)
+        );
+      }
+      dispatch(setLoading(false));
+    }
+  };
+
 export const { clearError, setError, setLoading } = productSlice.actions;
 
 export const selectLoading = (state) => state?.product?.loading;

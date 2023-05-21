@@ -1,12 +1,14 @@
 import Product from "../models/product";
 import APIFilters from "../utils/APIFilters";
+import { uploads } from "../utils/cloudinary";
+import ErrorHandler from "../utils/errorHandler";
 
 // validacion desde la coleccion
 export const newProduct = async (req, res, next) => {
   req.body.user = req.user._id;
 
   const product = await Product.create(req.body);
- 
+
   res.status(201).json({
     product,
     success: true,
@@ -49,3 +51,94 @@ export const getProduct = async (req, res, next) => {
     product,
   });
 };
+
+export const uploadProductImages = async (req, res, next) => {
+  let product = await Product.findById(req.query.id);
+  if (!product) {
+    return res.status(404).json({
+      error: "producto no encontrado",
+    });
+  }
+
+  const urls = [];
+
+  if (req.files.length > 0) {
+    const uploader = async (buffer) =>
+      await uploads(buffer, "buyitnow/products");
+
+    const files = req.files;
+
+    for (let file of files) {
+      const buffer = file.buffer;
+      const newPath = await uploader(buffer);
+      urls.push(newPath);
+    }
+  } else {
+    return next(new ErrorHandler("Debes agregar por lo menos una imagen", 401));
+  }
+
+  product = await Product.findByIdAndUpdate(req.query.id, {
+    $push: {
+      images: {
+        $each: urls,
+      },
+    },
+  }, { new: true });
+
+  res.status(200).json({
+    data: urls,
+    product,
+    success: true,
+  });
+};
+
+// export const uploadProductImages = async (req, res, next) => {
+//   let product = await Product.findById(req.query.id);
+//   if (!product) {
+//     return res.status(404).json({
+//       error: "producto no encontrado",
+//     });
+//   }
+
+//   const urls = [];
+
+//   if (req.files.length > 0) {
+//     const uploader = async (buffer) =>
+//       await uploads(buffer, "buyitnow/products");
+
+//     const files = req.files;
+
+//     for (let file of files) {
+//       const buffer = file.buffer;
+//       const newPath = await uploader(buffer);
+//       urls.push(newPath);
+//     }
+//   } else {
+//     return next(new ErrorHandler("Debes agregar por lo menos una imagen", 401));
+//   }
+
+//   product = await Product.findByIdAndUpdate(req.query.id, {
+//     images: urls,
+//   });
+
+//   res.status(200).json({
+//     data: urls,
+//     product,
+//     success: true,
+//   });
+// };
+
+// LOCAL
+// export const uploadProductImages = async (req, res, next) => {
+//   const uploader = async (buffer) => await uploads(buffer, "buyitnow/products");
+
+//   const urls = []
+//   const files = req.files;
+
+//   for(file of files){
+//     const {path} = file
+//     const newPath = await uploader(path)
+//     urls.push(newPath)
+
+//   }
+// };

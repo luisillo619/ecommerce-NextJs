@@ -1,7 +1,29 @@
+import Joi from "joi";
 import Product from "../models/product";
 import APIFilters from "../utils/APIFilters";
-import { uploads } from "../utils/cloudinary";
+import { cloudinary, uploads } from "../utils/cloudinary";
 import ErrorHandler from "../utils/errorHandler";
+
+const productSchema = Joi.object({
+  name: Joi.string().required().messages({
+    "string.empty": "El nombre es requerido",
+  }),
+  description: Joi.string().required().messages({
+    "string.empty": "La descripción es requerida",
+  }),
+  price: Joi.number().required().messages({
+    "string.empty": "El precio es requerido",
+  }),
+  category: Joi.string().required().messages({
+    "string.empty": "La categoría es requerida",
+  }),
+  seller: Joi.string().required().messages({
+    "string.empty": "El vendedor es requerido",
+  }),
+  stock: Joi.number().required().messages({
+    "string.empty": "El stock es requerido",
+  }),
+});
 
 // validacion desde la coleccion
 export const newProduct = async (req, res, next) => {
@@ -43,9 +65,7 @@ export const getProducts = async (req, res, next) => {
 export const getProduct = async (req, res, next) => {
   const product = await Product.findById(req.query.id);
   if (!product) {
-    return res.status(404).json({
-      error: "producto no encontrado",
-    });
+    return next(new ErrorHandler("producto no encontrado", 404));
   }
   res.status(200).json({
     product,
@@ -55,9 +75,7 @@ export const getProduct = async (req, res, next) => {
 export const uploadProductImages = async (req, res, next) => {
   let product = await Product.findById(req.query.id);
   if (!product) {
-    return res.status(404).json({
-      error: "producto no encontrado",
-    });
+    return next(new ErrorHandler("producto no encontrado", 404));
   }
 
   const urls = [];
@@ -77,13 +95,17 @@ export const uploadProductImages = async (req, res, next) => {
     return next(new ErrorHandler("Debes agregar por lo menos una imagen", 401));
   }
 
-  product = await Product.findByIdAndUpdate(req.query.id, {
-    $push: {
-      images: {
-        $each: urls,
+  product = await Product.findByIdAndUpdate(
+    req.query.id,
+    {
+      $push: {
+        images: {
+          $each: urls,
+        },
       },
     },
-  }, { new: true });
+    { new: true }
+  );
 
   res.status(200).json({
     data: urls,
@@ -142,3 +164,46 @@ export const uploadProductImages = async (req, res, next) => {
 
 //   }
 // };
+
+export const updateProduct = async (req, res, next) => {
+  let product = await Product.findById(req.query.id);
+  if (!product) {
+    return next(new ErrorHandler("producto no encontrado", 404));
+  }
+
+  const { error } = productSchema.validate(req.body);
+  if (error) {
+    return next(
+      new ErrorHandler(
+        error.details.map((detail) => detail.message).join(", "),
+        400
+      )
+    );
+  }
+
+  product = await Product.findByIdAndUpdate(req.query.id, req.body);
+
+  res.status(200).json({
+    product,
+    success: true,
+  });
+};
+
+export const deleteProduct = async (req, res, next) => {
+  let product = await Product.findById(req.query.id);
+  if (!product) {
+    return next(new ErrorHandler("producto no encontrado", 404));
+  }
+
+  const imageIds = product.images.map((image) => image.public_id);
+  await Promise.all(
+    imageIds.map((imageId) => cloudinary.v2.uploader.destroy(imageId))
+  );
+
+  await product.deleteOne();
+
+  res.status(200).json({
+    product,
+    success: true,
+  });
+};

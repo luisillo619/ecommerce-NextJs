@@ -117,4 +117,3 @@ const UploadImages = ({ id, session }) => {
 };
 
 export default UploadImages;
-//

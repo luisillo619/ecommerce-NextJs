@@ -185,7 +185,7 @@ export const updateAddress =
           autoClose: 1200,
           transition: Zoom,
         });
-        router.replace(`/address/${id}`);
+        router.refresh()
       }
     } catch (error) {
       dispatch(setError(error?.response?.data?.error?.message));

@@ -82,7 +82,7 @@ export const deleteAddress = async (req, res, next) => {
       new ErrorHandler("No tienes permiso para eliminar esta direccion", 401)
     );
 
-  await Address.findByIdAndRemove(req.query.id);
+  await address.deleteOne();
   res.status(200).json({
     success: true,
   });

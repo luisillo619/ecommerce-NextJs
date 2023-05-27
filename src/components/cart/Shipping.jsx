@@ -17,16 +17,17 @@ const Shipping = ({ addresses, session }) => {
     setShippinInfo(address._id);
   };
 
-  const checkoutHandler = async () => {
+  const checkoutHandler = () => {
     if (!shippingInfo) {
-      return toast.error("Por favor, selecciona una direccion de envio",{
+      return toast.error("Por favor, selecciona una direccion de envio", {
         position: "bottom-right",
         autoClose: 1200,
         transition: Slide,
       });
     }
+  
     try {
-      const { data } = await axios.post(
+      axios.post(
         `/api/orders/checkout_session`,
         {
           items: cart,
@@ -37,10 +38,9 @@ const Shipping = ({ addresses, session }) => {
             "x-user-session": JSON.stringify(session),
           },
         }
-      );
-      console.log("aqui estoy");
-      console.log(data.url);
-      window.location.href = data.url; // se abre la ventana de stripe
+      ).then((response) => {
+        window.open(response.data.url, '_blank');
+      });
     } catch (error) {
       console.log(error);
     }

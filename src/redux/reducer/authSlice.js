@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { signIn } from "next-auth/react";
 import { toast, Zoom } from "react-toastify";
 
 const authSlice = createSlice({
@@ -38,7 +39,27 @@ export const registerUser =
       });
 
       if (Object.keys(data).length > 0) {
-        router.replace("/");
+        const data = await signIn("credentials", {
+          email,
+          password,
+          redirect: false,
+        });
+
+        if (data?.error) {
+          toast.error(data?.error, {
+            position: "bottom-right",
+            autoClose: 1200,
+            transition: Zoom,
+          });
+          setLoading(false);
+        } else if (data?.ok) {
+          toast.success("Bienvenido de vuelta", {
+            position: "bottom-right",
+            autoClose: 1500,
+            transition: Zoom,
+          });
+          router.replace("/register");
+        }
       }
     } catch (error) {
       const errorMessages = error?.response?.data?.message;

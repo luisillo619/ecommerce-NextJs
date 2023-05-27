@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 
 const OrderItem = ({ order }) => {
+  console.log(order.orderStatus);
   return (
     <article className="p-3 lg:p-5 mb-5 bg-white border border-blue-600 rounded-md">
       <header className="lg:flex justify-between mb-4">
@@ -9,12 +10,12 @@ const OrderItem = ({ order }) => {
           <p className="font-semibold">
             <span>Orden ID: {order?._id} </span>
             {order?.orderStatus == "Processing" ? (
-              <span className="text-red-500">
-                • PROCESANDO
+              <span className="text-red-500 uppercase">
+                • {order.orderStatus}
               </span>
             ) : (
-              <span className="text-green-500">
-                • ENVIADO
+              <span className="text-green-500 uppercase">
+                • {order.orderStatus}
               </span>
             )}
           </p>

@@ -26,12 +26,42 @@ export const getOrder = async (req, res) => {
   const order = await Order.findById(req.query.id).populate(
     "shippingInfo user"
   );
+
   if (!order) {
     return next(new ErrorHandler(`Orden ${req.query.id} no encontrada`, 404));
   }
 
   res.status(200).json({
     order,
+  });
+};
+
+export const updateOrder = async (req, res) => {
+  let order = await Order.findById(req.query.id);
+  if (!order) {
+    return next(new ErrorHandler(`Orden ${req.query.id} no encontrada`, 404));
+  }
+
+  order = await Order.findByIdAndUpdate(req.query.id, {
+    orderStatus: req.body.orderStatus,
+  });
+
+  res.status(200).json({
+    success: true,
+    order,
+  });
+};
+
+export const deleteOrder = async (req, res) => {
+  let order = await Order.findById(req.query.id);
+  if (!order) {
+    return next(new ErrorHandler(`Orden ${req.query.id} no encontrada`, 404));
+  }
+
+  await order.deleteOne();
+
+  res.status(200).json({
+    success: true,
   });
 };
 

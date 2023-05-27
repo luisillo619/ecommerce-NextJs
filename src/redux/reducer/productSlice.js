@@ -86,7 +86,6 @@ export const updateProduct =
 
 export const deleteProduct = (router, session, id) => async (dispatch) => {
   try {
-    dispatch(setLoading(true));
     const { data } = await axios.delete(`/api/admin/products/${id}`, {
       headers: {
         "x-user-session": JSON.stringify(session),

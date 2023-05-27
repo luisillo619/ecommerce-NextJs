@@ -5,17 +5,16 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deleteProduct,
   selectProductError,
-  setLoading,
   clearError,
 } from "@/redux/reducer/productSlice";
-import { toast } from "react-toastify";
+import { Slide, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Modal from "react-modal";
 
 const Products = ({ data, session }) => {
   const router = useRouter();
 
-  const [loadingState, setLoadingState] = useState();
+  const [loading, setLoading] = useState();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [productIdNameToDelete, setProductIdNameToDelete] = useState({});
 
@@ -24,8 +23,12 @@ const Products = ({ data, session }) => {
 
   useEffect(() => {
     if (error) {
-      toast.error(error);
-      clearError();
+      toast.error(error, {
+        position: "bottom-right",
+        autoClose: 2000,
+        transition: Slide,
+      });
+      dispatch(clearError());
     }
   }, [error]);
 
@@ -41,10 +44,6 @@ const Products = ({ data, session }) => {
     dispatch(deleteProduct(router, session, productIdNameToDelete.id));
     setModalIsOpen(false);
   };
-
-  useEffect(() => {
-    return () => dispatch(setLoading(false));
-  }, []);
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -105,8 +104,8 @@ const Products = ({ data, session }) => {
         <CustomPagination
           resPerPage={data?.resPerPage}
           productsCount={data?.filteredProductsCount}
-          loading={loadingState}
-          setLoading={setLoadingState}
+          loading={loading}
+          setLoading={setLoading}
         />
       </div>
 
@@ -119,10 +118,7 @@ const Products = ({ data, session }) => {
       >
         <div className="w-96 p-10 bg-white rounded-lg shadow-md">
           <h2 className="mb-6 text-center space-y-5">
-            <p>
-              ¿Estás seguro de que deseas eliminar el siguiente
-              producto?
-            </p>
+            <p>¿Estás seguro de que deseas eliminar el siguiente producto?</p>
             <div className="space-y-2">
               <p>{productIdNameToDelete.name}.</p>
               <p>{productIdNameToDelete.id}</p>

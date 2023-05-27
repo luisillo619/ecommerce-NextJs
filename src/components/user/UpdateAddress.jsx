@@ -65,10 +65,9 @@ const UpdateAddress = ({ addressData, session }) => {
 
   return (
     <>
-      <section className="py-10">
-        <div className="container max-w-screen-xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row -mx-4">
-            <Sidebar />
+      <section className="py-10 ">
+        <div className="max-w-screen-xl mx-auto px-4 ">
+          <div className="flex flex-col md:flex-row -mx-4 md:mx-0 justify-center">
             <main className="md:w-2/3 lg:w-3/4 px-4">
               <div
                 style={{ maxWidth: "480px" }}

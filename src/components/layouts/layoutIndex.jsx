@@ -30,6 +30,12 @@ export default function LayoutIndex({ children }) {
     }
   }, [status]);
 
+  useEffect(() => {
+    if (router?.query?.keyword) {
+      router.replace(`/?keyword=${router?.query?.keyword}`);
+    }
+  }, [router?.query?.keyword]);
+
   return (
     <>
       {user !== null ? (

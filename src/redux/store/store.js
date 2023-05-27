@@ -2,6 +2,7 @@ import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import cartReducer from "../reducer/cartSlice";
 import authReducer from "../reducer/authSlice";
 import productReducer from "../reducer/productSlice";
+import orderReducer from "../reducer/orderSlice";
 
 import thunkMiddleware from "redux-thunk";
 
@@ -12,6 +13,7 @@ export default configureStore({
     cart: cartReducer,
     auth: authReducer,
     product: productReducer,
+    order: orderReducer,
   },
   middleware,
 });

@@ -1,13 +1,52 @@
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import {
+  updateOrder,
+  setLoading,
+  clearError,
+  selectOrderError,
+  selectLoading,
+} from "@/redux/reducer/orderSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-const UpdateOrder = ({ order }) => {
+import { useRouter } from "next/navigation";
+import { Slide, toast } from "react-toastify";
+
+const UpdateOrder = ({ order, session }) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const error = useSelector(selectOrderError);
+  const loading = useSelector(selectLoading);
+
+  const [orderStatus, setOrderStatus] = useState(order?.orderStatus);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        position: "bottom-right",
+        autoClose: 2000,
+        transition: Slide,
+      });
+      dispatch(clearError());
+    }
+  }, [error]);
+
+  const submitHandler = () => {
+    const orderData = { orderStatus };
+
+    dispatch(updateOrder(orderData, router, session, order?._id, ));
+  };
+
+  useEffect(() => {
+    return () => dispatch(setLoading(false));
+  }, []);
+
   return (
     <article className="p-3 lg:p-5 mb-5 bg-white border border-blue-600 rounded-md">
       <header className="lg:flex justify-between mb-4">
         <div className="mb-4 lg:mb-0">
           <p className="font-semibold">
-            <span>ID de Orden: {order?._id} </span>
+            <span>Id de Orden: {order?._id} </span>
             {order?.orderStatus == "Processing" ? (
               <span className="text-red-500">
                 • {order?.orderStatus.toUpperCase()}
@@ -31,7 +70,7 @@ const UpdateOrder = ({ order }) => {
           </ul>
         </div>
         <div>
-          <p className="text-gray-400 mb-1">Direccion de Envio</p>
+          <p className="text-gray-400 mb-1">Direccion de envio</p>
           <ul className="text-gray-600">
             <li>{order?.shippingInfo?.street}</li>
             <li>
@@ -42,7 +81,7 @@ const UpdateOrder = ({ order }) => {
           </ul>
         </div>
         <div>
-          <p className="text-gray-400 mb-1">Pago</p>
+          <p className="text-gray-400 mb-1">Datos de pago</p>
           <ul className="text-gray-600">
             <li className="text-green-400">
               {order?.paymentInfo?.status?.toUpperCase()}
@@ -81,14 +120,16 @@ const UpdateOrder = ({ order }) => {
       <hr />
 
       <div class="my-8">
-        <label class="block mb-3"> Actualizar el estado de la orden </label>
+        <label class="block mb-3"> Actualizar el Estado de la Orden </label>
         <div class="relative">
           <select
             class="block appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
             name="category"
+            value={orderStatus}
+            onChange={(e) => setOrderStatus(e.target.value)}
             required
           >
-            {["Procesando", "Enviando", "Entregado"].map((status) => (
+            {["Processing", "Shipped", "Delivered"].map((status) => (
               <option key={status} value={status}>
                 {status}
               </option>
@@ -110,9 +151,12 @@ const UpdateOrder = ({ order }) => {
       <button
         type="submit"
         className="mb-2 px-4 py-2 text-center w-full inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
-      >
-        Actualizar
-      </button>
+        onClick={() => submitHandler()} 
+        disabled={loading ? true : false}
+        >
+          {loading ? "Actualizando..." : "Actualizar"}
+        </button>
+  
     </article>
   );
 };

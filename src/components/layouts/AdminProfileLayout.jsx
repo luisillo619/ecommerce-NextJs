@@ -3,9 +3,9 @@ import Sidebar from "./Sidebar";
 export default function AdminProfileLayout({ children }) {
   return (
     <>
-      <section className="py-5 sm:py-7 bg-blue-100">
+      <section className="py-2 bg-blue-100">
         <div className="container max-w-screen-xl mx-auto px-4">
-          <h1 className="font-bold text-2xl">Panel de Admin</h1>
+          <h1 className="font-bold text-2xl ml-7">Panel de Admin</h1>
         </div>
       </section>
 

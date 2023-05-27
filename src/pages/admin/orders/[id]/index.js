@@ -4,26 +4,35 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 
 export const getServerSideProps = async (context) => {
-  const session = await getSession({ req: context.req });
+  try {
+    const session = await getSession({ req: context.req });
 
-  const { data } = await axios.get(
-    `${process.env.API_URL}/api/admin/orders/${context.params.id}`,
-    {
-      headers: {
-        "x-user-session": JSON.stringify(session),
+    const { data } = await axios.get(
+      `${process.env.API_URL}/api/admin/orders/${context.params.id}`,
+      {
+        headers: {
+          "x-user-session": JSON.stringify(session),
+        },
+      }
+    );
+
+    return {
+      props: { data: data.order, session },
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/admin/orders",
+        permanent: true,
       },
-    }
-  );
-
-  return {
-    props: { data: data.order },
-  };
+    };
+  }
 };
 
-export default function AdminOrderDetailsPage({ data }) {
+export default function AdminOrderDetailsPage({ data, session }) {
   return (
     <AdminProfileLayout>
-      <UpdateOrder order={data} />
+      <UpdateOrder order={data} session={session} />
     </AdminProfileLayout>
   );
 }

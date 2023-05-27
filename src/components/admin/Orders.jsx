@@ -1,9 +1,41 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomPagination from "../layouts/CustomPagination";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { deleteOrder, selectOrderError } from "@/redux/reducer/orderSlice";
+import { Slide, toast } from "react-toastify";
+import Modal from "react-modal";
 
-const Orders = ({ orders }) => {
+const Orders = ({ orders, session }) => {
   const [loading, setLoading] = useState();
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [orderIdToDelete, setOrderIdToDelete] = useState();
+
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const error = useSelector(selectOrderError);
+
+  const deleteHandler = (id) => {
+    setModalIsOpen(true);
+    setOrderIdToDelete(id);
+  };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        position: "bottom-right",
+        autoClose: 2000,
+        transition: Slide,
+      });
+      dispatch(clearError());
+    }
+  }, [error]);
+
+  const confirmDelete = () => {
+    dispatch(deleteOrder(router, session, orderIdToDelete));
+    setModalIsOpen(false);
+  };
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -41,7 +73,10 @@ const Orders = ({ orders }) => {
                   >
                     <i className="fa fa-pencil" aria-hidden="true"></i>
                   </Link>
-                  <a className="px-2 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer">
+                  <a
+                    className="px-2 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer"
+                    onClick={() => deleteHandler(order?._id)}
+                  >
                     <i className="fa fa-trash" aria-hidden="true"></i>
                   </a>
                 </div>
@@ -59,6 +94,38 @@ const Orders = ({ orders }) => {
           setLoading={setLoading}
         />
       </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        contentLabel="Confirmar eliminación"
+        className="flex items-center justify-center h-screen"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+      >
+        <div className="w-96 p-10 bg-white rounded-lg shadow-md">
+          <h2 className="mb-6 text-center space-y-5">
+            <p>
+              ¿Estás seguro de que deseas eliminar la orden con el siguiente ID?
+            </p>
+            <div className="space-y-2">
+              <p>{orderIdToDelete}</p>
+            </div>
+          </h2>
+          <div className="flex justify-center space-x-5">
+            <button
+              className="px-4 py-2 text-gray-800 bg-white border border-gray-400 rounded cursor-pointer  hover:bg-blue-500 hover:text-white"
+              onClick={() => setModalIsOpen(false)}
+            >
+              Cancelar
+            </button>
+            <button
+              className="px-4 py-2 text-white bg-red-600 rounded cursor-pointer hover:bg-red-700"
+              onClick={confirmDelete}
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

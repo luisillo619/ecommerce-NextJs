@@ -22,14 +22,14 @@ export const getServerSideProps = async (context) => {
   );
 
   return {
-    props: { data },
+    props: { data,session },
   };
 };
 
-export default function AdminOrdersPage({ data }) {
+export default function AdminOrdersPage({ data,session }) {
   return (
     <AdminProfileLayout>
-      <Orders orders={data} />
+      <Orders orders={data}  session={session}/>
     </AdminProfileLayout>
   );
 }

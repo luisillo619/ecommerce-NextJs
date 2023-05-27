@@ -1,3 +1,4 @@
+import UserProfileLayout from "@/components/layouts/UserProfileLayout";
 import UpdateAddress from "@/components/user/UpdateAddress";
 import axios from "axios";
 import { getSession } from "next-auth/react";
@@ -22,5 +23,9 @@ export const getServerSideProps = async (context) => {
 };
 
 export default function UpdateAddressPage({ addressData, session }) {
-  return <UpdateAddress addressData={addressData} session={session} />;
+  return (
+    <UserProfileLayout>
+      <UpdateAddress addressData={addressData} session={session} />
+    </UserProfileLayout>
+  );
 }

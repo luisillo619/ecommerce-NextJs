@@ -7,9 +7,11 @@ import { selectCart } from "@/redux/reducer/cartSlice";
 import defaultProduct from "../../../public/images/default_product.png";
 import Image from "next/image";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 const Shipping = ({ addresses, session }) => {
   const cart = useSelector(selectCart);
+  const router = useRouter();
 
   const [shippingInfo, setShippinInfo] = useState("");
 
@@ -25,22 +27,30 @@ const Shipping = ({ addresses, session }) => {
         transition: Slide,
       });
     }
-  
+
     try {
-      axios.post(
-        `/api/orders/checkout_session`,
-        {
-          items: cart,
-          shippingInfo,
-        },
-        {
-          headers: {
-            "x-user-session": JSON.stringify(session),
+      axios
+        .post(
+          `/api/orders/checkout_session`,
+          {
+            items: cart,
+            shippingInfo,
           },
-        }
-      ).then((response) => {
-        window.open(response.data.url, '_blank');
-      });
+          {
+            headers: {
+              "x-user-session": JSON.stringify(session),
+            },
+          }
+        )
+        .then((response) => {
+          const link = document.createElement("a");
+          link.href = response.data.url;
+          link.target = "_blank";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          router.replace("/");
+        });
     } catch (error) {
       console.log(error);
     }

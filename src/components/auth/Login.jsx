@@ -36,6 +36,37 @@ const Login = () => {
     }
   };
 
+  const submitHandlerGoogle = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const data = await signIn("google", { redirect: false });
+    } catch (error) {
+      if (error.message === "User is not authorized") {
+        toast.error(
+          "Usuario no autorizado. Por favor, inicia sesión con una cuenta de Google válida",
+          {
+            position: "bottom-right",
+            autoClose: 1200,
+            transition: Zoom,
+          }
+        );
+      } else {
+        toast.error(
+          "Error al iniciar sesión con Google. Por favor, inténtalo nuevamente más tarde",
+          {
+            position: "bottom-right",
+            autoClose: 1200,
+            transition: Zoom,
+          }
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     return () => setLoading(false);
   }, []);
@@ -97,7 +128,7 @@ const Login = () => {
           <button
             className="inline-flex items-center justify-center p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700"
             type="button"
-            onClick={() => signIn("google")}
+            onClick={(e) => submitHandlerGoogle(e)}
           >
             <i className="fab fa-google"></i>
           </button>

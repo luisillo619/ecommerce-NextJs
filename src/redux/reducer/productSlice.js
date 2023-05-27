@@ -68,7 +68,7 @@ export const updateProduct =
           autoClose: 1500,
           transition: Zoom,
         });
-        router.refresh();
+        router.replace(`/admin/products/${id}`);
       }
     } catch (error) {
       const errorMessages = error?.response?.data?.message;
@@ -99,7 +99,7 @@ export const deleteProduct = (router, session, id) => async (dispatch) => {
         autoClose: 1500,
         transition: Zoom,
       });
-      router.refresh();
+      router.replace("/admin/products");
     }
   } catch (error) {
     const errorMessages = error?.response?.data?.message;

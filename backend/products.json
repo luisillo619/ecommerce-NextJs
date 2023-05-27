@@ -1,13 +1,5 @@
 [
   {
-    "name": "Nintendo Switch",
-    "description": "Consola híbrida de videojuegos para uso en el hogar y en movimiento",
-    "price": 299.99,
-    "seller": "Nintendo",
-    "stock": 20,
-    "category": "Juguetes"
-  },
-  {
     "name": "MacBook Air 13",
     "description": "Laptop ultraligera y portátil para profesionales en movimiento",
     "price": 1099.99,

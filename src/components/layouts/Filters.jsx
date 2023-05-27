@@ -93,7 +93,7 @@ return (
       <h3 className="font-semibold mb-2">Categoria</h3>
       <ul className="space-y-1">
         {[
-          "Electrónicos",
+          "Electronicos",
           "Laptops",
           "Juguetes",
           "Oficina",

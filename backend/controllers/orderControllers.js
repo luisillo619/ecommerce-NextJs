@@ -2,7 +2,38 @@ import getRawBody from "raw-body";
 import Stripe from "stripe";
 import Order from "../models/order";
 import APIFilters from "../utils/APIFilters";
+import ErrorHandler from "../utils/errorHandler";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+export const getOrders = async (req, res) => {
+  const resPerPage = 4;
+  const ordersCount = await Order.find().countDocuments();
+
+  const apiFilters = new APIFilters(Order.find(), req.query).pagination(
+    resPerPage
+  );
+
+  const orders = await apiFilters.query.find().populate("shippingInfo user");
+
+  res.status(200).json({
+    ordersCount,
+    resPerPage,
+    orders,
+  });
+};
+
+export const getOrder = async (req, res) => {
+  const order = await Order.findById(req.query.id).populate(
+    "shippingInfo user"
+  );
+  if (!order) {
+    return next(new ErrorHandler(`Orden ${req.query.id} no encontrada`, 404));
+  }
+
+  res.status(200).json({
+    order,
+  });
+};
 
 export const myOrders = async (req, res) => {
   const resPerPage = 2;
@@ -46,7 +77,9 @@ export const checkoutSession = async (req, res) => {
     };
   });
 
-  const shippingInfo = body?.shippingInfo; // direccion de envio
+  // En lugar de solo pasar el ID, se debe proporcionar toda la información de la dirección al crear la orden. En el webhook, se deben agregar directamente los datos de la dirección al momento de crear la orden, en lugar de hacer referencia a la dirección en el esquema de las órdenes con el id
+
+  const shippingInfo = body?.shippingInfo; // id direccion de envio, DESPUES desde el front pasar toda la direccion y no solo el id
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
@@ -65,7 +98,7 @@ export const checkoutSession = async (req, res) => {
   });
 
   res.status(200).json({
-    url: session.url, // url de pago. Una vez completado el pago va a redirigir a suscess_url o a cancel_url
+    url: session.url, // PARA ABRIRL EL MODAL DE STRIPE
   });
 };
 

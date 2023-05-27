@@ -38,6 +38,8 @@ const Shipping = ({ addresses, session }) => {
           },
         }
       );
+      console.log("aqui estoy");
+      console.log(data.url);
       window.location.href = data.url; // se abre la ventana de stripe
     } catch (error) {
       console.log(error);

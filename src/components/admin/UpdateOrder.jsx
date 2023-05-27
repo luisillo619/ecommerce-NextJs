@@ -2,7 +2,6 @@ import Image from "next/image";
 import React from "react";
 
 const UpdateOrder = ({ order }) => {
-    
   return (
     <article className="p-3 lg:p-5 mb-5 bg-white border border-blue-600 rounded-md">
       <header className="lg:flex justify-between mb-4">
@@ -58,7 +57,7 @@ const UpdateOrder = ({ order }) => {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-2">
         {order?.orderItems?.map((item) => (
-          <figure className="flex flex-row mb-4">
+          <figure className="flex flex-row mb-4" key={item.product}>
             <div>
               <div className="block w-20 h-20 rounded border border-gray-200 overflow-hidden p-3">
                 <Image

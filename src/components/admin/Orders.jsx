@@ -29,7 +29,7 @@ const Orders = ({ orders }) => {
         </thead>
         <tbody>
           {orders?.orders?.map((order) => (
-            <tr className="bg-white">
+            <tr className="bg-white" key={order?._id}>
               <td className="px-6 py-2">{order?._id}</td>
               <td className="px-6 py-2">${order?.paymentInfo?.amountPaid}</td>
               <td className="px-6 py-2">{order?.orderStatus}</td>

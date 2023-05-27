@@ -8,6 +8,7 @@ import { selectUser } from "@/redux/reducer/authSlice";
 import { useSession } from "next-auth/react";
 import { ClipLoader } from "react-spinners";
 import { useRouter } from "next/router";
+import queryString from "query-string";
 
 export default function LayoutIndex({ children }) {
   const dispatch = useDispatch();
@@ -30,9 +31,12 @@ export default function LayoutIndex({ children }) {
     }
   }, [status]);
 
+  // Para poder buscar desde cualquier ruta
   useEffect(() => {
     if (router?.query?.keyword) {
-      router.replace(`/?keyword=${router?.query?.keyword}`);
+      const queryParams = { ...router.query, keyword: router.query.keyword };
+      const newUrl = `/?${queryString.stringify(queryParams)}`;
+      router.replace(newUrl);
     }
   }, [router?.query?.keyword]);
 

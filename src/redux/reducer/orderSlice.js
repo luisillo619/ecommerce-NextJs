@@ -7,6 +7,7 @@ const orderSlice = createSlice({
   initialState: {
     error: null,
     loading: null,
+    canReview: null,
   },
   reducers: {
     setLoading: (state, action) => {
@@ -17,6 +18,9 @@ const orderSlice = createSlice({
     },
     clearError: (state, action) => {
       state.error = null;
+    },
+    setCanReview: (state, action) => {
+      state.canReview = action.payload;
     },
   },
 });
@@ -81,9 +85,34 @@ export const deleteOrder = (router, session, id) => async (dispatch) => {
   }
 };
 
-export const { clearError, setError, setLoading } = orderSlice.actions;
+export const canUserReview = (id, session) => async (dispatch) => {
+  try {
+    const { data } = await axios.get(`/api/orders/can_review?productId=${id}`, {
+      headers: {
+        "x-user-session": JSON.stringify(session),
+      },
+    });
 
-export const selectLoading = (state) => state?.product?.loading;
-export const selectOrderError = (state) => state.product.error;
+    if (data?.canReview) {
+      dispatch(setCanReview(data?.canReview));
+    }
+  } catch (error) {
+    const errorMessages = error?.response?.data?.message;
+
+    if (errorMessages) {
+      const messagesArray = errorMessages.split(",");
+      dispatch(
+        setError(messagesArray[0] || error?.response?.data?.error?.message)
+      );
+    }
+  }
+};
+
+export const { clearError, setError, setLoading, setCanReview } =
+  orderSlice.actions;
+
+export const selectLoading = (state) => state?.order?.loading;
+export const selectOrderError = (state) => state.order.error;
+export const selectCanReview = (state) => state.order.canReview;
 
 export default orderSlice.reducer;

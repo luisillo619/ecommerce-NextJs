@@ -149,6 +149,37 @@ export const uploadProductImages =
     }
   };
 
+export const postReview = (router, session, reviewData) => async (dispatch) => {
+  try {
+ 
+    const { data } = await axios.put(`/api/products/review`, reviewData, {
+      headers: {
+        "x-user-session": JSON.stringify(session),
+      },
+    });
+
+    if (data?.success) {
+      toast.success("Comentario Creado", {
+        position: "bottom-right",
+        autoClose: 1500,
+        transition: Zoom,
+      });
+      router.replace(`/product/${reviewData?.productId}`);
+    }
+  } catch (error) {
+   
+
+    const errorMessages = error?.response?.data?.message;
+
+    if (errorMessages) {
+      const messagesArray = errorMessages.split(",");
+      dispatch(
+        setError(messagesArray[0] || error?.response?.data?.error?.message)
+      );
+    }
+  }
+};
+
 export const { clearError, setError, setLoading } = productSlice.actions;
 
 export const selectLoading = (state) => state?.product?.loading;

@@ -84,7 +84,7 @@ const loadUser = async (router, dispatch) => {
         autoClose: 1200,
         transition: Zoom,
       });
-      router.replace("/profile");
+      
     }
   } catch (error) {
     const errorMessages = error?.response?.data?.message;
@@ -110,6 +110,7 @@ export const updateProfile =
       });
       if (Object.keys(data).length > 0) {
         await loadUser(router, dispatch);
+        router.replace("/profile");
       }
     } catch (error) {
       const errorMessages = error?.response?.data?.message;
@@ -158,6 +159,67 @@ export const updatePassword =
         );
       }
       dispatch(setLoading(false));
+    }
+  };
+
+export const updateUser =
+  (id, userData, router, session) => async (dispatch) => {
+    try {
+      dispatch(setLoading(true));
+      const { data } = await axios.put(
+        `/api/admin/users/${id}`,
+        {
+          userData,
+        },
+        {
+          headers: {
+            "x-user-session": JSON.stringify(session),
+          },
+        }
+      );
+
+      if (Object.keys(data).length > 0) {
+        await loadUser(router, dispatch);
+        router.replace(`/admin/users/${id}`);
+      }
+    } catch (error) {
+      const errorMessages = error?.response?.data?.message;
+      if (errorMessages) {
+        const messagesArray = errorMessages.split(",");
+        dispatch(
+          setError(messagesArray[0] || error?.response?.data?.error?.message)
+        );
+      }
+      dispatch(setLoading(false));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  export const deleteUser = (router, session, id) => async (dispatch) => {
+    try {
+      const { data } = await axios.delete(`/api/admin/users/${id}`, {
+        headers: {
+          "x-user-session": JSON.stringify(session),
+        },
+      });
+  
+      if (data?.success) {
+        toast.success("Usuario Eliminado", {
+          position: "bottom-right",
+          autoClose: 1500,
+          transition: Zoom,
+        });
+        router.replace("/admin/users");
+      }
+    } catch (error) {
+      const errorMessages = error?.response?.data?.message;
+      if (errorMessages) {
+        const messagesArray = errorMessages.split(",");
+        dispatch(
+          setError(messagesArray[0] || error?.response?.data?.error?.message)
+        );
+      }
     }
   };
 

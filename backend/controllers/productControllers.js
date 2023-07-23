@@ -191,9 +191,7 @@ export const updateProduct = async (req, res, next) => {
 
 export const deleteProduct = async (req, res, next) => {
   let product = await Product.findById(req.query.id);
-  if (!product) {
-    return next(new ErrorHandler("producto no encontrado", 404));
-  }
+  if (!product) return next(new ErrorHandler("producto no encontrado", 404));
 
   const imageIds = product.images.map((image) => image.public_id);
   await Promise.all(
@@ -204,6 +202,47 @@ export const deleteProduct = async (req, res, next) => {
 
   res.status(200).json({
     product,
+    success: true,
+  });
+};
+
+export const createProductReview = async (req, res, next) => {
+  const { rating, comment, productId } = req.body;
+
+  const review = {
+    user: req?.user?._id,
+    rating: Number(rating),
+    comment,
+  };
+
+  let product = await Product.findById(productId);
+  console.log(product);
+  if (!product) {
+    return next(new ErrorHandler("Product not found.", 404));
+  }
+
+  const isReviewed = product?.reviews?.find(
+    (r) => r?.user?.toString() === req?.user?._id.toString()
+  );
+
+  if (isReviewed) {
+    product?.reviews.forEach((review) => {
+      if (review.user.toString() === req.user._id.toString()) {
+        review.comment = comment;
+        review.rating = rating;
+      }
+    });
+  } else {
+    product?.reviews.push(review);
+  }
+
+  product.ratings =
+    product?.reviews?.reduce((acc, item) => item.rating + acc, 0) /
+    product.reviews.length;
+
+  await product?.save();
+
+  res.status(200).json({
     success: true,
   });
 };

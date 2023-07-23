@@ -1,26 +1,23 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import CustomPagination from "../layouts/CustomPagination";
+import {
+  clearError,
+  deleteUser,
+  selectAuthError,
+} from "@/redux/reducer/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { deleteOrder, selectOrderError } from "@/redux/reducer/orderSlice";
-import { Slide, toast } from "react-toastify";
 import Modal from "react-modal";
-import { clearError } from "@/redux/reducer/productSlice";
 
-const Orders = ({ orders, session }) => {
+
+const Users = ({ users, session }) => {
   const [loading, setLoading] = useState();
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [orderIdToDelete, setOrderIdToDelete] = useState();
-
-  const dispatch = useDispatch();
+  const error = useSelector(selectAuthError);
   const router = useRouter();
-  const error = useSelector(selectOrderError);
-
-  const deleteHandler = (id) => {
-    setModalIsOpen(true);
-    setOrderIdToDelete(id);
-  };
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [userIdToDelete, setUserIdToDelete] = useState()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (error) {
@@ -33,27 +30,33 @@ const Orders = ({ orders, session }) => {
     }
   }, [error]);
 
-  const confirmDelete = () => {
-    dispatch(deleteOrder(router, session, orderIdToDelete));
-    setModalIsOpen(false);
+  const deleteHandler = (id) => {
+    setModalIsOpen(true);
+    setUserIdToDelete(id);
   };
+  
+  const confirmDelete = () =>{
+    dispatch(deleteUser(router, session, userIdToDelete));
+    setModalIsOpen(false);
+  }
+
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <h1 className="text-3xl my-5 ml-4 font-bold">
-        {orders?.ordersCount} Ordenes
+        {users?.users?.length} Usuarios
       </h1>
       <table className="w-full text-sm text-left">
         <thead className="text-l text-gray-700 uppercase">
           <tr>
             <th scope="col" className="px-6 py-3">
-              ID
+              Nombre
             </th>
             <th scope="col" className="px-6 py-3">
-              Total Pagado
+              Correo
             </th>
             <th scope="col" className="px-6 py-3">
-              Estatus
+              Rol
             </th>
             <th scope="col" className="px-6 py-3">
               Acciones
@@ -61,22 +64,22 @@ const Orders = ({ orders, session }) => {
           </tr>
         </thead>
         <tbody>
-          {orders?.orders?.map((order) => (
-            <tr className="bg-white" key={order?._id}>
-              <td className="px-6 py-2">{order?._id}</td>
-              <td className="px-6 py-2">${order?.paymentInfo?.amountPaid}</td>
-              <td className="px-6 py-2">{order?.orderStatus}</td>
+          {users?.users?.map((user) => (
+            <tr key={user?._id} className="bg-white">
+              <td className="px-6 py-2">{user?.name}</td>
+              <td className="px-6 py-2">{user?.email}</td>
+              <td className="px-6 py-2">{user?.role}</td>
               <td className="px-6 py-2">
                 <div>
                   <Link
-                    href={`/admin/orders/${order?._id}`}
+                    href={`/admin/users/${user?._id}`}
                     className="px-2 py-2 inline-block text-yellow-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer mr-2"
                   >
                     <i className="fa fa-pencil" aria-hidden="true"></i>
                   </Link>
                   <a
                     className="px-2 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer"
-                    onClick={() => deleteHandler(order?._id)}
+                    onClick={() => deleteHandler(user?._id)}
                   >
                     <i className="fa fa-trash" aria-hidden="true"></i>
                   </a>
@@ -86,15 +89,16 @@ const Orders = ({ orders, session }) => {
           ))}
         </tbody>
       </table>
-
+      {/* {users?.users?.length > users.resPerPage && ( */}
       <div className="mb-6">
         <CustomPagination
-          resPerPage={orders?.resPerPage}
-          productsCount={orders?.ordersCount}
+          resPerPage={users?.resPerPage}
+          productsCount={users?.usersCount}
           loading={loading}
           setLoading={setLoading}
         />
       </div>
+
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
@@ -108,7 +112,7 @@ const Orders = ({ orders, session }) => {
               ¿Estás seguro de que deseas eliminar la orden con el siguiente ID?
             </p>
             <div className="space-y-2">
-              <p>{orderIdToDelete}</p>
+              <p>{userIdToDelete}</p>
             </div>
           </h2>
           <div className="flex justify-center space-x-5">
@@ -127,8 +131,9 @@ const Orders = ({ orders, session }) => {
           </div>
         </div>
       </Modal>
+      {/* )} */}
     </div>
   );
 };
 
-export default Orders;
+export default Users;

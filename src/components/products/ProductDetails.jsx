@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
 import { toast, Zoom } from "react-toastify";
@@ -6,15 +6,27 @@ import BreadCrumbs from "../layouts/BreadCrumbs";
 import { addItemToCart, selectCart } from "@/redux/reducer/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
+import NewReview from "../review/NewReview";
+import { canUserReview, selectCanReview, setCanReview } from "@/redux/reducer/orderSlice";
+import Reviews from "../review/Reviews";
 
-const ProductDetails = ({ product }) => {
+const ProductDetails = ({ product, session }) => {
   const dispatch = useDispatch();
   const cart = useSelector(selectCart);
+  const canReview = useSelector(selectCanReview)
   const imgRef = useRef(null);
 
   const setImgPreview = (url) => {
     imgRef.current.src = url;
   };
+
+  useEffect(()=>{
+    dispatch(canUserReview(product?._id,session))
+  },[])
+
+  useEffect(() => {
+    return () => dispatch(setCanReview(false));
+  }, []);
 
   const inStock = product?.stock >= 1;
 
@@ -81,7 +93,7 @@ const ProductDetails = ({ product }) => {
       </div>
     );
   };
-
+console.log(canReview);
   return (
     <>
       <BreadCrumbs breadCrumbs={breadCrumbs} />
@@ -181,14 +193,14 @@ const ProductDetails = ({ product }) => {
             </main>
           </div>
 
-          {/* <NewReview /> */}
+         {canReview? <NewReview product={product} session={session}/>: null}
           <hr />
 
           <div className="font-semibold">
             <h1 className="text-gray-500 review-title mb-6 mt-10 text-2xl">
               Otras Calificaciones
             </h1>
-            {/* <Reviews /> */}
+            <Reviews reviews={product?.reviews} />
           </div>
         </div>
       </section>

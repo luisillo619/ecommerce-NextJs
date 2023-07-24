@@ -17,7 +17,7 @@ const Sidebar = () => {
       router.replace("/");
     }
   };
-
+console.log(user);
   return (
     <aside className="md:w-2/2 px-4 ">
       <ul className="space-y-2  ">
@@ -88,15 +88,16 @@ const Sidebar = () => {
             Actualizar Perfil
           </Link>
         </li>
-        <li>
-          <Link
-            href="/profile/update_password"
-            className="block px-4 py-2 text-gray-800 bg-white hover:bg-blue-100 hover:text-blue-500 rounded-md"
-          >
-            Actualizar Contraseña
-          </Link>
-        </li>
-
+        {user?.password && (
+          <li>
+            <Link
+              href="/profile/update_password"
+              className="block px-4 py-2 text-gray-800 bg-white hover:bg-blue-100 hover:text-blue-500 rounded-md"
+            >
+              Actualizar Contraseña
+            </Link>
+          </li>
+        )}
         <li>
           <button
             className="block px-4 py-2 text-red-800 bg-white hover:bg-red-100  rounded-md cursor-pointer"

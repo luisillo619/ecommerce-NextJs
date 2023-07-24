@@ -16,7 +16,9 @@ export default function MyApp({ Component, pageProps }) {
             <Component {...pageProps} />
           </LayoutIndex>
         </SessionProvider>
+        
       </Provider>
+      
     </>
   );
 }

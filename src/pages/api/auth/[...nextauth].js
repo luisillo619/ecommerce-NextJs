@@ -73,7 +73,10 @@ export default async function auth(req, res) {
         session.user = token.user;
 
         // Elimina la contraseña de la sesión
-        delete session?.user?.password;
+        if(session?.user?.password){
+          delete session?.user?.password;
+          session.user.password = true
+        }
         return session;
       },
 

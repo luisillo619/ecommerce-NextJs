@@ -28,7 +28,7 @@ const Search = () => {
 
   return (
     <form
-      className="flex flex-nowrap items-center w-full order-last md:order-none mt-5 md:mt-0 md:w-2/4 lg:w-2/4"
+      className="flex flex-nowrap items-center w-full md:w-1/2 lg:w-1/3 xl:w-1/4 mt-5 md:mt-0"
       onSubmit={handleSubmit}
     >
       <input

@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { deleteOrder, selectOrderError } from "@/redux/reducer/orderSlice";
 import { Slide, toast } from "react-toastify";
 import Modal from "react-modal";
-import { clearError } from "@/redux/reducer/productSlice";
+import { clearError } from "@/redux/reducer/orderSlice";
+Modal.setAppElement('#__next');
 
 const Orders = ({ orders, session }) => {
   const [loading, setLoading] = useState();

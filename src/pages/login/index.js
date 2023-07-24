@@ -8,9 +8,10 @@ export const getServerSideProps = async (context) => {
     return {
       redirect: {
         destination: context.query.callbackUrl
-          ? parseCallbackUrl(context.query.callbackUrl)
-          : "/",
-        permanent: true,
+          ? "/profile"
+          : //? parseCallbackUrl(context.query.callbackUrl)
+            "/",
+       // permanent: true,
       },
     };
   }

@@ -82,19 +82,19 @@ export default async function auth(req, res) {
 
       // SI RETUR ES TRUE, HACE LA REDIRECCION A JWT
       signIn: async ({ user, account, profile }) => {
-        if (account.provider === "google") {
-          try {
+        try {
+          if (account.provider === "google") {
             dbConnect();
             let existingUser = await User.findOne({
               email: profile.email.toLowerCase(),
             });
-
+  
             if (!existingUser) {
               const avatar = {
                 url: profile.picture,
                 public_id: profile.sub,
               };
-
+  
               existingUser = await User.create({
                 name: profile.name,
                 email: profile.email.toLowerCase(),
@@ -102,7 +102,7 @@ export default async function auth(req, res) {
                 isOAuthUser: true,
                 avatar,
               });
-
+  
               await sendWelcomeMail({
                 email: profile.email,
                 name: profile.name,
@@ -113,11 +113,12 @@ export default async function auth(req, res) {
               await existingUser.save();
             }
             return true;
-          } catch (error) {
-            throw new Error("Error en el inicio de sesión de Google");
+          } else if (account.provider === "credentials") {
+            return true;
           }
-        } else if (account.provider === "credentials") {
-          return true;
+        } catch (error) {
+          console.error('SignIn Error:', error);
+          throw new Error("Error en el inicio de sesión");
         }
       },
     },

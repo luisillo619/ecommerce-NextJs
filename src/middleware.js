@@ -17,6 +17,7 @@ export default withAuth(
         if (!token) {
           return false;
         }
+        return true
       },
     },
   }

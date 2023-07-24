@@ -41,7 +41,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const data = await signIn("google", { redirect: false });
+     await signIn("google", { redirect: false });
     } catch (error) {
       if (error.message === "User is not authorized") {
         toast.error(

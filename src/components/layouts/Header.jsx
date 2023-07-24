@@ -42,7 +42,7 @@ const Header = ({ user, cart }) => {
                 <span className="ml-1">Sign in</span>
               </Link>
             ) : (
-              <Link href="/profile">
+              <a href="/profile">
                 <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer">
                   <Image
                     alt="BuyItNow"
@@ -62,7 +62,7 @@ const Header = ({ user, cart }) => {
                     </p>
                   </div>
                 </div>
-              </Link>
+              </a>
             )}
           </div>
         </div>

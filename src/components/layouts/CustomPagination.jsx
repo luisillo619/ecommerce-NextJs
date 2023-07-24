@@ -54,7 +54,7 @@ const CustomPagination = ({
   const totalPages = Math.ceil(productsCount / resPerPage);
 
   if (productsCount === 0) {
-    return <div>No hay productos disponibles.</div>;
+    return <div style={{textAlign:"center"}}>No hay disponibles.</div>;
   }
 
   return (

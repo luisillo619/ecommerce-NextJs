@@ -8,38 +8,38 @@ const Header = ({ user, cart }) => {
   const quantity = cart?.reduce((total, item) => total + item.quantity, 0) || 0;
   return (
     <header className="bg-white py-2 border-b">
-      <div className="container max-w-screen-xl mx-auto px-4">
-        <div className="flex flex-wrap items-center">
-          <div className="flex-shrink-0 mr-5">
+      <div className="container max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-center justify-between md:space-x-4 lg:space-x-6 xl:space-x-8">
+          <div className="flex-shrink-0">
             <Link href="/">
               <Image
                 src={buyItNowLogo}
                 alt="BuyItNow"
-                className="cursor-pointer object-contain w-24 h-12"
+                className="cursor-pointer object-contain"
                 width={120}
                 height={40}
               />
             </Link>
           </div>
-          <Search />
+          <Search className="flex-grow lg:flex-grow-0 lg:w-96 lg:mx-10" />
 
-          <div className="flex items-center space-x-2 ml-auto">
+          <div className="flex items-center space-x-2 mt-2 lg:mt-0">
             <Link
               href="/cart"
-              className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+              className="px-3 py-2 inline-flex items-center text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
             >
               <i className="text-gray-400 w-5 fa fa-shopping-cart"></i>
-              <span className="hidden lg:inline ml-1">
+              <span className="ml-1">
                 Carrito (<b>{cart?.length || 0}</b>)
               </span>
             </Link>
             {!user ? (
               <Link
                 href="/login"
-                className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+                className="px-3 py-2 inline-flex items-center text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
               >
                 <i className="text-gray-400 w-5 fa fa-user"></i>
-                <span className="hidden lg:inline ml-1">Sign in</span>
+                <span className="ml-1">Sign in</span>
               </Link>
             ) : (
               <Link href="/profile">
@@ -64,16 +64,6 @@ const Header = ({ user, cart }) => {
                 </div>
               </Link>
             )}
-          </div>
-
-          <div className="lg:hidden ml-2">
-            <button
-              type="button"
-              className="bg-white p-3 inline-flex items-center rounded-md text-black hover:bg-gray-200 hover:text-gray-800 border border-transparent"
-            >
-              <span className="sr-only">Buscar</span>
-              <i className="fa fa-bars fa-lg"></i>
-            </button>
           </div>
         </div>
       </div>

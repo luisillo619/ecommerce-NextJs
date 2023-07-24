@@ -27,7 +27,7 @@ export const registerUser = async (req, res, next) => {
   if (user && user.isOAuthUser && !user.password) {
     user.password = password;
     await user.save();
-    user.password = undefined;
+    user.password = null;
     return res.status(200).json(user);
   }
 

@@ -4,18 +4,36 @@ import { getSession } from "next-auth/react";
 
 export const getServerSideProps = async ({ req }) => {
   const session = await getSession({ req });
-  const sessionToSend = { ...session };
-  
-  // Delete the avatar property
-  if (sessionToSend.user?.avatar) {
-    delete sessionToSend.user.avatar;
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  const sessionToSend = {
+    user: {
+      id: session.user._id,
+      role: session.user.role,
+    },
+  };
+
+  let data;
+  try {
+    const response = await axios.get(`${process.env.API_URL}/api/address`, {
+      headers: {
+        "x-user-session": JSON.stringify(sessionToSend),
+      },
+    });
+    data = response.data;
+  } catch (error) {
+    console.error("Error fetching address data:", error);
+    data = { addresses: [] };
   }
   
-  const { data } = await axios.get(`${process.env.API_URL}/api/address`, {
-    headers: {
-      "x-user-session": JSON.stringify(sessionToSend),
-    },
-  });
   return {
     props: {
       addresses: data?.addresses,

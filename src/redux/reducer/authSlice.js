@@ -102,12 +102,20 @@ export const updateProfile =
     try {
       dispatch(setLoading(true));
 
+      const sessionToSend = {
+        user: {
+          id: session.user._id,
+          role: session.user.role,
+        },
+      };
+
       const { data } = await axios.put(`/api/auth/profile/update`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          "x-user-session": JSON.stringify(session),
+          "x-user-session": JSON.stringify(sessionToSend),
         },
       });
+
       if (Object.keys(data).length > 0) {
         await loadUser(router, dispatch);
         router.replace("/profile");
@@ -128,6 +136,13 @@ export const updatePassword =
   ({ currentPassword, newPassword }, router, session) =>
   async (dispatch) => {
     try {
+      const sessionToSend = {
+        user: {
+          id: session.user._id,
+          role: session.user.role,
+        },
+      };
+      
       dispatch(setLoading(true));
       const { data } = await axios.put(
         `/api/auth/profile/update_password`,
@@ -137,7 +152,7 @@ export const updatePassword =
         },
         {
           headers: {
-            "x-user-session": JSON.stringify(session),
+            "x-user-session": JSON.stringify(sessionToSend),
           },
         }
       );
@@ -165,6 +180,12 @@ export const updatePassword =
 export const updateUser =
   (id, userData, router, session) => async (dispatch) => {
     try {
+      const sessionToSend = {
+        user: {
+          id: session.user._id,
+          role: session.user.role,
+        },
+      };
       dispatch(setLoading(true));
       const { data } = await axios.put(
         `/api/admin/users/${id}`,
@@ -173,7 +194,7 @@ export const updateUser =
         },
         {
           headers: {
-            "x-user-session": JSON.stringify(session),
+            "x-user-session": JSON.stringify(sessionToSend),
           },
         }
       );
@@ -198,9 +219,16 @@ export const updateUser =
 
   export const deleteUser = (router, session, id) => async (dispatch) => {
     try {
+      const sessionToSend = {
+        user: {
+          id: session.user._id,
+          role: session.user.role,
+        },
+      };
+
       const { data } = await axios.delete(`/api/admin/users/${id}`, {
         headers: {
-          "x-user-session": JSON.stringify(session),
+          "x-user-session": JSON.stringify(sessionToSend),
         },
       });
   
@@ -226,9 +254,15 @@ export const updateUser =
 export const addNewAddress = (address, router, session) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
+    const sessionToSend = {
+      user: {
+        id: session.user._id,
+        role: session.user.role,
+      },
+    };
     const { data } = await axios.post(`/api/address`, address, {
       headers: {
-        "x-user-session": JSON.stringify(session),
+        "x-user-session": JSON.stringify(sessionToSend),
       },
     });
     if (Object.keys(data).length > 0) {
@@ -255,10 +289,15 @@ export const updateAddress =
   (address, id, router, session) => async (dispatch) => {
     try {
       dispatch(setLoading(true));
-
+      const sessionToSend = {
+        user: {
+          id: session.user._id,
+          role: session.user.role,
+        },
+      };
       const { data } = await axios.put(`/api/address/${id}`, address, {
         headers: {
-          "x-user-session": JSON.stringify(session),
+          "x-user-session": JSON.stringify(sessionToSend),
         },
       });
 
@@ -280,8 +319,14 @@ export const updateAddress =
 export const deleteAddress =
   (id, router, session, setDeleteLoading) => async (dispatch) => {
     try {
+      const sessionToSend = {
+        user: {
+          id: session.user._id,
+          role: session.user.role,
+        },
+      };
       const { data } = await axios.delete(`/api/address/${id}`, {
-        headers: { "x-user-session": JSON.stringify(session) },
+        headers: { "x-user-session": JSON.stringify(sessionToSend) },
       });
       if (data?.success) {
         toast.success("Direccion eliminada", {

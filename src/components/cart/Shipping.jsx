@@ -19,7 +19,7 @@ const Shipping = ({ addresses, session }) => {
     setShippinInfo(address._id);
   };
 
-  const checkoutHandler = () => {
+  const checkoutHandler = async () => {
     if (!shippingInfo) {
       return toast.error("Por favor, selecciona una direccion de envio", {
         position: "bottom-right",
@@ -27,30 +27,29 @@ const Shipping = ({ addresses, session }) => {
         transition: Slide,
       });
     }
-
+  
     try {
-      axios
-        .post(
-          `/api/orders/checkout_session`,
-          {
-            items: cart,
-            shippingInfo,
+      const sessionToSend = {
+        user: {
+          id: session.user._id,
+          role: session.user.role,
+        },
+      };
+  
+      const {data} = await axios.post(
+        `/api/orders/checkout_session`,
+        {
+          items: cart,
+          shippingInfo,
+        },
+        {
+          headers: {
+            "x-user-session": JSON.stringify(sessionToSend),
           },
-          {
-            headers: {
-              "x-user-session": JSON.stringify(session),
-            },
-          }
-        )
-        .then((response) => {
-          const link = document.createElement("a");
-          link.href = response.data.url;
-          link.target = "_blank";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          router.replace("/");
-        });
+        }
+      );
+      console.log(data.url);
+      window.location.href = data.url;
     } catch (error) {
       console.log(error);
     }

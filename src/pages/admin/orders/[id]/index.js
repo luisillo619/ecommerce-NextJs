@@ -7,11 +7,27 @@ export const getServerSideProps = async (context) => {
   try {
     const session = await getSession({ req: context.req });
 
+    if (!session) {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
+
+    const sessionToSend = {
+      user: {
+        id: session.user._id,
+        role: session.user.role,
+      },
+    };
+
     const { data } = await axios.get(
       `${process.env.API_URL}/api/admin/orders/${context.params.id}`,
       {
         headers: {
-          "x-user-session": JSON.stringify(session),
+          "x-user-session": JSON.stringify(sessionToSend),
         },
       }
     );
@@ -20,6 +36,7 @@ export const getServerSideProps = async (context) => {
       props: { data: data.order, session },
     };
   } catch (error) {
+    console.error("Error fetching admin orders data:", error);
     return {
       redirect: {
         destination: "/admin/orders",

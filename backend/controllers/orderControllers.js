@@ -125,7 +125,6 @@ export const checkoutSession = async (req, res) => {
   // En lugar de solo pasar el ID, se debe proporcionar toda la información de la dirección al crear la orden. En el webhook, se deben agregar directamente los datos de la dirección al momento de crear la orden, en lugar de hacer referencia a la dirección en el esquema de las órdenes con el id
 
   const shippingInfo = body?.shippingInfo; // id direccion de envio, DESPUES desde el front pasar toda la direccion y no solo el id
-
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     success_url: `${process.env.CLIENT_URL}/profile/orders?order_success=true`,
@@ -200,7 +199,7 @@ export const webhook = async (req, res) => {
         orderItems,
       };
 
-      const order = await Order.create(orderData);
+      await Order.create(orderData);
 
       res.status(201).json({ success: true });
     }

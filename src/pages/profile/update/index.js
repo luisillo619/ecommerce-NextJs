@@ -4,7 +4,6 @@ import { getSession } from "next-auth/react";
 
 export const getServerSideProps = async ({ req }) => {
   const session = await getSession({ req });
-  
     return {
       props: {
         session,

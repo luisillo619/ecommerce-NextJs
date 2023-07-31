@@ -51,8 +51,7 @@ export const updateAddress = async (req, res, next) => {
   let address = await Address.findById(req.query.id);
 
   if (!address) return next(new ErrorHandler("Direccion no encontrada", 404));
-
-  if (address.user.toString() !== req.user._id) {
+  if (address.user.toString() !== req.user._id.toString()) {
     return next(
       new ErrorHandler("No tienes permiso para modificar esta direccion", 401)
     );
@@ -77,7 +76,7 @@ export const deleteAddress = async (req, res, next) => {
   let address = await Address.findById(req.query.id);
   if (!address) return next(new ErrorHandler("Address not found", 404));
 
-  if (address.user.toString() !== req.user._id)
+  if (address.user.toString() !== req.user._id.toString())
     return next(
       new ErrorHandler("No tienes permiso para eliminar esta direccion", 401)
     );

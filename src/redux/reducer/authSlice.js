@@ -295,6 +295,7 @@ export const updateAddress =
           role: session.user.role,
         },
       };
+     
       const { data } = await axios.put(`/api/address/${id}`, address, {
         headers: {
           "x-user-session": JSON.stringify(sessionToSend),

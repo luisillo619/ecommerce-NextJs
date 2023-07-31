@@ -29,9 +29,15 @@ export const updateOrder =
   (orderData, router, session, id) => async (dispatch) => {
     try {
       dispatch(setLoading(true));
+      const sessionToSend = {
+        user: {
+          id: session.user._id,
+          role: session.user.role,
+        },
+      };
       const { data } = await axios.put(`/api/admin/orders/${id}`, orderData, {
         headers: {
-          "x-user-session": JSON.stringify(session),
+          "x-user-session": JSON.stringify(sessionToSend),
         },
       });
 
@@ -59,9 +65,15 @@ export const updateOrder =
 
 export const deleteOrder = (router, session, id) => async (dispatch) => {
   try {
+    const sessionToSend = {
+      user: {
+        id: session.user._id,
+        role: session.user.role,
+      },
+    };
     const { data } = await axios.delete(`/api/admin/orders/${id}`, {
       headers: {
-        "x-user-session": JSON.stringify(session),
+        "x-user-session": JSON.stringify(sessionToSend),
       },
     });
 
@@ -87,9 +99,15 @@ export const deleteOrder = (router, session, id) => async (dispatch) => {
 
 export const canUserReview = (id, session) => async (dispatch) => {
   try {
+    const sessionToSend = {
+      user: {
+        id: session.user._id,
+        role: session.user.role,
+      },
+    };
     const { data } = await axios.get(`/api/orders/can_review?productId=${id}`, {
       headers: {
-        "x-user-session": JSON.stringify(session),
+        "x-user-session": JSON.stringify(sessionToSend),
       },
     });
 

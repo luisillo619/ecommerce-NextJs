@@ -8,15 +8,37 @@ export const getServerSideProps = async (context) => {
   const req = context.req;
   const session = await getSession({ req });
 
-  const { data } = await axios.get(`${process.env.API_URL}/api/address/${id}`, {
-    headers: {
-      "x-user-session": JSON.stringify(session),
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  const sessionToSend = {
+    user: {
+      id: session.user._id,
+      role: session.user.role,
     },
-  });
+  };
+
+  let data;
+  try {
+    const response = await axios.get(`${process.env.API_URL}/api/address/${id}`, {
+      headers: {
+        "x-user-session": JSON.stringify(sessionToSend),
+      },
+    });
+    data = response.data;
+  } catch (error) {
+    data = { address: null };
+  }
 
   return {
     props: {
-      addressData: data?.address || null,
+      addressData: data?.address,
       session,
     },
   };

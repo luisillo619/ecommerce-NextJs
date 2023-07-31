@@ -1,15 +1,18 @@
 import ErrorHandler from "../utils/errorHandler";
+import User from "../models/user";
 
 const isAuthenticatedUser = async (req, res, next) => {
   const session =
     req?.headers?.["x-user-session"] &&
     JSON.parse(req.headers["x-user-session"]);
-  if (!session) {
+
+  if (!session.user.id) {
     return next(
       new ErrorHandler("Inicia sesion para tener acceso a esta ruta.", 401)
     );
   }
-  req.user = session.user;
+  const user = await User.findById(session.user.id);
+  req.user = user;
   next();
 };
 

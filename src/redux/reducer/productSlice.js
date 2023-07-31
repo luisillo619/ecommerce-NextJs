@@ -24,9 +24,15 @@ const productSlice = createSlice({
 export const newProduct = (product, router, session) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
+    const sessionToSend = {
+      user: {
+        id: session.user._id,
+        role: session.user.role,
+      },
+    };
     const { data } = await axios.post(`/api/admin/products`, product, {
       headers: {
-        "x-user-session": JSON.stringify(session),
+        "x-user-session": JSON.stringify(sessionToSend),
       },
     });
 
@@ -56,9 +62,15 @@ export const updateProduct =
   (product, router, session, id) => async (dispatch) => {
     try {
       dispatch(setLoading(true));
+      const sessionToSend = {
+        user: {
+          id: session.user._id,
+          role: session.user.role,
+        },
+      };
       const { data } = await axios.put(`/api/admin/products/${id}`, product, {
         headers: {
-          "x-user-session": JSON.stringify(session),
+          "x-user-session": JSON.stringify(sessionToSend),
         },
       });
 
@@ -86,9 +98,15 @@ export const updateProduct =
 
 export const deleteProduct = (router, session, id) => async (dispatch) => {
   try {
+    const sessionToSend = {
+      user: {
+        id: session.user._id,
+        role: session.user.role,
+      },
+    };
     const { data } = await axios.delete(`/api/admin/products/${id}`, {
       headers: {
-        "x-user-session": JSON.stringify(session),
+        "x-user-session": JSON.stringify(sessionToSend),
       },
     });
 
@@ -116,13 +134,19 @@ export const uploadProductImages =
   (formdata, id, session, router) => async (dispatch) => {
     try {
       dispatch(setLoading(true));
+      const sessionToSend = {
+        user: {
+          id: session.user._id,
+          role: session.user.role,
+        },
+      };
       const { data } = await axios.post(
         `/api/admin/products/upload_images/${id}`,
         formdata,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            "x-user-session": JSON.stringify(session),
+            "x-user-session": JSON.stringify(sessionToSend),
           },
         }
       );
@@ -151,10 +175,15 @@ export const uploadProductImages =
 
 export const postReview = (router, session, reviewData) => async (dispatch) => {
   try {
- 
+    const sessionToSend = {
+      user: {
+        id: session.user._id,
+        role: session.user.role,
+      },
+    };
     const { data } = await axios.put(`/api/products/review`, reviewData, {
       headers: {
-        "x-user-session": JSON.stringify(session),
+        "x-user-session": JSON.stringify(sessionToSend),
       },
     });
 
@@ -167,8 +196,6 @@ export const postReview = (router, session, reviewData) => async (dispatch) => {
       router.replace(`/product/${reviewData?.productId}`);
     }
   } catch (error) {
-   
-
     const errorMessages = error?.response?.data?.message;
 
     if (errorMessages) {

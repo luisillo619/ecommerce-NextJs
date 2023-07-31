@@ -6,24 +6,55 @@ import AdminProfileLayout from "@/components/layouts/AdminProfileLayout";
 import { getSession } from "next-auth/react";
 
 export const getServerSideProps = async (context) => {
-  const session = await getSession({ req: context.req });
+  try {
+    const session = await getSession({ req: context.req });
 
-  const urlParams = {
-    page: context.query.page,
-  };
+    if (!session) {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
 
-  const searchQuery = queryString.stringify(urlParams);
+    const sessionToSend = {
+      user: {
+        id: session.user._id,
+        role: session.user.role,
+      },
+    };
 
-  const { data } = await axios.get(
-    `${process.env.API_URL}/api/products?${searchQuery}`
-  );
+    const urlParams = {
+      page: context.query.page,
+    };
 
-  return {
-    props: {
-      data,
-      session,
-    },
-  };
+    const searchQuery = queryString.stringify(urlParams);
+
+    const { data } = await axios.get(
+      `${process.env.API_URL}/api/products?${searchQuery}`,
+      {
+        headers: {
+          "x-user-session": JSON.stringify(sessionToSend),
+        },
+      }
+    );
+
+    return {
+      props: {
+        data,
+        session,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    return {
+      props: {
+        data: [],
+        session: null,
+      },
+    };
+  }
 };
 
 const AdminProductsPage = ({ data, session }) => {

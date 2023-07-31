@@ -54,11 +54,11 @@ const CustomPagination = ({
   const totalPages = Math.ceil(productsCount / resPerPage);
 
   if (productsCount === 0) {
-    return <div style={{textAlign:"center"}}>No hay disponibles.</div>;
+    return <div style={{ textAlign: "center" }}>No hay disponibles.</div>;
   }
 
   return (
-    <div className="flex mt-10 justify-center">
+    <div className="w-full flex flex-wrap justify-center items-center">
       {!loading && (
         <ReactPaginate
           pageCount={totalPages}
@@ -67,15 +67,15 @@ const CustomPagination = ({
           previousLabel="Anterior"
           nextLabel="Siguiente"
           breakLabel="..."
-          containerClassName="flex items-center"
-          pageClassName="border rounded mx-1"
-          pageLinkClassName="px-4 py-2 w-full h-full flex items-center justify-center"
+          containerClassName="flex flex-col md:flex-row items-center md:space-y-0 space-y-4 md:space-x-4"
+          pageClassName="order-2 border rounded mx-1"
+          pageLinkClassName="px-2 md:px-4 py-1 md:py-2 w-full md:w-auto h-full flex items-center justify-center"
           activeClassName="bg-blue-600 border text-white"
-          breakClassName="px-4 py-2 mx-1 border border-red-500"
-          previousClassName="border rounded mx-1"
-          nextClassName="border rounded mx-1"
-          previousLinkClassName="px-4 py-2 w-full h-full flex items-center justify-center"
-          nextLinkClassName="px-4 py-2 w-full h-full flex items-center justify-center"
+          breakClassName="order-2 px-2 md:px-4 py-1 md:py-2 mx-1 border border-red-500"
+          previousClassName="order-1 border rounded mx-1"
+          nextClassName="order-3 border rounded mx-1"
+          previousLinkClassName="px-2 md:px-4 py-1 md:py-2 w-full md:w-auto h-full flex items-center justify-center"
+          nextLinkClassName="px-2 md:px-4 py-1 md:py-2 w-full md:w-auto h-full flex items-center justify-center"
           disabledClassName="opacity-50 cursor-not-allowed"
           disabledLinkClassName="opacity-50 cursor-not-allowed"
         />

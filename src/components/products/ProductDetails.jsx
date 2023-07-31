@@ -93,7 +93,6 @@ const ProductDetails = ({ product, session }) => {
       </div>
     );
   };
-console.log(canReview);
   return (
     <>
       <BreadCrumbs breadCrumbs={breadCrumbs} />

@@ -17,7 +17,7 @@ const Sidebar = () => {
       router.replace("/");
     }
   };
-console.log(user);
+
   return (
     <aside className="md:w-2/2 px-4 ">
       <ul className="space-y-2  ">

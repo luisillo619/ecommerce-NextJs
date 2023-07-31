@@ -54,7 +54,9 @@ export default async function auth(req, res) {
         if (account?.provider === "credentials") {
           token.user = user;
         } else if (account?.provider === "google") {
-          const existingUser = await User.findOne({ email: user.email });
+          const existingUser = await User.findOne({ email: user.email }).select(
+            "+password"
+          );
           token.user = existingUser;
         }
 
@@ -62,7 +64,9 @@ export default async function auth(req, res) {
         const update = req.query?.update;
 
         if (update === "true") {
-          const updatedUser = await User.findById(token.user._id);
+          const updatedUser = await User.findById(token.user._id).select(
+            "+password"
+          );
           token.user = updatedUser;
         }
 
@@ -71,11 +75,10 @@ export default async function auth(req, res) {
 
       session: async ({ session, token }) => {
         session.user = token.user;
-
         // Elimina la contraseña de la sesión
-        if(session?.user?.password){
+        if (session?.user?.password) {
           delete session?.user?.password;
-          session.user.password = true
+          session.user.password = true;
         }
         return session;
       },
@@ -88,13 +91,13 @@ export default async function auth(req, res) {
             let existingUser = await User.findOne({
               email: profile.email.toLowerCase(),
             });
-  
+
             if (!existingUser) {
               const avatar = {
                 url: profile.picture,
                 public_id: profile.sub,
               };
-  
+
               existingUser = await User.create({
                 name: profile.name,
                 email: profile.email.toLowerCase(),
@@ -102,7 +105,7 @@ export default async function auth(req, res) {
                 isOAuthUser: true,
                 avatar,
               });
-  
+
               await sendWelcomeMail({
                 email: profile.email,
                 name: profile.name,
@@ -117,7 +120,7 @@ export default async function auth(req, res) {
             return true;
           }
         } catch (error) {
-          console.error('SignIn Error:', error);
+          console.error("SignIn Error:", error);
           throw new Error("Error en el inicio de sesión");
         }
       },

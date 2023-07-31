@@ -130,9 +130,12 @@ export const checkoutSession = async (req, res) => {
     success_url: `${process.env.CLIENT_URL}/profile/orders?order_success=true`,
     cancel_url: process.env.CLIENT_URL,
     customer_email: req?.user?.email,
-    client_reference_id: req?.user?._id,
+    client_reference_id: req?.user?._id.toString(),
     mode: "payment",
-    metadata: { shippingInfo },
+    metadata: {
+      shippingInfo: shippingInfo,
+      userId: req?.user?._id.toString(),
+    },
     shipping_options: [
       {
         shipping_rate: process.env.STRIPE_SHIPPING_RATE, // id tarifa de envio de stripe
@@ -177,6 +180,7 @@ export const webhook = async (req, res) => {
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
+
       const line_items = await stripe.checkout.sessions.listLineItems(
         event.data.object.id
       );
@@ -193,7 +197,7 @@ export const webhook = async (req, res) => {
       };
 
       const orderData = {
-        user: userId,
+        user: userId ? userId : session.metadata.userId,
         shippingInfo: session.metadata.shippingInfo,
         paymentInfo,
         orderItems,

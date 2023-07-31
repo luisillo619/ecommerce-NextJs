@@ -54,7 +54,7 @@ const Header = ({ user, cart }) => {
                     }
                   />
                   <div className="space-y-1 font-medium">
-                    <p>
+                    <p className="hidden sm:block ">
                       {user?.name}
                       <time className="block text-xs text-gray-500 dark:text-gray-400">
                         {user?.email?.substring(0, 35)}

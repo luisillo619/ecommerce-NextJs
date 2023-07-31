@@ -73,7 +73,6 @@ const welcomeMail = (email, name) => {
 
 export async function sendWelcomeMail(data) {
   const { email, name } = data;
-  console.log(email, name);
   const mailOptions = welcomeMail(email, name);
   try {
   

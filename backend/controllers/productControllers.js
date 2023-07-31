@@ -216,7 +216,6 @@ export const createProductReview = async (req, res, next) => {
   };
 
   let product = await Product.findById(productId);
-  console.log(product);
   if (!product) {
     return next(new ErrorHandler("Product not found.", 404));
   }

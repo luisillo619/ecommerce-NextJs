@@ -79,7 +79,7 @@ const UpdateProfile = ({ session }) => {
             <input
               className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
               type="text"
-              placeholder="Type your name"
+              placeholder="Escribe tú nombre"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -91,7 +91,7 @@ const UpdateProfile = ({ session }) => {
             <input
               className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
               type="text"
-              placeholder="Type your email"
+              placeholder="Escribe tu correo"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
